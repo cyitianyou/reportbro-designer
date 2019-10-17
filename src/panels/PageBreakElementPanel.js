@@ -63,8 +63,7 @@ export default class PageBreakElementPanel {
      * @param {*} obj - new/deleted/modified data object.
      * @param {String} operation - operation which caused the notification.
      */
-    notifyEvent(obj, operation) {
-    }
+    notifyEvent(obj, operation) {}
 
     /**
      * Updates displayed errors of currently selected data object.
@@ -74,8 +73,7 @@ export default class PageBreakElementPanel {
         $('#rbro_page_break_element_panel .rbroErrorMessage').text('');
         let selectedObj = this.rb.getDataObject(this.selectedObjId);
         if (selectedObj !== null) {
-            for (let error of selectedObj.getErrors()) {
-            }
+            for (let error of selectedObj.getErrors()) {}
         }
     }
 

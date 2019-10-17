@@ -16,13 +16,13 @@ export default class CommandGroupCmd {
     }
 
     do() {
-        for (let i=0; i < this.commands.length; i++) {
+        for (let i = 0; i < this.commands.length; i++) {
             this.commands[i].do();
         }
     }
 
     undo() {
-        for (let i=this.commands.length - 1; i >= 0; i--) {
+        for (let i = this.commands.length - 1; i >= 0; i--) {
             this.commands[i].undo();
         }
     }

@@ -35,8 +35,12 @@ export default class PageBreakElement extends DocElement {
 
     updateDisplayInternal(x, y, width, height) {
         if (this.el !== null) {
-            let props = { left: this.rb.toPixel(0), top: this.rb.toPixel(y),
-                width: '100%', height: this.rb.toPixel(1) };
+            let props = {
+                left: this.rb.toPixel(0),
+                top: this.rb.toPixel(y),
+                width: '100%',
+                height: this.rb.toPixel(1)
+            };
             this.el.css(props);
         }
     }

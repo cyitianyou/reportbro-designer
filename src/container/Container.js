@@ -11,8 +11,8 @@ export default class Container {
         this.el = null;
         this.elContent = null;
         this.owner = null;
-        this.level = 0;  // number of containers "above"
-        this.parent = null;  // parent container
+        this.level = 0; // number of containers "above"
+        this.parent = null; // parent container
     }
 
     init(owner) {
@@ -32,11 +32,9 @@ export default class Container {
     /**
      * Called after initialization is finished.
      */
-    setup() {
-    }
+    setup() {}
 
-    remove() {
-    }
+    remove() {}
 
     appendElement(el) {
         if (this.elContent !== null) {
@@ -155,6 +153,5 @@ export default class Container {
         return false;
     }
 
-    clearErrors() {
-    }
+    clearErrors() {}
 }

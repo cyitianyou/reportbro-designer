@@ -98,7 +98,7 @@ export default class TextElementPanel {
         elFormField.append('<div id="rbro_text_element_position_error" class="rbroErrorMessage"></div>');
         elDiv.append(elFormField);
         panel.append(elDiv);
-        
+
         elDiv = $('<div id="rbro_text_element_size_row" class="rbroFormRow"></div>');
         elDiv.append(`<label for="rbro_text_element_size">${this.rb.getLabel('docElementSize')}:</label>`);
         elFormField = $('<div class="rbroFormField rbroSplit"></div>');
@@ -391,7 +391,7 @@ export default class TextElementPanel {
         elFormField.append(this.cs_elStyle);
         elDiv.append(elFormField);
         elCondStyleSectionDiv.append(elDiv);
-        
+
         let elCondStyleDiv = $('<div id="rbro_text_element_cs_style_settings"></div>');
         StylePanel.renderStyle(elCondStyleDiv, 'text_element_cs_', 'cs_', DocElement.type.text, this, this.rb);
         elCondStyleSectionDiv.append(elCondStyleDiv);

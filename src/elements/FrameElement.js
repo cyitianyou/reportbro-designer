@@ -25,13 +25,13 @@ export default class FrameElement extends DocElement {
         this.borderBottom = false;
         this.borderColor = '#000000';
         this.borderWidth = '1';
-        
+
         this.shrinkToContentHeight = false;
 
         this.spreadsheet_hide = false;
         this.spreadsheet_column = '';
         this.spreadsheet_addEmptyRow = false;
-        
+
         this.setInitialData(initialData);
 
         this.borderWidthVal = utils.convertInputToNumber(this.borderWidth);
@@ -53,7 +53,7 @@ export default class FrameElement extends DocElement {
         this.setupComplete = true;
         this.updateStyle();
         this.updateName();
-        if (openPanelItem){
+        if (openPanelItem) {
             this.panelItem.open();
         }
     }
@@ -74,7 +74,7 @@ export default class FrameElement extends DocElement {
     getMaxId() {
         return this.linkedContainerId;
     }
-    
+
     setValue(field, value, elSelector, isShown) {
         if (field.indexOf('border') !== -1) {
             // Style.setBorderValue needs to be called before super.setValue because it calls updateStyle() which expects
@@ -95,8 +95,12 @@ export default class FrameElement extends DocElement {
 
     updateDisplayInternal(x, y, width, height) {
         if (this.el !== null) {
-            let props = { left: this.rb.toPixel(x), top: this.rb.toPixel(y),
-                width: this.rb.toPixel(width), height: this.rb.toPixel(height) };
+            let props = {
+                left: this.rb.toPixel(x),
+                top: this.rb.toPixel(y),
+                width: this.rb.toPixel(width),
+                height: this.rb.toPixel(height)
+            };
             this.el.css(props);
         }
         // update inner frame element size
@@ -124,7 +128,7 @@ export default class FrameElement extends DocElement {
         let borderStyleProperties = {};
         styleProperties['background-color'] = this.getValue('backgroundColor');
         if (this.getValue('borderLeft') || this.getValue('borderTop') ||
-                this.getValue('borderRight') || this.getValue('borderBottom')) {
+            this.getValue('borderRight') || this.getValue('borderBottom')) {
             borderStyleProperties['border-style'] = this.getValue('borderTop') ? 'solid' : 'none';
             borderStyleProperties['border-style'] += this.getValue('borderRight') ? ' solid' : ' none';
             borderStyleProperties['border-style'] += this.getValue('borderBottom') ? ' solid' : ' none';
@@ -147,7 +151,8 @@ export default class FrameElement extends DocElement {
             'x', 'y', 'width', 'height', 'backgroundColor',
             'borderAll', 'borderLeft', 'borderTop', 'borderRight', 'borderBottom', 'borderColor', 'borderWidth',
             'printIf', 'removeEmptyElement', 'shrinkToContentHeight',
-            'spreadsheet_hide', 'spreadsheet_column', 'spreadsheet_addEmptyRow'];
+            'spreadsheet_hide', 'spreadsheet_column', 'spreadsheet_addEmptyRow'
+        ];
     }
 
     getElementType() {

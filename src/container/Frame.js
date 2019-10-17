@@ -33,7 +33,8 @@ export default class Frame extends Container {
      * @returns {Object} x and y offset coordinates.
      */
     getOffset() {
-        let x = 0, y = 0;
+        let x = 0,
+            y = 0;
         if (this.owner !== null) {
             x = this.owner.getValue('xVal');
             y = this.owner.getValue('yVal');
@@ -51,14 +52,15 @@ export default class Frame extends Container {
      * @returns {Object} width and height of container.
      */
     getSize() {
-        let width = 0, height = 0;
+        let width = 0,
+            height = 0;
         if (this.owner !== null) {
             width = this.owner.getValue('widthVal');
             height = this.owner.getValue('heightVal');
         }
         return { width: width, height: height };
     }
-    
+
     /**
      * Returns container content size.
      * This is the container minus optional borders, thus the available area for
@@ -66,7 +68,8 @@ export default class Frame extends Container {
      * @returns {Object} width and height of container content area.
      */
     getContentSize() {
-        let width = 0, height = 0;
+        let width = 0,
+            height = 0;
         if (this.owner !== null) {
             width = this.owner.getValue('widthVal');
             height = this.owner.getValue('heightVal');

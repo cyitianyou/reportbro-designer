@@ -80,7 +80,8 @@ export default class DocumentProperties {
         return ['pageFormat', 'pageWidth', 'pageHeight', 'unit', 'orientation',
             'contentHeight', 'marginLeft', 'marginTop', 'marginRight', 'marginBottom',
             'header', 'headerSize', 'headerDisplay', 'footer', 'footerSize', 'footerDisplay',
-            'patternLocale', 'patternCurrencySymbol'];
+            'patternLocale', 'patternCurrencySymbol'
+        ];
     }
 
     getId() {
@@ -123,9 +124,9 @@ export default class DocumentProperties {
             this.rb.getDocument().updateFooter();
             this.footerSizeVal = this.footer ? utils.convertInputToNumber(this.footerSize) : 0;
         }
-        if (field === 'pageFormat' ||field === 'pageWidth' || field === 'pageHeight' || field === 'unit' ||
-                field === 'orientation' || field === 'contentHeight' ||
-                field === 'marginTop' || field === 'marginBottom') {
+        if (field === 'pageFormat' || field === 'pageWidth' || field === 'pageHeight' || field === 'unit' ||
+            field === 'orientation' || field === 'contentHeight' ||
+            field === 'marginTop' || field === 'marginBottom') {
             let size = this.getPageSize();
             this.updatePageSize(size);
         }
@@ -211,7 +212,7 @@ export default class DocumentProperties {
         }
         if (this.contentHeight.trim() !== '') {
             pageHeight = utils.convertInputToNumber(this.contentHeight) +
-                    this.marginTopVal + this.marginBottomVal + this.headerSizeVal + this.footerSizeVal;
+                this.marginTopVal + this.marginBottomVal + this.headerSizeVal + this.footerSizeVal;
         }
         return { width: pageWidth, height: pageHeight };
     }
@@ -229,8 +230,10 @@ export default class DocumentProperties {
             height = size.height - this.marginTopVal - this.marginBottomVal -
                 this.headerSizeVal - this.footerSizeVal;
         }
-        return { width: size.width - this.marginLeftVal - this.marginRightVal,
-            height: height };
+        return {
+            width: size.width - this.marginLeftVal - this.marginRightVal,
+            height: height
+        };
     }
 
     addError(error) {
@@ -245,14 +248,11 @@ export default class DocumentProperties {
         return this.errors;
     }
 
-    remove() {
-    }
+    remove() {}
 
-    select() {
-    }
+    select() {}
 
-    deselect() {
-    }
+    deselect() {}
 
     toJS() {
         let ret = {};

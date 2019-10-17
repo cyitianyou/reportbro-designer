@@ -23,9 +23,7 @@ export default class EmptyDetailPanel {
         $('#rbro_empty_detail_panel').addClass('rbroHidden');
     }
 
-    notifyEvent(obj, operation) {
-    }
+    notifyEvent(obj, operation) {}
 
-    updateErrors() {
-    }
+    updateErrors() {}
 }

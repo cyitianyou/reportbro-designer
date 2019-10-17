@@ -15,10 +15,10 @@ export default class Parameter {
         this.name = rb.getLabel('parameter');
         this.panelItem = null;
         this.errors = [];
-        
+
         this.type = Parameter.type.string;
         this.arrayItemType = Parameter.type.string;
-        this.eval = !rb.getProperty('adminMode');  // if false value comes from database
+        this.eval = !rb.getProperty('adminMode'); // if false value comes from database
         this.nullable = false;
         this.pattern = '';
         this.expression = '';
@@ -49,8 +49,7 @@ export default class Parameter {
                 let parameter = new Parameter(child.id || this.rb.getUniqueId(), child, this.rb);
                 this.rb.addParameter(parameter);
                 let panelItem = new MainPanelItem(
-                    'parameter', this.panelItem, parameter,
-                    { hasChildren: true, showAdd: parameter.editable, showDelete: parameter.editable, draggable: true }, this.rb);
+                    'parameter', this.panelItem, parameter, { hasChildren: true, showAdd: parameter.editable, showDelete: parameter.editable, draggable: true }, this.rb);
                 parameter.setPanelItem(panelItem);
                 this.panelItem.appendChild(panelItem);
                 parameter.setup();
@@ -137,14 +136,11 @@ export default class Parameter {
         return this.errors;
     }
 
-    remove() {
-    }
+    remove() {}
 
-    select() {
-    }
+    select() {}
 
-    deselect() {
-    }
+    deselect() {}
 
     /**
      * Adds SetValue commands to command group parameter in case the specified parameter is used in any of
@@ -225,8 +221,7 @@ export default class Parameter {
                         testDataStr, SetValueCmd.type.text, this.rb);
                     cmdGroup.addCommand(cmd);
                 }
-            } catch (e) {
-            }
+            } catch (e) {}
         }
     }
 
@@ -241,7 +236,10 @@ export default class Parameter {
     addCommandsForChangedParameterType(newParameterType, cmdGroup) {
         if (this.type !== Parameter.type.array && newParameterType === Parameter.type.array) {
             let initialData = {
-                name: 'row_number', type: Parameter.type.number, eval: false, editable: false,
+                name: 'row_number',
+                type: Parameter.type.number,
+                eval: false,
+                editable: false,
                 showOnlyNameType: true
             };
             let cmd = new AddDeleteParameterCmd(true, initialData, this.rb.getUniqueId(), this.getId(), 0, this.rb);
@@ -309,26 +307,38 @@ export default class Parameter {
             }
             if (parametersToAppend.length > 0) {
                 parameters.push({
-                    separator: true, id: this.id,
-                    separatorClass: 'rbroParameterGroup', name: this.name });
+                    separator: true,
+                    id: this.id,
+                    separatorClass: 'rbroParameterGroup',
+                    name: this.name
+                });
             }
             for (let parameter of parametersToAppend) {
                 let paramName = this.name + '.' + parameter.getName();
                 parameters.push({
-                    name: paramName, nameLowerCase: paramName.toLowerCase(),
-                    id: parameter.getId(), description: '' });
+                    name: paramName,
+                    nameLowerCase: paramName.toLowerCase(),
+                    id: parameter.getId(),
+                    description: ''
+                });
             }
         } else if (this.type !== Parameter.type.array) {
             if (!Array.isArray(allowedTypes) || allowedTypes.indexOf(this.type) !== -1) {
                 parameters.push({
-                    name: this.name, nameLowerCase: this.name.toLowerCase(),
-                    id: this.id, description: '' });
+                    name: this.name,
+                    nameLowerCase: this.name.toLowerCase(),
+                    id: this.id,
+                    description: ''
+                });
             }
         } else if (Array.isArray(allowedTypes) && allowedTypes.indexOf(this.type) !== -1) {
             // add array parameter only if explicitly specified in allowedTypes
             parameters.push({
-                name: this.name, nameLowerCase: this.name.toLowerCase(),
-                id: this.id, description: '' });
+                name: this.name,
+                nameLowerCase: this.name.toLowerCase(),
+                id: this.id,
+                description: ''
+            });
         }
     }
 
@@ -394,8 +404,8 @@ export default class Parameter {
                         for (let field of fields) {
                             if (field.name in row) {
                                 let fieldData = row[field.name];
-                                if((field.allowMultiple && Array.isArray(fieldData)) ||
-                                        (!field.allowMultiple && !Array.isArray(fieldData))) {
+                                if ((field.allowMultiple && Array.isArray(fieldData)) ||
+                                    (!field.allowMultiple && !Array.isArray(fieldData))) {
                                     hasData = true;
                                     itemRow[field.name] = fieldData;
                                     if (field.allowMultiple && fieldData.length > 0) {
@@ -409,8 +419,7 @@ export default class Parameter {
                         }
                     }
                 }
-            } catch (e) {
-            }
+            } catch (e) {}
         }
         return rows;
     }

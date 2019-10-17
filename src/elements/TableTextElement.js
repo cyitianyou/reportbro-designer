@@ -211,7 +211,8 @@ export default class TableTextElement extends TextElement {
             'cs_condition', 'cs_styleId', 'cs_bold', 'cs_italic', 'cs_underline',
             'cs_horizontalAlignment', 'cs_verticalAlignment', 'cs_textColor', 'cs_backgroundColor',
             'cs_font', 'cs_fontSize', 'cs_lineSpacing',
-            'cs_paddingLeft', 'cs_paddingTop', 'cs_paddingRight', 'cs_paddingBottom'];
+            'cs_paddingLeft', 'cs_paddingTop', 'cs_paddingRight', 'cs_paddingBottom'
+        ];
         let tableBandObj = this.rb.getDataObject(this.parentId);
         if (tableBandObj !== null && tableBandObj.getValue('bandType') === Band.bandType.header) {
             fields.push('printIf');
@@ -248,7 +249,7 @@ export default class TableTextElement extends TextElement {
                 // calculate table width
                 let newTableWidth = width;
                 let cellWidths = tableBandObj.getSingleCellWidths();
-                for (let i=0; i < cellWidths.length; i++) {
+                for (let i = 0; i < cellWidths.length; i++) {
                     if (i < this.columnIndex || i >= (this.columnIndex + this.colspanVal)) {
                         newTableWidth += cellWidths[i];
                     }
@@ -318,7 +319,7 @@ export default class TableTextElement extends TextElement {
         if (tableObj !== null && tableBandObj !== null) {
             let contentWidth = this.rb.getDocumentProperties().getContentSize().width;
             let widths = tableBandObj.getSingleCellWidths();
-            let widthOther = 0;  // width of other cells
+            let widthOther = 0; // width of other cells
             for (let i = 0; i < widths.length; i++) {
                 if (i < this.columnIndex || i >= (this.columnIndex + this.colspanVal)) {
                     widthOther += widths[i];
@@ -363,7 +364,7 @@ export default class TableTextElement extends TextElement {
             .append($(`<div id="rbro_el_content${this.id}" class="rbroContentContainerHelper"></div>`)
                 .append($(`<div id="rbro_el_content_text${this.id}" class="rbroDocElementContentText"></div>`)
                     .append($(`<span id="rbro_el_content_text_data${this.id}"></span>`))
-            ));
+                ));
         if (this.colspanVal > 1) {
             this.el.attr('colspan', this.colspanVal);
         }
@@ -419,7 +420,7 @@ export default class TableTextElement extends TextElement {
 
                 // add a column to each table band
                 table.getValue('headerData').createColumns(columns, true, colIndex, left);
-                for (let i=0; i < table.getValue('contentDataRows').length; i++) {
+                for (let i = 0; i < table.getValue('contentDataRows').length; i++) {
                     table.getValue('contentDataRows')[i].createColumns(columns, true, colIndex, left);
                 }
                 table.getValue('footerData').createColumns(columns, true, colIndex, left);
@@ -458,7 +459,7 @@ export default class TableTextElement extends TextElement {
 
                 // remove column from each table band
                 table.getValue('headerData').deleteColumn(colIndex);
-                for (let i=0; i < table.getValue('contentDataRows').length; i++) {
+                for (let i = 0; i < table.getValue('contentDataRows').length; i++) {
                     table.getValue('contentDataRows')[i].deleteColumn(colIndex);
                 }
                 table.getValue('footerData').deleteColumn(colIndex);

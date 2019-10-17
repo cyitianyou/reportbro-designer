@@ -3,7 +3,7 @@ import Band from './container/Band';
 import DocumentProperties from './data/DocumentProperties';
 import DocElement from './elements/DocElement';
 import * as utils from './utils';
-import {getEventAbsPos} from "./utils";
+import { getEventAbsPos } from "./utils";
 
 /**
  * Area to display all bands and its doc elements.
@@ -68,7 +68,7 @@ export default class Document {
                 this.setDocumentTab(Document.tab.pdfLayout);
             }));
         let btnPdfPreview = $(
-            `<div id="rbro_document_tab_pdf_preview" class="rbroDocumentTab rbroButton rbroTabButton rbroHidden rbroPdfPreview 
+                `<div id="rbro_document_tab_pdf_preview" class="rbroDocumentTab rbroButton rbroTabButton rbroHidden rbroPdfPreview 
                 ${this.rb.getProperty('enableSpreadsheet') ? 'rbroXlsxDownload' : ''}">
                 ${this.rb.getLabel('documentTabPdfPreview')}</div>`)
             .click(event => {
@@ -76,11 +76,11 @@ export default class Document {
             });
         if (this.rb.getProperty('enableSpreadsheet')) {
             btnPdfPreview.append($(
-                `<span class="rbroIcon-xlsx rbroXlsxDownlaodButton" title="${this.rb.getLabel('documentTabXlsxDownload')}"></span>`)
+                    `<span class="rbroIcon-xlsx rbroXlsxDownlaodButton" title="${this.rb.getLabel('documentTabXlsxDownload')}"></span>`)
                 .click(event => { this.rb.downloadSpreadsheet(); }));
         }
         btnPdfPreview.append($(
-            `<span class="rbroIcon-cancel" title="${this.rb.getLabel('documentTabClose')}"></span>`)
+                `<span class="rbroIcon-cancel" title="${this.rb.getLabel('documentTabClose')}"></span>`)
             .click(event => { this.closePdfPreviewTab(); }));
         elDocTabs.append(btnPdfPreview);
         panel.append(elDocTabs);
@@ -129,29 +129,29 @@ export default class Document {
 
     initializeEventHandlers() {
         this.elDocContent.on('dragover', event => {
-            this.processDragover(event);
-        })
-        .on('dragenter', event => {
-            if (this.rb.isBrowserDragActive('docElement')) {
-                this.dragEnterCount++;
-                event.preventDefault(); // needed for IE
-            }
-        })
-        .on('dragleave', event => {
-            if (this.rb.isBrowserDragActive('docElement')) {
-                this.dragEnterCount--;
-                if (this.dragEnterCount === 0) {
-                    $('.rbroElementContainer').removeClass('rbroElementDragOver');
-                    this.dragContainerId = null;
+                this.processDragover(event);
+            })
+            .on('dragenter', event => {
+                if (this.rb.isBrowserDragActive('docElement')) {
+                    this.dragEnterCount++;
+                    event.preventDefault(); // needed for IE
                 }
-            }
-        })
-        .on('drop', event => {
-            this.processDrop(event);
-            return false;
-        });
+            })
+            .on('dragleave', event => {
+                if (this.rb.isBrowserDragActive('docElement')) {
+                    this.dragEnterCount--;
+                    if (this.dragEnterCount === 0) {
+                        $('.rbroElementContainer').removeClass('rbroElementDragOver');
+                        this.dragContainerId = null;
+                    }
+                }
+            })
+            .on('drop', event => {
+                this.processDrop(event);
+                return false;
+            });
     }
-    
+
     processMouseMove(event) {
         if (this.dragging) {
             this.processDrag(event);
@@ -160,8 +160,11 @@ export default class Document {
             let area = this.getSelectionArea(
                 event.originalEvent.pageX - offset.left, event.originalEvent.pageY - offset.top);
             let props = {
-                left: this.rb.toPixel(area.left), top: this.rb.toPixel(area.top),
-                width: this.rb.toPixel(area.width), height: this.rb.toPixel(area.height)};
+                left: this.rb.toPixel(area.left),
+                top: this.rb.toPixel(area.top),
+                width: this.rb.toPixel(area.width),
+                height: this.rb.toPixel(area.height)
+            };
             this.elSelectionArea.css(props);
             if (this.elSelectionArea.hasClass('rbroHidden')) {
                 // show element after css properties are set
@@ -228,7 +231,7 @@ export default class Document {
             $('#rbro_menu_element_drag_item').addClass('rbroHidden');
         }
     }
-    
+
     processDrag(event) {
         let absPos = getEventAbsPos(event);
         if (this.dragType === DocElement.dragType.element) {
@@ -562,8 +565,7 @@ export default class Document {
             let offset = this.elDocContent.offset();
             this.stopSelectionArea(
                 event.originalEvent.pageX - offset.left,
-                event.originalEvent.pageY - offset.top,
-                !event.shiftKey);
+                event.originalEvent.pageY - offset.top, !event.shiftKey);
         }
     }
 }

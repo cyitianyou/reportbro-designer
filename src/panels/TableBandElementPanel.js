@@ -31,7 +31,7 @@ export default class TableBandElementPanel {
         elFormField.append(elHeight);
         elDiv.append(elFormField);
         panel.append(elDiv);
-        
+
         elDiv = $('<div id="rbro_table_band_element_repeat_header_row" class="rbroFormRow"></div>');
         elDiv.append(`<label for="rbro_table_band_element_repeat_header">${this.rb.getLabel('tableElementRepeatHeader')}:</label>`);
         elFormField = $('<div class="rbroFormField"></div>');
@@ -47,7 +47,7 @@ export default class TableBandElementPanel {
         elFormField.append(elRepeatHeader);
         elDiv.append(elFormField);
         panel.append(elDiv);
-        
+
         elDiv = $('<div class="rbroFormRow"></div>');
         elDiv.append(`<label for="rbro_table_band_element_background_color">${this.rb.getLabel('styleBackgroundColor')}:</label>`);
         elFormField = $('<div class="rbroFormField"></div>');
@@ -225,8 +225,7 @@ export default class TableBandElementPanel {
      * @param {*} obj - new/deleted/modified data object.
      * @param {String} operation - operation which caused the notification.
      */
-    notifyEvent(obj, operation) {
-    }
+    notifyEvent(obj, operation) {}
 
     /**
      * Updates displayed errors of currently selected data object.

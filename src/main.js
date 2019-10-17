@@ -49,6 +49,6 @@ $.fn.reportBro = function(options) {
             rv = reportBro;
         }
     });
-    
+
     return rv;
 };

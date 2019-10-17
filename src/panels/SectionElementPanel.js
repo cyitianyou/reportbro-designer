@@ -122,21 +122,21 @@ export default class SectionElementPanel {
         let elPrintHeader = $('<div class="rbroPanelSectionHeader"></div>');
         let elPrintHeaderIcon = $('<span id="rbro_section_element_print_header_icon" class="rbroIcon-plus"></span>');
         elDiv = $('<div id="rbro_section_element_print_header" class="rbroFormRow rbroPanelSection"></div>')
-                .click(event => {
-                    $('#rbro_section_element_print_header').toggleClass('rbroPanelSectionHeaderOpen');
-                    $('#rbro_section_element_print_section').toggleClass('rbroHidden');
-                    elPrintHeaderIcon.toggleClass('rbroIcon-plus');
-                    elPrintHeaderIcon.toggleClass('rbroIcon-minus');
-                    if (elPrintHeaderIcon.hasClass('rbroIcon-minus')) {
-                        $('#rbro_detail_panel').scrollTop(elPrintHeader.position().top);
-                    }
-                    autosize.update($('#rbro_section_element_print_if'));
-                });
+            .click(event => {
+                $('#rbro_section_element_print_header').toggleClass('rbroPanelSectionHeaderOpen');
+                $('#rbro_section_element_print_section').toggleClass('rbroHidden');
+                elPrintHeaderIcon.toggleClass('rbroIcon-plus');
+                elPrintHeaderIcon.toggleClass('rbroIcon-minus');
+                if (elPrintHeaderIcon.hasClass('rbroIcon-minus')) {
+                    $('#rbro_detail_panel').scrollTop(elPrintHeader.position().top);
+                }
+                autosize.update($('#rbro_section_element_print_if'));
+            });
         elPrintHeader.append(elPrintHeaderIcon);
         elPrintHeader.append(`<span>${this.rb.getLabel('docElementPrintSettings')}</span>`);
         elDiv.append(elPrintHeader);
         panel.append(elDiv);
-        
+
         let elPrintSectionDiv = $('<div id="rbro_section_element_print_section" class="rbroHidden"></div>');
         elDiv = $('<div id="rbro_section_element_print_if_row" class="rbroFormRow"></div>');
         elDiv.append(`<label for="rbro_section_element_print_if">${this.rb.getLabel('docElementPrintIf')}:</label>`);
@@ -196,7 +196,7 @@ export default class SectionElementPanel {
             $('#rbro_table_element_header').prop('disabled', false);
             $('#rbro_table_element_footer').prop('disabled', false);
             $('#rbro_section_element_print_if').prop('disabled', false);
-            
+
             $('#rbro_section_element_data_source').val(data.getValue('dataSource'));
             $('#rbro_section_element_label').val(data.getValue('label'));
             $('#rbro_section_element_position_y').val(data.getValue('y'));
@@ -222,8 +222,7 @@ export default class SectionElementPanel {
      * @param {*} obj - new/deleted/modified data object.
      * @param {String} operation - operation which caused the notification.
      */
-    notifyEvent(obj, operation) {
-    }
+    notifyEvent(obj, operation) {}
 
     /**
      * Updates displayed errors of currently selected data object.

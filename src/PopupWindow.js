@@ -62,8 +62,12 @@ export default class PopupWindow {
             this.createTestDataTable(items);
             let width = Math.round(winWidth * 0.8);
             let height = Math.round(winHeight * 0.8);
-            this.elWindow.css({ left: Math.round((winWidth - width) / 2) + 'px', top: Math.round((winHeight - height) / 2) + $(window).scrollTop() + 'px',
-                    width: width + 'px', height: height + 'px' });
+            this.elWindow.css({
+                left: Math.round((winWidth - width) / 2) + 'px',
+                top: Math.round((winHeight - height) / 2) + $(window).scrollTop() + 'px',
+                width: width + 'px',
+                height: height + 'px'
+            });
             $('body').append($('<div id="rbro_background_overlay" class="rbroBackgroundOverlay"></div>'));
             $('body').addClass('rbroFixedBackground'); // no scroll bars for background while popup is shown
         } else {
@@ -184,7 +188,7 @@ export default class PopupWindow {
                 if (testData !== null && parameter.name in testData) {
                     values = testData[parameter.name];
                 }
-                for (let i=0; i < parameter.arraySize; i++) {
+                for (let i = 0; i < parameter.arraySize; i++) {
                     let data = '';
                     if (Array.isArray(values) && i < values.length) {
                         data = values[i];
@@ -235,7 +239,7 @@ export default class PopupWindow {
             for (let parameter of this.parameters) {
                 if (parameter.allowMultiple && parameter.arraySize > 0) {
                     let fieldData = [];
-                    for (let j=0; j < parameter.arraySize; j++) {
+                    for (let j = 0; j < parameter.arraySize; j++) {
                         let input = inputs.eq(i);
                         if (parameter !== excludeParameter || j !== excludeParameterArrayItemIndex) {
                             fieldData.push(input.val().trim());
@@ -263,7 +267,7 @@ export default class PopupWindow {
         tableHeaderRow.append('<th></th>');
         for (let parameter of this.parameters) {
             if (parameter.allowMultiple) {
-                for (let arrayIndex=0; arrayIndex < parameter.arraySize; arrayIndex++) {
+                for (let arrayIndex = 0; arrayIndex < parameter.arraySize; arrayIndex++) {
                     let th = $('<th></th>');
                     th.append($(`<span>${parameter.name} ${arrayIndex + 1}</span>`));
                     if (arrayIndex === 0) {
@@ -293,7 +297,7 @@ export default class PopupWindow {
         if (items.length === 0) {
             this.addTestDataRow(tableBody, this.parameters, null);
         }
-        for (i=0; i < items.length; i++) {
+        for (i = 0; i < items.length; i++) {
             this.addTestDataRow(tableBody, this.parameters, items[i]);
         }
         table.append(tableBody);

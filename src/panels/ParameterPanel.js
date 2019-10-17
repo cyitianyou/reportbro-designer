@@ -196,7 +196,7 @@ export default class ParameterPanel {
                     let items;
                     let popupType;
                     if (selectedObj.getValue('type') === Parameter.type.sum ||
-                            selectedObj.getValue('type') === Parameter.type.average) {
+                        selectedObj.getValue('type') === Parameter.type.average) {
                         items = this.rb.getArrayFieldParameterItems(Parameter.type.number);
                         popupType = PopupWindow.type.parameterSet;
                     } else {
@@ -312,7 +312,7 @@ export default class ParameterPanel {
             $('#rbro_parameter_expression').prop('disabled', true);
             $('#rbro_parameter_test_data').prop('disabled', true);
         }
-        
+
         this.updateAutosizeInputs();
         this.updateErrors();
     }
@@ -351,7 +351,7 @@ export default class ParameterPanel {
             $('#rbro_parameter_array_item_type_row').hide();
         }
         if (type === Parameter.type.string || type === Parameter.type.number || type === Parameter.type.boolean || type === Parameter.type.date ||
-                type === Parameter.type.array || type === Parameter.type.simpleArray || type === Parameter.type.map) {
+            type === Parameter.type.array || type === Parameter.type.simpleArray || type === Parameter.type.map) {
             $('#rbro_parameter_nullable_row').show();
         } else {
             $('#rbro_parameter_nullable_row').hide();
@@ -363,7 +363,7 @@ export default class ParameterPanel {
             $('#rbro_parameter_pattern_row').hide();
         }
         if (type === Parameter.type.image || type === Parameter.type.sum || type === Parameter.type.average ||
-                showOnlyNameType) {
+            showOnlyNameType) {
             $('#rbro_parameter_eval_row').hide();
             $('#rbro_parameter_test_data_row').hide();
         } else {
@@ -373,7 +373,7 @@ export default class ParameterPanel {
                 $('#rbro_parameter_eval_row').show();
             }
             if ((parentParameter !== null && parentParameter.getValue('type') === Parameter.type.array) ||
-                    type === Parameter.type.map) {
+                type === Parameter.type.map) {
                 $('#rbro_parameter_test_data_row').hide();
             } else {
                 if (type === Parameter.type.array || type === Parameter.type.simpleArray || !obj.getValue('eval')) {
@@ -391,7 +391,7 @@ export default class ParameterPanel {
             }
         }
         if (((obj.getValue('eval') && (type === Parameter.type.string || type === Parameter.type.number ||
-              type === Parameter.type.boolean || type === Parameter.type.date)) ||
+                    type === Parameter.type.boolean || type === Parameter.type.date)) ||
                 (type === Parameter.type.sum || type === Parameter.type.average)) && !showOnlyNameType) {
             $('#rbro_parameter_expression_row').show();
         } else {

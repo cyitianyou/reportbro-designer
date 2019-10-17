@@ -111,7 +111,7 @@ SetValueCmd.type = {
     filename: 'filename',
     checkbox: 'checkbox',
     button: 'button',
-    buttonGroup: 'buttonGroup',  // one button inside a group of buttons with only one active button
+    buttonGroup: 'buttonGroup', // one button inside a group of buttons with only one active button
     color: 'color',
     internal: 'internal'
 };

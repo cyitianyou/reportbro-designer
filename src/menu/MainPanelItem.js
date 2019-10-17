@@ -16,7 +16,7 @@ import Document from '../Document';
 export default class MainPanelItem {
     constructor(panelName, parent, data, properties, rb) {
         this.properties = { hasChildren: false, showAdd: false, showDelete: true, hasDetails: true, visible: true, draggable: false };
-        $.extend( this.properties, properties );
+        $.extend(this.properties, properties);
         this.panelName = panelName;
         let name = (data !== null) ? data.getName() : '';
         this.id = (data !== null) ? data.getId() : properties.id;
@@ -34,7 +34,7 @@ export default class MainPanelItem {
         if (this.properties.draggable) {
             itemDiv.attr('draggable', 'true');
             itemDiv.on('dragstart', event => {
-                event.originalEvent.dataTransfer.setData('text/plain', '');  // without setData dragging does not work in FF
+                event.originalEvent.dataTransfer.setData('text/plain', ''); // without setData dragging does not work in FF
                 event.originalEvent.dataTransfer.effectAllowed = 'move';
                 this.rb.startBrowserDrag('panelItem', null, this.id);
                 // avoid calling dragstart handler for main div which disables dragging for all other elements
@@ -100,7 +100,7 @@ export default class MainPanelItem {
                     }
                 }
             });
-        
+
         let nameDiv = $(`<div class="rbroMenuItemText"><span id="rbro_menu_item_name${this.id}">${name}</span></div>`);
         if (this.properties.showAdd) {
             itemDiv.append($(`<div id="rbro_menu_item_add${this.id}" class="rbroButton rbroRoundButton rbroIcon-plus"></div>`)
@@ -130,9 +130,9 @@ export default class MainPanelItem {
                         cmd = new CommandGroupCmd('Delete', this);
                         this.getData().addCommandsForDelete(cmd);
                     } else if (panelName === DocElement.type.text || panelName === DocElement.type.image ||
-                            panelName === DocElement.type.line || panelName === DocElement.type.table ||
-                            panelName === DocElement.type.pageBreak ||
-                            panelName === DocElement.type.frame || panelName === DocElement.type.section) {
+                        panelName === DocElement.type.line || panelName === DocElement.type.table ||
+                        panelName === DocElement.type.pageBreak ||
+                        panelName === DocElement.type.frame || panelName === DocElement.type.section) {
                         if (this.getData() instanceof DocElement) {
                             cmd = new CommandGroupCmd('Delete', this);
                             this.getData().addCommandsForDelete(cmd);
@@ -255,7 +255,7 @@ export default class MainPanelItem {
             $(`#rbro_menu_item${this.getId()}`).removeClass('rbroMenuItemNoChildren');
         }
         if (pos !== -1) {
-                this.children.splice(pos, 0, child);
+            this.children.splice(pos, 0, child);
         } else {
             this.children.push(child);
         }
@@ -276,7 +276,7 @@ export default class MainPanelItem {
     }
 
     removeChildInternal(child, deleteDomNode) {
-        for (let i=0; i < this.children.length; i++) {
+        for (let i = 0; i < this.children.length; i++) {
             if (child.getId() === this.children[i].getId()) {
                 this.children.splice(i, 1);
                 if (deleteDomNode) {
@@ -293,7 +293,7 @@ export default class MainPanelItem {
     getSiblingPosition() {
         if (this.getParent() !== null) {
             let siblings = this.getParent().getChildren();
-            for (let i=0; i < siblings.length; i++) {
+            for (let i = 0; i < siblings.length; i++) {
                 if (siblings[i] === this) {
                     return i;
                 }
@@ -357,15 +357,15 @@ export default class MainPanelItem {
                     if (parent !== null) {
                         if (parent.getValue('type') === Parameter.type.array) {
                             if (draggedObj.getValue('type') !== Parameter.type.array &&
-                                    draggedObj.getValue('type') !== Parameter.type.map &&
-                                    draggedObj.getValue('type') !== Parameter.type.sum &&
-                                    draggedObj.getValue('type') !== Parameter.type.average) {
+                                draggedObj.getValue('type') !== Parameter.type.map &&
+                                draggedObj.getValue('type') !== Parameter.type.sum &&
+                                draggedObj.getValue('type') !== Parameter.type.average) {
                                 rv.allowDrop = true;
                                 dropIntoParent = true;
                             }
                         } else if (parent.getValue('type') === Parameter.type.map) {
                             if (draggedObj.getValue('type') !== Parameter.type.array &&
-                                    draggedObj.getValue('type') !== Parameter.type.map) {
+                                draggedObj.getValue('type') !== Parameter.type.map) {
                                 rv.allowDrop = true;
                                 dropIntoParent = true;
                             }
@@ -396,9 +396,9 @@ export default class MainPanelItem {
                 }
                 if (rv.panel === null || (rv.panel === draggedObj.getPanelItem().getParent() &&
                         rv.position === draggedObj.getPanelItem().getSiblingPosition())) {
-                        // do not allow drop if object is not moved (same parent and position)
-                        rv.allowDrop = false;
-                    }
+                    // do not allow drop if object is not moved (same parent and position)
+                    rv.allowDrop = false;
+                }
             }
         }
         return rv;

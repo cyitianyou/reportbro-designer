@@ -44,7 +44,7 @@ export default class StylePanel {
         let elDiv = $('<div class="rbroFormRow"></div>');
         elDiv.append(`<label for="rbro_${idPrefix}padding">${rb.getLabel('stylePadding')}:</label>`);
         let elFormField = $('<div class="rbroFormField rbroSmallInput"></div>');
-        
+
         let elPaddingTopDiv = $('<div class="rbroColumnCenter"></div>');
         let elPaddingTop = $(`<input id="rbro_${idPrefix}padding_top" placeholder="${rb.getLabel('orientationTop')}">`)
             .on('input', event => {
@@ -301,7 +301,7 @@ export default class StylePanel {
                 });
             elFormField.append(elFont);
             let strFontSize = `<select id="rbro_${idPrefix}font_size">`;
-            for (let size of [8,9,10,11,12,13,14,15,16,18,20,22,24,26,28,32,36,40,44,48,54,60,66,72,80]) {
+            for (let size of[8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 54, 60, 66, 72, 80]) {
                 strFontSize += `<option value="${size}">${size}</option>`;
             }
             strFontSize += '</select>';
@@ -518,25 +518,20 @@ export default class StylePanel {
             let horizontalAlignment = data.getValue(`${fieldPrefix}horizontalAlignment`);
             if (horizontalAlignment === Style.alignment.left) {
                 $(`#rbro_${idPrefix}halignment_left`).addClass('rbroButtonActive');
-            }
-            else if (horizontalAlignment === Style.alignment.center) {
+            } else if (horizontalAlignment === Style.alignment.center) {
                 $(`#rbro_${idPrefix}halignment_center`).addClass('rbroButtonActive');
-            }
-            else if (horizontalAlignment === Style.alignment.right) {
+            } else if (horizontalAlignment === Style.alignment.right) {
                 $(`#rbro_${idPrefix}halignment_right`).addClass('rbroButtonActive');
-            }
-            else if (horizontalAlignment === Style.alignment.justify) {
+            } else if (horizontalAlignment === Style.alignment.justify) {
                 $(`#rbro_${idPrefix}halignment_justify`).addClass('rbroButtonActive');
             }
             $(`#rbro_${idPrefix}valignment_top`).parent().find('button').removeClass('rbroButtonActive');
             let verticalAlignment = data.getValue(`${fieldPrefix}verticalAlignment`);
             if (verticalAlignment == Style.alignment.top) {
                 $(`#rbro_${idPrefix}valignment_top`).addClass('rbroButtonActive');
-            }
-            else if (verticalAlignment === Style.alignment.middle) {
+            } else if (verticalAlignment === Style.alignment.middle) {
                 $(`#rbro_${idPrefix}valignment_middle`).addClass('rbroButtonActive');
-            }
-            else if (verticalAlignment === Style.alignment.bottom) {
+            } else if (verticalAlignment === Style.alignment.bottom) {
                 $(`#rbro_${idPrefix}valignment_bottom`).addClass('rbroButtonActive');
             }
 
@@ -647,8 +642,7 @@ export default class StylePanel {
      * @param {*} obj - new/deleted/modified data object.
      * @param {String} operation - operation which caused the notification.
      */
-    notifyEvent(obj, operation) {
-    }
+    notifyEvent(obj, operation) {}
 
     /**
      * Updates displayed errors of currently selected data object.
@@ -658,8 +652,7 @@ export default class StylePanel {
         $('#rbro_style_panel .rbroErrorMessage').text('');
         let selectedObj = this.rb.getDataObject(this.selectedObjId);
         if (selectedObj !== null) {
-            for (let error of selectedObj.getErrors()) {
-            }
+            for (let error of selectedObj.getErrors()) {}
         }
     }
 

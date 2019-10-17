@@ -32,7 +32,7 @@ export default class BarCodeElement extends DocElement {
 
     setValue(field, value, elSelector, isShown) {
         super.setValue(field, value, elSelector, isShown);
-        if (field === 'content' ||field === 'format' || field === 'displayValue' || field === 'height') {
+        if (field === 'content' || field === 'format' || field === 'displayValue' || field === 'height') {
             this.updateBarCode();
             this.updateDisplay();
         }
@@ -45,7 +45,8 @@ export default class BarCodeElement extends DocElement {
     getFields() {
         return ['id', 'containerId', 'x', 'y', 'height', 'content', 'format', 'displayValue',
             'printIf', 'removeEmptyElement',
-            'spreadsheet_hide', 'spreadsheet_column', 'spreadsheet_colspan', 'spreadsheet_addEmptyRow'];
+            'spreadsheet_hide', 'spreadsheet_column', 'spreadsheet_colspan', 'spreadsheet_addEmptyRow'
+        ];
     }
 
     getElementType() {
@@ -54,8 +55,12 @@ export default class BarCodeElement extends DocElement {
 
     updateDisplayInternal(x, y, width, height) {
         if (this.el !== null) {
-            let props = { left: this.rb.toPixel(x), top: this.rb.toPixel(y),
-                width: this.rb.toPixel(width), height: this.rb.toPixel(height) };
+            let props = {
+                left: this.rb.toPixel(x),
+                top: this.rb.toPixel(y),
+                width: this.rb.toPixel(width),
+                height: this.rb.toPixel(height)
+            };
             this.el.css(props);
         }
     }
@@ -95,14 +100,17 @@ export default class BarCodeElement extends DocElement {
 
     updateBarCode() {
         let valid = false;
-        let options = { format: this.format, height: this.displayValue ? (this.heightVal - 22) : this.heightVal,
-                margin: 0, displayValue: this.displayValue };
+        let options = {
+            format: this.format,
+            height: this.displayValue ? (this.heightVal - 22) : this.heightVal,
+            margin: 0,
+            displayValue: this.displayValue
+        };
         if (this.content !== '' && this.content.indexOf('${') === -1) {
             try {
                 this.elBarCode.JsBarcode(this.content, options);
                 valid = true;
-            } catch (ex) {
-            }
+            } catch (ex) {}
         }
         if (!valid) {
             // in case barcode cannot be created because of invalid input use default content appropriate
@@ -120,8 +128,8 @@ export default class BarCodeElement extends DocElement {
                 content = '12';
             } else if (this.format === 'ITF14') {
                 content = '12345678901231';
-            } else if (this.format === 'MSI' ||this.format === 'MSI10' || this.format === 'MSI11' ||
-                    this.format === 'MSI1010' || this.format === 'MSI1110' || this.format == 'pharmacode') {
+            } else if (this.format === 'MSI' || this.format === 'MSI10' || this.format === 'MSI11' ||
+                this.format === 'MSI1010' || this.format === 'MSI1110' || this.format == 'pharmacode') {
                 content = '1234';
             }
             this.elBarCode.JsBarcode(content, options);

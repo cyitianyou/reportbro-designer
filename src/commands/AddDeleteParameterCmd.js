@@ -51,8 +51,7 @@ export default class AddDeleteParameterCmd {
             let parameter = new Parameter(this.id, this.initialData, this.rb);
             this.rb.addParameter(parameter);
             let panelItem = new MainPanelItem(
-                'parameter', parent.getPanelItem(), parameter,
-                { hasChildren: true, showAdd: true, showDelete: this.showDelete, draggable: true }, this.rb);
+                'parameter', parent.getPanelItem(), parameter, { hasChildren: true, showAdd: true, showDelete: this.showDelete, draggable: true }, this.rb);
             panelItem.openParentItems();
             parameter.setPanelItem(panelItem);
             parent.getPanelItem().insertChild(this.position, panelItem);

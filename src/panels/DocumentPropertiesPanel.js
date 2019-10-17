@@ -53,11 +53,11 @@ export default class DocumentPropertiesPanel {
             <option value="mm">mm</option>
             <option value="inch">inch</option>
         </select>`)
-        .change(event => {
-            let cmd = new SetValueCmd(this.documentProperties.getId(), 'rbro_document_properties_unit', 'unit',
-                elUnit.val(), SetValueCmd.type.select, this.rb);
-            this.rb.executeCommand(cmd);
-        });
+            .change(event => {
+                let cmd = new SetValueCmd(this.documentProperties.getId(), 'rbro_document_properties_unit', 'unit',
+                    elUnit.val(), SetValueCmd.type.select, this.rb);
+                this.rb.executeCommand(cmd);
+            });
         elPageSizeDiv.append(elUnit);
         elFormField.append(elPageSizeDiv);
         elFormField.append('<div id="rbro_document_properties_page_error" class="rbroErrorMessage"></div>');
@@ -143,7 +143,7 @@ export default class DocumentPropertiesPanel {
         let elDiv = $('<div class="rbroFormRow"></div>');
         elDiv.append(`<label for="rbro_document_properties_page_margin_top">${this.rb.getLabel('pageMargins')}:</label>`);
         let elFormField = $('<div class="rbroFormField rbroSmallInput"></div>');
-        
+
         let elMarginTopDiv = $('<div class="rbroColumnCenter"></div>');
         let elMarginTop = $(`<input id="rbro_document_properties_page_margin_top" placeholder="${this.rb.getLabel('orientationTop')}">`)
             .change(event => {

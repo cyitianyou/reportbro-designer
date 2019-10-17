@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,800');
-
-*, html {
-    font-family:inherit;
-    outline:none;
+*,
+html {
+    font-family: inherit;
+    outline: none;
 }
 
 #reportbro {
@@ -19,7 +19,8 @@
 #reportbro {
     position: absolute;
     width: 100%;
-    min-width: 1060px; /* prevent menu item wrap on too small screens */
+    min-width: 1060px;
+    /* prevent menu item wrap on too small screens */
     height: 100%;
     top: auto;
     left: auto;
@@ -28,6 +29,7 @@
     -ms-user-select: none;
     user-select: none;
 }
+
 
 /* Main content container - general styles */
 
@@ -42,7 +44,7 @@
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
-.rbroContainer > div {
+.rbroContainer>div {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -51,13 +53,15 @@
     box-sizing: border-box;
 }
 
-.rbroContainer input, .rbroContainer select, .rbroContainer textarea {
+.rbroContainer input,
+.rbroContainer select,
+.rbroContainer textarea {
     color: #444444;
     width: 100%;
     box-sizing: border-box;
     height: 28px;
     border-radius: 4px;
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     background-color: #f1f3f4;
     transition: all 0.2s linear;
     padding: 0 4px;
@@ -94,16 +98,21 @@
     padding: 5px;
 }
 
-.rbroContainer input:focus, .rbroContainer select:focus, .rbroContainer textarea:focus {
+.rbroContainer input:focus,
+.rbroContainer select:focus,
+.rbroContainer textarea:focus {
     background: #ffffff;
     border: 1px solid #004864;
     outline: none;
 }
 
-.rbroContainer input[disabled], .rbroContainer select[disabled], .rbroContainer textarea[disabled] {
+.rbroContainer input[disabled],
+.rbroContainer select[disabled],
+.rbroContainer textarea[disabled] {
     background: transparent;
     color: #AAAAAA;
 }
+
 
 /* Menu panel */
 
@@ -119,7 +128,7 @@
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
-.rbroMenuPanel > div {
+.rbroMenuPanel>div {
     position: absolute;
     top: 0;
 }
@@ -134,7 +143,7 @@
     height: 45px;
     background-size: auto 85%;
     background-position: center;
-    background-color: rgba(113,171,218,0.3);
+    background-color: rgba(113, 171, 218, 0.3);
     z-index: 10;
 }
 
@@ -154,9 +163,11 @@
     height: 45px;
 }
 
-.rbroActionButtons > div, .rbroElementButtons > div {
+.rbroActionButtons>div,
+.rbroElementButtons>div {
     display: inline-block;
 }
+
 
 /* Sidebar menu enabled  */
 
@@ -167,7 +178,7 @@
 .rbroMenuPanelSidebar .rbroLogo {
     top: auto;
     bottom: 0;
-    background-color: rgba(113,171,218,0.3);
+    background-color: rgba(113, 171, 218, 0.3);
 }
 
 .rbroMenuPanelSidebar .rbroDocumentPanel {
@@ -185,7 +196,7 @@
     box-sizing: border-box;
 }
 
-.rbroMenuPanelSidebar .rbroMenuPanel > div {
+.rbroMenuPanelSidebar .rbroMenuPanel>div {
     position: relative;
     left: 0;
 }
@@ -234,6 +245,7 @@
     display: block;
 }
 
+
 /* Main Panel - Navigation */
 
 .rbroMainPanel {
@@ -243,23 +255,24 @@
     color: #f2f2f2;
 }
 
-.rbroMainPanel ul, .rbroMainPanel li {
+.rbroMainPanel ul,
+.rbroMainPanel li {
     list-style: none inside;
     padding: 0;
     margin: 0;
 }
 
-.rbroMainPanel > ul > li {
+.rbroMainPanel>ul>li {
     border-bottom: 1px solid;
     border-color: rgba(255, 255, 255, 0.1);
     line-height: 20px;
 }
 
-.rbroMainPanel > ul > li > ul > li:not(:empty) {
+.rbroMainPanel>ul>li>ul>li:not(:empty) {
     line-height: 20px;
 }
 
-.rbroMainPanel > div:hover {
+.rbroMainPanel>div:hover {
     background-color: rgba(116, 116, 130, 0.2);
 }
 
@@ -271,14 +284,14 @@
     text-transform: uppercase;
 }
 
-.rbroMenuItem > div {
+.rbroMenuItem>div {
     display: flex;
     align-items: center;
     overflow: hidden;
     white-space: nowrap;
 }
 
-.rbroMenuItem > div > span {
+.rbroMenuItem>div>span {
     -ms-text-overflow: ellipsis;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -339,7 +352,7 @@ ul ul .rbroMenuItemText {
 .rbroMenuArrow {
     font-size: 12px;
     margin-right: 2px;
-    transition:  all 0.2s linear;
+    transition: all 0.2s linear;
     margin-left: 2px;
 }
 
@@ -361,6 +374,7 @@ ul ul .rbroMenuItemText {
 .rbroMainPanelSizer:hover {
     background: #468FED;
 }
+
 
 /* Detail Panel */
 
@@ -389,7 +403,8 @@ ul ul .rbroMenuItemText {
     background-color: transparent;
 }
 
-.rbroFormRowContainer { /* groups multiple rbroFormRow without borders within the group */
+.rbroFormRowContainer {
+    /* groups multiple rbroFormRow without borders within the group */
     border-bottom: 1px solid #E4E7EA;
 }
 
@@ -419,11 +434,14 @@ ul ul .rbroMenuItemText {
     width: 65%;
 }
 
-.rbroFormField:not(.rbroSplit) > :nth-child(n+2) { /* add some top margin in case of multiline formField */
+.rbroFormField:not(.rbroSplit)> :nth-child(n+2) {
+    /* add some top margin in case of multiline formField */
     margin-top: 5px;
 }
 
-.rbroSplit, .rbroTripleSplit { /* splitting a formField */
+.rbroSplit,
+.rbroTripleSplit {
+    /* splitting a formField */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -438,11 +456,13 @@ ul ul .rbroMenuItemText {
     width: 49%;
 }
 
-.rbroTripleSplit input, .rbroTripleSplit select {
+.rbroTripleSplit input,
+.rbroTripleSplit select {
     width: 32%;
 }
 
-.rbroSelector textarea, .rbroSelector input {
+.rbroSelector textarea,
+.rbroSelector input {
     width: 85%;
 }
 
@@ -450,7 +470,9 @@ ul ul .rbroMenuItemText {
     width: 70px;
 }
 
+
 /* For styling font selection only */
+
 .rbroSelectFont select:first-child {
     width: 70%;
 }
@@ -459,14 +481,15 @@ ul ul .rbroMenuItemText {
     width: 22%;
 }
 
-.rbroPanelSection, .rbroPanelSection.rbroPanelSectionHeaderOpen:hover {
+.rbroPanelSection,
+.rbroPanelSection.rbroPanelSectionHeaderOpen:hover {
     justify-content: center;
     cursor: pointer;
     background-color: #D4E6F4
 }
 
 .rbroPanelSection:hover {
-    background-color: rgba(113,171,218,0.2);
+    background-color: rgba(113, 171, 218, 0.2);
 }
 
 .rbroPanelSection.rbroPanelSectionHeaderOpen {
@@ -481,7 +504,7 @@ ul ul .rbroMenuItemText {
     color: #004864;
 }
 
-.rbroPanelSection .rbroPanelSectionHeader > span {
+.rbroPanelSection .rbroPanelSectionHeader>span {
     margin: 0 5px;
 }
 
@@ -489,6 +512,7 @@ ul ul .rbroMenuItemText {
     background-color: #ffcccc;
     align-items: flex-start;
 }
+
 
 /* Document Panel - Template layouting and PDF preview */
 
@@ -533,20 +557,22 @@ ul ul .rbroMenuItemText {
 }
 
 .rbroElementDragOver {
-    background-color: rgba(204,204,204,0.2);
+    background-color: rgba(204, 204, 204, 0.2);
 }
 
-.rbroElementDragOver > .rbroDocumentBandDescription {
+.rbroElementDragOver>.rbroDocumentBandDescription {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
     font-size: 32px;
     font-weight: 600;
-    color: rgba(0,72,100,0.4);
+    color: rgba(0, 72, 100, 0.4);
 }
 
+
 /* Document Panel - Tabs to switch between layout and preview */
+
 .rbroDocumentTabs {
     text-align: center;
 }
@@ -569,7 +595,7 @@ ul ul .rbroMenuItemText {
     cursor: text;
 }
 
-.rbroTabButton > span {
+.rbroTabButton>span {
     color: #444444;
     cursor: pointer;
     font-weight: 400;
@@ -601,11 +627,14 @@ ul ul .rbroMenuItemText {
     right: 30px;
 }
 
-.rbroTabButton .rbroIcon-cancel:hover, .rbroXlsxDownlaodButton:hover {
+.rbroTabButton .rbroIcon-cancel:hover,
+.rbroXlsxDownlaodButton:hover {
     color: #3baae3;
 }
 
+
 /* Document Panel - Elements */
+
 .rbroSectionElement {
     position: absolute;
     box-sizing: border-box;
@@ -651,40 +680,54 @@ ul ul .rbroMenuItemText {
     width: 100%;
 }
 
-.rbroDocElementAlignCenter, .rbroDocElementAlignCenter .rbroDocElementContentText {
+.rbroDocElementAlignCenter,
+.rbroDocElementAlignCenter .rbroDocElementContentText {
     justify-content: center;
 }
 
-.rbroDocElementAlignLeft,  .rbroDocElementAlignLeft .rbroDocElementContentText {
+.rbroDocElementAlignLeft,
+.rbroDocElementAlignLeft .rbroDocElementContentText {
     justify-content: flex-start;
 }
 
-.rbroDocElementAlignRight, .rbroDocElementAlignRight .rbroDocElementContentText {
+.rbroDocElementAlignRight,
+.rbroDocElementAlignRight .rbroDocElementContentText {
     justify-content: flex-end;
 }
 
-.rbroDocElementAlignJustify,  .rbroDocElementAlignJustify .rbroDocElementContentText {
+.rbroDocElementAlignJustify,
+.rbroDocElementAlignJustify .rbroDocElementContentText {
     justify-content: flex-start;
 }
 
-.rbroDocElementVAlignTop, .rbroDocElementVAlignTop .rbroDocElementContentText {
+.rbroDocElementVAlignTop,
+.rbroDocElementVAlignTop .rbroDocElementContentText {
     align-items: flex-start;
 }
 
-.rbroDocElementVAlignMiddle, .rbroDocElementVAlignMiddle .rbroDocElementContentText {
+.rbroDocElementVAlignMiddle,
+.rbroDocElementVAlignMiddle .rbroDocElementContentText {
     align-items: center;
 }
 
-.rbroDocElementVAlignBottom, .rbroDocElementVAlignBottom .rbroDocElementContentText {
+.rbroDocElementVAlignBottom,
+.rbroDocElementVAlignBottom .rbroDocElementContentText {
     align-items: flex-end;
 }
 
-.rbroTextElement, .rbroImageElement, .rbroFrameElement {
+.rbroTextElement,
+.rbroImageElement,
+.rbroFrameElement {
     border: 1px dotted #B0B0B0;
 }
 
-.rbroTableElement table, .rbroTableElement table thead, .rbroTableElement table tbody, .rbroTableElement table tfoot, .rbroTableElement table tr,
-.rbroTableElement table th, .rbroTableElement table td {
+.rbroTableElement table,
+.rbroTableElement table thead,
+.rbroTableElement table tbody,
+.rbroTableElement table tfoot,
+.rbroTableElement table tr,
+.rbroTableElement table th,
+.rbroTableElement table td {
     border-collapse: collapse;
     border-spacing: 0;
     position: relative;
@@ -704,18 +747,24 @@ ul ul .rbroMenuItemText {
     position: relative;
 }
 
-.rbroBorderTableFrameRow .rbroTableTextElement, .rbroBorderTableRow .rbroTableTextElement,
-.rbroBorderTableFrame .rbroTableTextElement, .rbroBorderTableNone .rbroTableTextElement {
+.rbroBorderTableFrameRow .rbroTableTextElement,
+.rbroBorderTableRow .rbroTableTextElement,
+.rbroBorderTableFrame .rbroTableTextElement,
+.rbroBorderTableNone .rbroTableTextElement {
     border: 1px dotted #B0B0B0 !important;
 }
 
-.rbroBorderTableFrameRow .rbroTableTextElement.rbroSelected, .rbroBorderTableRow .rbroTableTextElement.rbroSelected,
-.rbroBorderTableFrame .rbroTableTextElement.rbroSelected, .rbroBorderTableNone .rbroTableTextElement.rbroSelected,
+.rbroBorderTableFrameRow .rbroTableTextElement.rbroSelected,
+.rbroBorderTableRow .rbroTableTextElement.rbroSelected,
+.rbroBorderTableFrame .rbroTableTextElement.rbroSelected,
+.rbroBorderTableNone .rbroTableTextElement.rbroSelected,
 .rbroBorderTableGrid .rbroTableTextElement.rbroSelected {
     border: 1px solid #B0B0B0 !important;
 }
 
-.rbroTextElement.rbroSelected, .rbroImageElement.rbroSelected, .rbroBarCodeElement.rbroSelected,
+.rbroTextElement.rbroSelected,
+.rbroImageElement.rbroSelected,
+.rbroBarCodeElement.rbroSelected,
 .rbroFrameElement.rbroSelected {
     border: 1px solid #B0B0B0;
 }
@@ -729,7 +778,9 @@ ul ul .rbroMenuItemText {
     border: 1px solid #000000;
 }
 
+
 /* Document template styling, element resizer  */
+
 .rbroDocumentBand {
     position: absolute;
     width: 100%;
@@ -740,19 +791,24 @@ ul ul .rbroMenuItemText {
     overflow: hidden;
 }
 
-.rbroDividerMarginLeft, .rbroDividerMarginRight {
+.rbroDividerMarginLeft,
+.rbroDividerMarginRight {
     top: 0;
     bottom: 0;
     border-left: 1px dashed #999999;
 }
 
-.rbroDividerMarginTop, .rbroDividerMarginBottom, .rbroDividerFooter, .rbroDividerHeader {
+.rbroDividerMarginTop,
+.rbroDividerMarginBottom,
+.rbroDividerFooter,
+.rbroDividerHeader {
     left: 0;
     right: 0;
     border-top: 1px dashed #999999;
 }
 
-.rbroDividerSection, .rbroDividerSectionBand {
+.rbroDividerSection,
+.rbroDividerSectionBand {
     left: 0;
     right: 0;
 }
@@ -774,7 +830,7 @@ ul ul .rbroMenuItemText {
 }
 
 .rbroSizerN {
-    top:-5px;
+    top: -5px;
     left: calc(50% - 5px);
     cursor: ns-resize;
 }
@@ -821,9 +877,11 @@ ul ul .rbroMenuItemText {
     cursor: nwse-resize;
 }
 
+
 /* Buttons */
 
-.rbroButton, button.rbroButton {
+.rbroButton,
+button.rbroButton {
     cursor: pointer;
     transition: all 0.2s linear;
     display: inline-block;
@@ -849,8 +907,9 @@ button.rbroActionButton {
     border-radius: 4px;
 }
 
-button.rbroActionButton:hover, button.rbroActionButton.rbroButtonActive {
-    background-color: rgba(0,0,0,0.15);
+button.rbroActionButton:hover,
+button.rbroActionButton.rbroButtonActive {
+    background-color: rgba(0, 0, 0, 0.15);
 }
 
 button.rbroActionButton.rbroButtonActive {
@@ -877,9 +936,12 @@ button.rbroActionButton.rbroButtonActive {
     margin: 0 1px;
 }
 
-button.rbroButton[disabled], button.rbroButton[disabled]:hover,
-button.rbroMenuButton[disabled], button.rbroMenuButton[disabled]:hover,
-.rbroButton.rbroDisabled, .rbroButton.rbroDisabled:hover {
+button.rbroButton[disabled],
+button.rbroButton[disabled]:hover,
+button.rbroMenuButton[disabled],
+button.rbroMenuButton[disabled]:hover,
+.rbroButton.rbroDisabled,
+.rbroButton.rbroDisabled:hover {
     color: #cccccc;
     background-color: #ffffff;
     cursor: not-allowed;
@@ -894,7 +956,8 @@ button.rbroMenuButton[disabled], button.rbroMenuButton[disabled]:hover,
     color: #444444;
 }
 
-.rbroDeleteButton:hover, .rbroMenuItem.rbroError .rbroDeleteButton:hover {
+.rbroDeleteButton:hover,
+.rbroMenuItem.rbroError .rbroDeleteButton:hover {
     color: #fdc700;
 }
 
@@ -911,12 +974,14 @@ button.rbroMenuButton[disabled], button.rbroMenuButton[disabled]:hover,
     background-color: #336D83;
 }
 
-.rbroRoundButton:hover{
+.rbroRoundButton:hover {
     background-color: #fdc700;
     color: #ffffff;
 }
 
+
 /* Common */
+
 .rbroColumnCenter {
     display: flex;
     flex-direction: column;
@@ -950,7 +1015,7 @@ button.rbroMenuButton[disabled], button.rbroMenuButton[disabled]:hover,
 }
 
 .rbroLoadingIndicator {
-	background-color: rgba(255,255,255,0.9);
+    background-color: rgba(255, 255, 255, 0.9);
     background-image: url("ajaxload.gif");
     background-position: center;
     background-repeat: no-repeat;
@@ -960,16 +1025,20 @@ button.rbroMenuButton[disabled], button.rbroMenuButton[disabled]:hover,
     position: fixed;
     width: 100%;
     height: 100%;
-	z-index: 100000;
+    z-index: 100000;
 }
+
 
 /* Drag & drop */
 
-.rbroDropTarget * { /* prevent dragleave from firing when dragging into a child element */
+.rbroDropTarget * {
+    /* prevent dragleave from firing when dragging into a child element */
     pointer-events: none;
 }
 
+
 /* Popup Window */
+
 .rbroPopupWindow {
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
@@ -1037,8 +1106,12 @@ button.rbroMenuButton[disabled], button.rbroMenuButton[disabled]:hover,
     color: #666666;
 }
 
-.rbroPopupWindowContent table, .rbroPopupWindowContent table thead, .rbroPopupWindowContent table tbody,
-.rbroPopupWindowContent table tr, .rbroPopupWindowContent table th, .rbroPopupWindowContent table td {
+.rbroPopupWindowContent table,
+.rbroPopupWindowContent table thead,
+.rbroPopupWindowContent table tbody,
+.rbroPopupWindowContent table tr,
+.rbroPopupWindowContent table th,
+.rbroPopupWindowContent table td {
     border-collapse: collapse;
     border-spacing: 0;
     margin: 0;
@@ -1075,7 +1148,8 @@ button.rbroMenuButton[disabled], button.rbroMenuButton[disabled]:hover,
     border: 1px solid #444444;
 }
 
-.rbroPopupWindowContent table input, .rbroPopupWindowContent table input:focus {
+.rbroPopupWindowContent table input,
+.rbroPopupWindowContent table input:focus {
     color: #444444;
     width: 100%;
     box-sizing: border-box;
@@ -1125,7 +1199,8 @@ button.rbroMenuButton[disabled], button.rbroMenuButton[disabled]:hover,
     color: #004864;
 }
 
-.rbroPopupSearch, .rbroPopupSearch:focus {
+.rbroPopupSearch,
+.rbroPopupSearch:focus {
     width: 100%;
     position: relative;
     top: 0;
@@ -1134,23 +1209,26 @@ button.rbroMenuButton[disabled], button.rbroMenuButton[disabled]:hover,
     box-sizing: border-box;
     border-style: none none solid none;
     border-width: 1px;
-    border-color: rgba(0,0,0,0.1);
+    border-color: rgba(0, 0, 0, 0.1);
     transition: all 0.2s linear;
     padding: 0 4px;
     outline: none;
     font-size: 12px;
-    border-radius: 4px 4px 0 0 ;
+    border-radius: 4px 4px 0 0;
 }
 
 .rbroPopupSearch:focus {
     border-color: #004864;
 }
+
+
 /* ReportBro spectrum color picker */
+
 .rbroColorPickerContainer {
     transition: all 0.2s linear;
     background-color: #f1f3f4;
     border-radius: 20px 4px 4px 20px;
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     height: 28px;
     position: relative;
 }
@@ -1160,7 +1238,8 @@ button.rbroMenuButton[disabled], button.rbroMenuButton[disabled]:hover,
     background-color: #ffffff;
 }
 
-.rbroColorPickerContainer input, .rbroColorPickerContainer input:focus {
+.rbroColorPickerContainer input,
+.rbroColorPickerContainer input:focus {
     height: 28px;
     margin: 0 0 0 30px;
     width: calc(100% - 30px);
@@ -1176,7 +1255,9 @@ button.rbroMenuButton[disabled], button.rbroMenuButton[disabled]:hover,
     background-color: #ffffff;
 }
 
-.rbroColorContainer .sp-color, .rbroColorContainer .sp-hue, .rbroColorContainer .sp-clear {
+.rbroColorContainer .sp-color,
+.rbroColorContainer .sp-hue,
+.rbroColorContainer .sp-clear {
     border: none;
 }
 
@@ -1197,7 +1278,8 @@ button.rbroMenuButton[disabled], button.rbroMenuButton[disabled]:hover,
     width: 24px;
 }
 
-.rbroColorPicker.sp-replacer, .rbroColorPicker.sp-replacer * {
+.rbroColorPicker.sp-replacer,
+.rbroColorPicker.sp-replacer * {
     border: none;
     margin: 0;
     padding: 0;
@@ -1229,11 +1311,12 @@ button.rbroMenuButton[disabled], button.rbroMenuButton[disabled]:hover,
     overflow: hidden;
 }
 
-.rbroColorContainer .sp-palette .sp-thumb-el:hover, .sp-container .sp-palette .sp-thumb-el.sp-thumb-active {
+.rbroColorContainer .sp-palette .sp-thumb-el:hover,
+.sp-container .sp-palette .sp-thumb-el.sp-thumb-active {
     border: 2px solid #004864;
 }
 
 .rbroColorContainer .sp-palette .sp-thumb-light.sp-thumb-active .sp-thumb-inner,
-.rbroColorContainer .sp-palette .sp-thumb-dark.sp-thumb-active .sp-thumb-inner{
+.rbroColorContainer .sp-palette .sp-thumb-dark.sp-thumb-active .sp-thumb-inner {
     background-image: none;
 }

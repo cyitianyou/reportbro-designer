@@ -1,7 +1,7 @@
 import Style from '../data/Style';
 import DocElement from '../elements/DocElement';
 import TableTextElement from '../elements/TableTextElement';
-import {getEventAbsPos} from "../utils";
+import { getEventAbsPos } from "../utils";
 
 /**
  * The menu panel contains all menu buttons.
@@ -54,7 +54,7 @@ export default class MenuPanel {
                     <span class="rbroIcon-text"></span>
                 </div>`)
             .on('dragstart', event => {
-                event.originalEvent.dataTransfer.setData('text/plain', '');  // without setData dragging does not work in FF
+                event.originalEvent.dataTransfer.setData('text/plain', ''); // without setData dragging does not work in FF
                 event.originalEvent.dataTransfer.effectAllowed = 'copy';
 
                 this.rb.startBrowserDrag('docElement', DocElement.type.text, '');
@@ -231,7 +231,7 @@ export default class MenuPanel {
         );
 
         panelRight.append(elElementsDiv);
-        
+
         let elActionsDiv = $('<div class="rbroActionButtons"></div>');
         let elAlignDiv = $('<div id="rbro_menu_align" style="display: none;"></div>');
         let elAlignLeft = $(`<button id="rbro_menu_align_left"

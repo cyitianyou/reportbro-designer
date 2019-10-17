@@ -35,7 +35,7 @@ export default class TextElement extends DocElement {
         this.paddingTop = '2';
         this.paddingRight = '2';
         this.paddingBottom = '2';
-        
+
         this.cs_condition = '';
         this.cs_styleId = '';
         this.cs_bold = false;
@@ -60,7 +60,7 @@ export default class TextElement extends DocElement {
         this.cs_paddingTop = '2';
         this.cs_paddingRight = '2';
         this.cs_paddingBottom = '2';
-        
+
         this.alwaysPrintOnSamePage = true;
         this.pattern = '';
         this.link = '';
@@ -146,7 +146,8 @@ export default class TextElement extends DocElement {
             'cs_lineSpacing', 'cs_borderColor', 'cs_borderWidth',
             'cs_borderAll', 'cs_borderLeft', 'cs_borderTop', 'cs_borderRight', 'cs_borderBottom',
             'cs_paddingLeft', 'cs_paddingTop', 'cs_paddingRight', 'cs_paddingBottom',
-            'spreadsheet_hide', 'spreadsheet_column', 'spreadsheet_colspan', 'spreadsheet_addEmptyRow'];
+            'spreadsheet_hide', 'spreadsheet_column', 'spreadsheet_colspan', 'spreadsheet_addEmptyRow'
+        ];
     }
 
     getElementType() {
@@ -155,8 +156,12 @@ export default class TextElement extends DocElement {
 
     updateDisplayInternal(x, y, width, height) {
         if (this.el !== null) {
-            let props = { left: this.rb.toPixel(x), top: this.rb.toPixel(y),
-                width: this.rb.toPixel(width), height: this.rb.toPixel(height) };
+            let props = {
+                left: this.rb.toPixel(x),
+                top: this.rb.toPixel(y),
+                width: this.rb.toPixel(width),
+                height: this.rb.toPixel(height)
+            };
             this.el.css(props);
         }
         // update inner text element size
@@ -227,7 +232,7 @@ export default class TextElement extends DocElement {
         styleProperties['font-size'] = style.getValue('fontSize') + 'px';
         styleProperties['line-height'] = (style.getValue('lineSpacing') * 100.0) + '%';
         if (style.getValue('borderLeft') || style.getValue('borderTop') ||
-                style.getValue('borderRight') || style.getValue('borderBottom')) {
+            style.getValue('borderRight') || style.getValue('borderBottom')) {
             borderStyleProperties['border-style'] = style.getValue('borderTop') ? 'solid' : 'none';
             borderStyleProperties['border-style'] += style.getValue('borderRight') ? ' solid' : ' none';
             borderStyleProperties['border-style'] += style.getValue('borderBottom') ? ' solid' : ' none';
@@ -238,7 +243,7 @@ export default class TextElement extends DocElement {
             borderStyleProperties['border-style'] = 'none';
         }
         if (style.getValue('paddingLeft') !== '' || style.getValue('paddingTop') !== '' ||
-                style.getValue('paddingRight') !== '' || style.getValue('paddingBottom') !== '') {
+            style.getValue('paddingRight') !== '' || style.getValue('paddingBottom') !== '') {
             styleProperties['padding'] = this.rb.toPixel(style.getValue('paddingTop'));
             styleProperties['padding'] += ' ' + this.rb.toPixel(style.getValue('paddingRight'));
             styleProperties['padding'] += ' ' + this.rb.toPixel(style.getValue('paddingBottom'));
@@ -280,7 +285,7 @@ export default class TextElement extends DocElement {
             .append($(`<div id="rbro_el_content${this.id}" class="rbroContentContainerHelper"></div>`)
                 .append($(`<div id="rbro_el_content_text${this.id}" class="rbroDocElementContentText"></div>`)
                     .append($(`<span id="rbro_el_content_text_data${this.id}"></span>`))
-            ));
+                ));
         this.appendToContainer();
         $(`#rbro_el_content_text_data${this.id}`).text(this.content);
         super.registerEventHandlers();
@@ -312,7 +317,7 @@ export default class TextElement extends DocElement {
 
     toJS() {
         let ret = super.toJS();
-        for (let field of ['borderWidth', 'paddingLeft', 'paddingTop', 'paddingRight', 'paddingBottom',
+        for (let field of['borderWidth', 'paddingLeft', 'paddingTop', 'paddingRight', 'paddingBottom',
                 'cs_paddingLeft', 'cs_paddingTop', 'cs_paddingRight', 'cs_paddingBottom']) {
             ret[field] = utils.convertInputToNumber(this.getValue(field));
         }

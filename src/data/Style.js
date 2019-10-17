@@ -14,7 +14,7 @@ export default class Style {
         this.name = rb.getLabel('style');
         this.panelItem = null;
         this.errors = [];
-        
+
         this.bold = false;
         this.italic = false;
         this.underline = false;
@@ -61,7 +61,8 @@ export default class Style {
             'horizontalAlignment', 'verticalAlignment',
             'textColor', 'backgroundColor', 'font', 'fontSize', 'lineSpacing', 'borderColor', 'borderWidth',
             'borderAll', 'borderLeft', 'borderTop', 'borderRight', 'borderBottom',
-            'paddingLeft', 'paddingTop', 'paddingRight', 'paddingBottom'];
+            'paddingLeft', 'paddingTop', 'paddingRight', 'paddingBottom'
+        ];
     }
 
     getId() {
@@ -105,7 +106,7 @@ export default class Style {
         for (let element of elements) {
             if ((element.getElementType() === DocElement.type.text ||
                     element.getElementType() === DocElement.type.tableText) && element.getValue('styleId') &&
-                    utils.convertInputToNumber(element.getValue('styleId')) === this.id) {
+                utils.convertInputToNumber(element.getValue('styleId')) === this.id) {
                 cmd = new SetValueCmd(
                     element.getId(), 'rbro_text_element_style_id', 'styleId', '', SetValueCmd.type.text, this.rb);
                 cmdGroup.addCommand(cmd);
@@ -129,14 +130,11 @@ export default class Style {
         return this.errors;
     }
 
-    remove() {
-    }
+    remove() {}
 
-    select() {
-    }
+    select() {}
 
-    deselect() {
-    }
+    deselect() {}
 
     toJS() {
         let ret = {};
@@ -167,9 +165,9 @@ export default class Style {
                 }
             }
         } else if (field === `${fieldPrefix}borderLeft` || field === `${fieldPrefix}borderTop` ||
-                field === `${fieldPrefix}borderRight` || field === `${fieldPrefix}borderBottom`) {
+            field === `${fieldPrefix}borderRight` || field === `${fieldPrefix}borderBottom`) {
             if (obj.getValue(`${fieldPrefix}borderLeft`) && obj.getValue(`${fieldPrefix}borderTop`) &&
-                    obj.getValue(`${fieldPrefix}borderRight`) && obj.getValue(`${fieldPrefix}borderBottom`)) {
+                obj.getValue(`${fieldPrefix}borderRight`) && obj.getValue(`${fieldPrefix}borderBottom`)) {
                 obj.setBorderAll(fieldPrefix, true);
                 if (isShown) {
                     $(elSelector).parent().find(`button[value="${fieldPrefix}borderAll"]`).addClass('rbroButtonActive');

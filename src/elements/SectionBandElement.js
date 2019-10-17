@@ -44,8 +44,7 @@ export default class SectionBandElement extends DocElement {
     /**
      * Do not register any event handlers so element cannot be selected.
      */
-    registerEventHandlers() {
-    }
+    registerEventHandlers() {}
 
     /**
      * Returns highest id of this component, this is the id of the linked container because it is

@@ -32,7 +32,7 @@ export default class SectionBandElementPanel {
         elFormField.append('<div id="rbro_section_element_size_error" class="rbroErrorMessage"></div>');
         elDiv.append(elFormField);
         panel.append(elDiv);
-        
+
         elDiv = $('<div id="rbro_section_band_element_repeat_header_row" class="rbroFormRow"></div>');
         elDiv.append(`<label for="rbro_section_band_element_repeat_header">${this.rb.getLabel('tableElementRepeatHeader')}:</label>`);
         elFormField = $('<div class="rbroFormField"></div>');
@@ -48,7 +48,7 @@ export default class SectionBandElementPanel {
         elFormField.append(elRepeatHeader);
         elDiv.append(elFormField);
         panel.append(elDiv);
-        
+
         elDiv = $('<div id="rbro_section_band_element_always_print_on_same_page_row" class="rbroFormRow"></div>');
         elDiv.append(`<label for="rbro_section_band_element_always_print_on_same_page">${this.rb.getLabel('docElementAlwaysPrintOnSamePage')}:</label>`);
         elFormField = $('<div class="rbroFormField"></div>');
@@ -131,8 +131,7 @@ export default class SectionBandElementPanel {
      * @param {*} obj - new/deleted/modified data object.
      * @param {String} operation - operation which caused the notification.
      */
-    notifyEvent(obj, operation) {
-    }
+    notifyEvent(obj, operation) {}
 
     /**
      * Updates displayed errors of currently selected data object.

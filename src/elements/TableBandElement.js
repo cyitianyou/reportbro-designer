@@ -25,7 +25,7 @@ export default class TableBandElement extends DocElement {
         this.columnData = [];
 
         this.heightVal = 0;
-        
+
         this.setInitialData(initialData);
     }
 
@@ -43,8 +43,7 @@ export default class TableBandElement extends DocElement {
         this.updateStyle();
     }
 
-    registerEventHandlers() {
-    }
+    registerEventHandlers() {}
 
     /**
      * Returns highest id of this component including all its child components.
@@ -103,8 +102,7 @@ export default class TableBandElement extends DocElement {
         return fields;
     }
 
-    updateDisplayInternal(x, y, width, height) {
-    }
+    updateDisplayInternal(x, y, width, height) {}
 
     updateStyle() {
         this.el.css('background-color', this.backgroundColor);
@@ -141,7 +139,7 @@ export default class TableBandElement extends DocElement {
 
     remove() {
         super.remove();
-        for (let i=0; i < this.columnData.length; i++) {
+        for (let i = 0; i < this.columnData.length; i++) {
             this.rb.deleteDataObject(this.columnData[i]);
         }
     }
@@ -165,7 +163,7 @@ export default class TableBandElement extends DocElement {
         }
 
         if (isUpdate) {
-            for (let i=0; i < this.columnData.length; i++) {
+            for (let i = 0; i < this.columnData.length; i++) {
                 this.columnData[i].remove();
                 if (i >= columns) {
                     this.rb.deleteDataObject(this.columnData[i]);
@@ -173,7 +171,7 @@ export default class TableBandElement extends DocElement {
             }
         }
         let newColumnData = [];
-        for (let i=0; i < columns; i++) {
+        for (let i = 0; i < columns; i++) {
             let data;
             let dataId;
             let colWidth = isUpdate ? 20 : 100;
@@ -205,8 +203,14 @@ export default class TableBandElement extends DocElement {
                     data.tableId = this.parentId;
                 }
             } else {
-                data = { band: this.band, columnIndex: i, parentId: this.id, tableId: this.parentId,
-                        width: colWidth, height: this.height };
+                data = {
+                    band: this.band,
+                    columnIndex: i,
+                    parentId: this.id,
+                    tableId: this.parentId,
+                    width: colWidth,
+                    height: this.height
+                };
             }
             if (!dataId) {
                 dataId = this.rb.getUniqueId();
@@ -214,7 +218,7 @@ export default class TableBandElement extends DocElement {
 
             let textElement = new TableTextElement(dataId, data, this.rb);
             newColumnData.push(textElement);
-        	this.rb.addDataObject(textElement);
+            this.rb.addDataObject(textElement);
             let panelItemText = new MainPanelItem(DocElement.type.text, this.panelItem, textElement, { showDelete: false }, this.rb);
             textElement.setPanelItem(panelItemText);
             this.panelItem.appendChild(panelItemText);
@@ -317,7 +321,7 @@ export default class TableBandElement extends DocElement {
      * @returns {Number} Index of column, -1 if column is not contained in this band.
      */
     getColumnIndex(column) {
-        for (let i=0; i < this.columnData.length; i++) {
+        for (let i = 0; i < this.columnData.length; i++) {
             if (column === this.columnData[i]) {
                 return i;
             }

@@ -127,16 +127,16 @@ export default class BarCodeElementPanel {
         let elPrintHeader = $('<div class="rbroPanelSectionHeader"></div>');
         let elPrintHeaderIcon = $('<span id="rbro_bar_code_element_print_header_icon" class="rbroIcon-plus"></span>');
         elDiv = $('<div id="rbro_bar_code_element_print_header" class="rbroFormRow rbroPanelSection"></div>')
-                .click(event => {
-                    $('#rbro_bar_code_element_print_header').toggleClass('rbroPanelSectionHeaderOpen');
-                    $('#rbro_bar_code_element_print_section').toggleClass('rbroHidden');
-                    elPrintHeaderIcon.toggleClass('rbroIcon-plus');
-                    elPrintHeaderIcon.toggleClass('rbroIcon-minus');
-                    if (elPrintHeaderIcon.hasClass('rbroIcon-minus')) {
-                        $('#rbro_detail_panel').scrollTop(elPrintHeader.position().top);
-                    }
-                    autosize.update($('#rbro_bar_code_element_print_if'));
-                });
+            .click(event => {
+                $('#rbro_bar_code_element_print_header').toggleClass('rbroPanelSectionHeaderOpen');
+                $('#rbro_bar_code_element_print_section').toggleClass('rbroHidden');
+                elPrintHeaderIcon.toggleClass('rbroIcon-plus');
+                elPrintHeaderIcon.toggleClass('rbroIcon-minus');
+                if (elPrintHeaderIcon.hasClass('rbroIcon-minus')) {
+                    $('#rbro_detail_panel').scrollTop(elPrintHeader.position().top);
+                }
+                autosize.update($('#rbro_bar_code_element_print_if'));
+            });
         elPrintHeader.append(elPrintHeaderIcon);
         elPrintHeader.append(`<span>${this.rb.getLabel('docElementPrintSettings')}</span>`);
         elDiv.append(elPrintHeader);
@@ -353,8 +353,7 @@ export default class BarCodeElementPanel {
      * @param {*} obj - new/deleted/modified data object.
      * @param {String} operation - operation which caused the notification.
      */
-    notifyEvent(obj, operation) {
-    }
+    notifyEvent(obj, operation) {}
 
     /**
      * Updates displayed errors of currently selected data object.

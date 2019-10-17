@@ -36,8 +36,7 @@ export default class ImageElementPanel {
             .click(event => {
                 let selectedObj = this.rb.getDataObject(this.selectedObjId);
                 if (selectedObj !== null) {
-                    this.rb.getPopupWindow().show(this.rb.getParameterItems(selectedObj,
-                        [Parameter.type.image, Parameter.type.string]), this.selectedObjId,
+                    this.rb.getPopupWindow().show(this.rb.getParameterItems(selectedObj, [Parameter.type.image, Parameter.type.string]), this.selectedObjId,
                         'rbro_image_element_source', 'source', PopupWindow.type.parameterSet);
                 }
             });
@@ -165,15 +164,15 @@ export default class ImageElementPanel {
         let elStyleHeader = $('<div class="rbroPanelSectionHeader"></div>');
         let elStyleHeaderIcon = $('<div id="rbro_image_element_style_header_icon" class="rbroPanelSectionHeaderOpen rbroIcon-minus"></div>');
         elDiv = $('<div id="rbro_image_element_style_header" class="rbroFormRow rbroPanelSection rbroPanelSectionHeaderOpen"></div>')
-                .click(event => {
-                    $('#rbro_image_element_style_header').toggleClass('rbroPanelSectionHeaderOpen');
-                    $('#rbro_image_element_style_section').toggleClass('rbroHidden');
-                    elStyleHeaderIcon.toggleClass('rbroIcon-plus');
-                    elStyleHeaderIcon.toggleClass('rbroIcon-minus');
-                    if (elStyleHeaderIcon.hasClass('rbroIcon-minus')) {
-                        $('#rbro_detail_panel').scrollTop(elStyleHeader.position().top);
-                    }
-                });
+            .click(event => {
+                $('#rbro_image_element_style_header').toggleClass('rbroPanelSectionHeaderOpen');
+                $('#rbro_image_element_style_section').toggleClass('rbroHidden');
+                elStyleHeaderIcon.toggleClass('rbroIcon-plus');
+                elStyleHeaderIcon.toggleClass('rbroIcon-minus');
+                if (elStyleHeaderIcon.hasClass('rbroIcon-minus')) {
+                    $('#rbro_detail_panel').scrollTop(elStyleHeader.position().top);
+                }
+            });
         elStyleHeader.append(elStyleHeaderIcon);
         elStyleHeader.append(`<span>${this.rb.getLabel('docElementStyle')}</span>`);
         elDiv.append(elStyleHeader);
@@ -186,16 +185,16 @@ export default class ImageElementPanel {
         let elPrintHeader = $('<div class="rbroPanelSectionHeader"></div>');
         let elPrintHeaderIcon = $('<span id="rbro_image_element_print_header_icon" class="rbroIcon-plus"></span>');
         elDiv = $('<div id="rbro_image_element_print_header" class="rbroFormRow rbroPanelSection"></div>')
-                .click(event => {
-                    $('#rbro_image_element_print_header').toggleClass('rbroPanelSectionHeaderOpen');
-                    $('#rbro_image_element_print_section').toggleClass('rbroHidden');
-                    elPrintHeaderIcon.toggleClass('rbroIcon-plus');
-                    elPrintHeaderIcon.toggleClass('rbroIcon-minus');
-                    if (elPrintHeaderIcon.hasClass('rbroIcon-minus')) {
-                        $('#rbro_detail_panel').scrollTop(elPrintHeader.position().top);
-                    }
-                    autosize.update($('#rbro_image_element_print_if'));
-                });
+            .click(event => {
+                $('#rbro_image_element_print_header').toggleClass('rbroPanelSectionHeaderOpen');
+                $('#rbro_image_element_print_section').toggleClass('rbroHidden');
+                elPrintHeaderIcon.toggleClass('rbroIcon-plus');
+                elPrintHeaderIcon.toggleClass('rbroIcon-minus');
+                if (elPrintHeaderIcon.hasClass('rbroIcon-minus')) {
+                    $('#rbro_detail_panel').scrollTop(elPrintHeader.position().top);
+                }
+                autosize.update($('#rbro_image_element_print_if'));
+            });
         elPrintHeader.append(elPrintHeaderIcon);
         elPrintHeader.append(`<span>${this.rb.getLabel('docElementPrintSettings')}</span>`);
         elDiv.append(elPrintHeader);
@@ -428,8 +427,7 @@ export default class ImageElementPanel {
      * @param {*} obj - new/deleted/modified data object.
      * @param {String} operation - operation which caused the notification.
      */
-    notifyEvent(obj, operation) {
-    }
+    notifyEvent(obj, operation) {}
 
     /**
      * Updates displayed errors of currently selected data object.

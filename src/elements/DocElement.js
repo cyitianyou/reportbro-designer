@@ -4,7 +4,7 @@ import SetValueCmd from '../commands/SetValueCmd';
 import Band from '../container/Band';
 import Parameter from '../data/Parameter';
 import * as utils from '../utils';
-import {getEventAbsPos} from "../utils";
+import { getEventAbsPos } from "../utils";
 
 /**
  * Base class for all doc elements.
@@ -49,7 +49,7 @@ export default class DocElement {
         this.y = '' + this.y;
         this.width = '' + this.width;
         this.height = '' + this.height;
-        
+
         this.xVal = utils.convertInputToNumber(this.x);
         this.yVal = utils.convertInputToNumber(this.y);
         this.widthVal = utils.convertInputToNumber(this.width);
@@ -305,7 +305,7 @@ export default class DocElement {
         if ((x + width) > containerSize.width) {
             x = containerSize.width - width;
         }
-        if (x < 0)  {
+        if (x < 0) {
             x = 0;
         }
         if ((x + width) > containerSize.width) {
@@ -314,7 +314,7 @@ export default class DocElement {
         if ((y + height) > containerSize.height) {
             y = containerSize.height - height;
         }
-        if (y < 0)  {
+        if (y < 0) {
             y = 0;
         }
         if ((y + height) > containerSize.height) {
@@ -382,12 +382,14 @@ export default class DocElement {
                 'horizontalAlignment', 'verticalAlignment',
                 'textColor', 'backgroundColor', 'font', 'fontSize', 'lineSpacing', 'borderColor', 'borderWidth',
                 'borderAll', 'borderLeft', 'borderTop', 'borderRight', 'borderBottom',
-                'paddingLeft', 'paddingTop', 'paddingRight', 'paddingBottom'].indexOf(field) !== -1) {
+                'paddingLeft', 'paddingTop', 'paddingRight', 'paddingBottom'
+            ].indexOf(field) !== -1) {
 
             this.updateStyle();
 
             if (['borderWidth', 'borderAll', 'borderLeft', 'borderTop', 'borderRight', 'borderBottom',
-                'paddingLeft', 'paddingTop', 'paddingRight', 'paddingBottom'].indexOf(field) !== -1) {
+                    'paddingLeft', 'paddingTop', 'paddingRight', 'paddingBottom'
+                ].indexOf(field) !== -1) {
                 this.updateDisplay();
             }
         }
@@ -434,14 +436,17 @@ export default class DocElement {
 
     updateDisplayInternal(x, y, width, height) {
         if (this.el !== null) {
-            let props = { left: this.rb.toPixel(x), top: this.rb.toPixel(y),
-                width: this.rb.toPixel(width), height: this.rb.toPixel(height) };
+            let props = {
+                left: this.rb.toPixel(x),
+                top: this.rb.toPixel(y),
+                width: this.rb.toPixel(width),
+                height: this.rb.toPixel(height)
+            };
             this.el.css(props);
         }
     }
 
-    updateStyle() {
-    }
+    updateStyle() {}
 
     updateChangedStyle(styleId) {
         if (utils.convertInputToNumber(this.styleId) === styleId) {
@@ -593,7 +598,7 @@ export default class DocElement {
         if (cmdGroup !== null) {
             let containerChanged = false;
             let container = this.getContainer();
-            let containerSize = { width: 0, height: 0};
+            let containerSize = { width: 0, height: 0 };
             if (dragContainer !== null && dragContainer.getId() !== this.getContainerId()) {
                 containerChanged = true;
                 containerSize = dragContainer.getContentSize();
@@ -758,8 +763,7 @@ export default class DocElement {
         return 20;
     }
 
-    createElement() {
-    }
+    createElement() {}
 
     getElement() {
         return this.el;
@@ -818,8 +822,7 @@ export default class DocElement {
      * @param {String} newParameterName - new name of the parameter.
      * @param {CommandGroupCmd} cmdGroup - possible SetValue commands will be added to this command group.
      */
-    addCommandsForChangedParameterName(parameter, newParameterName, cmdGroup) {
-    }
+    addCommandsForChangedParameterName(parameter, newParameterName, cmdGroup) {}
 
     /**
      * Adds SetValue command to command group parameter in case the specified parameter is used in the
@@ -835,7 +838,7 @@ export default class DocElement {
         let dataSources = [];
         let paramRef = null;
         let newParamRef = null;
-        
+
         this.getAllDataSources(dataSources, null);
 
         if (paramParent !== null && paramParent.getValue('type') === Parameter.type.array) {
@@ -907,8 +910,7 @@ export default class DocElement {
         cmdGroup.addCommand(cmd);
     }
 
-    addChildren(docElements) {
-    }
+    addChildren(docElements) {}
 
     addError(error) {
         this.errors.push(error);

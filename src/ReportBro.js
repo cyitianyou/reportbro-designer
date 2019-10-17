@@ -89,7 +89,7 @@ export default class ReportBro {
                     this.properties[prop] = properties[prop];
                 }
             }
-            $.extend( this.locale, properties['locale'] || {} );
+            $.extend(this.locale, properties['locale'] || {});
         }
         if (this.properties.additionalFonts.length > 0) {
             this.properties.fonts = this.properties.fonts.concat(this.properties.additionalFonts);
@@ -114,7 +114,7 @@ export default class ReportBro {
         this.clipboardElements = [];
 
         this.mainPanel = new MainPanel(element, this.headerBand, this.contentBand, this.footerBand,
-                this.parameterContainer, this.styleContainer, this);
+            this.parameterContainer, this.styleContainer, this);
         this.menuPanel = new MenuPanel(element, this);
         this.activeDetailPanel = 'none';
         this.detailPanels = {
@@ -141,7 +141,7 @@ export default class ReportBro {
         this.objectMap = {};
         this.containers = [this.headerBand, this.contentBand, this.footerBand];
         this.selections = [];
-        this.reportKey = null;  // key of last report preview to allow download of xlsx file for this report
+        this.reportKey = null; // key of last report preview to allow download of xlsx file for this report
 
         this.browserDragType = '';
         this.browserDragId = '';
@@ -153,218 +153,223 @@ export default class ReportBro {
             // check metaKey instead of ctrl for Mac
             if (event.metaKey || event.ctrlKey) {
                 switch (event.which) {
-                    case 67: {
-                        // Ctrl + C: copy
-                        if (!(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement)) {
-                            let cleared = false;
-                            let idMap = {};
-                            let serializedObj;
-                            let i;
-                            for (let selectionId of this.selections) {
-                                let obj = this.getDataObject(selectionId);
-                                if ((obj instanceof DocElement && !(obj instanceof TableTextElement)) ||
+                    case 67:
+                        {
+                            // Ctrl + C: copy
+                            if (!(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement)) {
+                                let cleared = false;
+                                let idMap = {};
+                                let serializedObj;
+                                let i;
+                                for (let selectionId of this.selections) {
+                                    let obj = this.getDataObject(selectionId);
+                                    if ((obj instanceof DocElement && !(obj instanceof TableTextElement)) ||
                                         (obj instanceof Parameter && !obj.showOnlyNameType) ||
                                         (obj instanceof Style)) {
-                                    if (!cleared) {
-                                        this.clipboardElements = [];
-                                        cleared = true;
-                                    }
-                                    if (!(obj.getId() in idMap)) {
-                                        idMap[obj.getId()] = true;
-                                        serializedObj = obj.toJS();
-                                        this.clipboardElements.push(serializedObj);
-                                        if (obj instanceof DocElement) {
-                                            serializedObj.baseClass = 'DocElement';
-                                            if (obj instanceof FrameElement) {
-                                                let nestedElements = [];
-                                                obj.appendContainerChildren(nestedElements);
-                                                for (let nestedElement of nestedElements) {
-                                                    if (nestedElement.getId() in idMap) {
-                                                        // in case a nested element is also selected we make sure to add it only once to
-                                                        // the clipboard objects and to add it after its parent element
-                                                        for (i = 0; i < this.clipboardElements.length; i++) {
-                                                            if (nestedElement.getId() === this.clipboardElements[i].id) {
-                                                                this.clipboardElements.splice(i, 1);
-                                                                break;
+                                        if (!cleared) {
+                                            this.clipboardElements = [];
+                                            cleared = true;
+                                        }
+                                        if (!(obj.getId() in idMap)) {
+                                            idMap[obj.getId()] = true;
+                                            serializedObj = obj.toJS();
+                                            this.clipboardElements.push(serializedObj);
+                                            if (obj instanceof DocElement) {
+                                                serializedObj.baseClass = 'DocElement';
+                                                if (obj instanceof FrameElement) {
+                                                    let nestedElements = [];
+                                                    obj.appendContainerChildren(nestedElements);
+                                                    for (let nestedElement of nestedElements) {
+                                                        if (nestedElement.getId() in idMap) {
+                                                            // in case a nested element is also selected we make sure to add it only once to
+                                                            // the clipboard objects and to add it after its parent element
+                                                            for (i = 0; i < this.clipboardElements.length; i++) {
+                                                                if (nestedElement.getId() === this.clipboardElements[i].id) {
+                                                                    this.clipboardElements.splice(i, 1);
+                                                                    break;
+                                                                }
                                                             }
+                                                        } else {
+                                                            idMap[nestedElement.getId()] = true;
                                                         }
-                                                    } else {
-                                                        idMap[nestedElement.getId()] = true;
+                                                        serializedObj = nestedElement.toJS();
+                                                        serializedObj.baseClass = 'DocElement';
+                                                        this.clipboardElements.push(serializedObj);
                                                     }
-                                                    serializedObj = nestedElement.toJS();
-                                                    serializedObj.baseClass = 'DocElement';
-                                                    this.clipboardElements.push(serializedObj);
+                                                }
+                                            } else if (obj instanceof Parameter) {
+                                                serializedObj.baseClass = 'Parameter';
+                                            } else if (obj instanceof Style) {
+                                                serializedObj.baseClass = 'Style';
+                                            }
+                                        }
+                                    }
+                                }
+                                event.preventDefault();
+                            }
+                            break;
+                        }
+                    case 86:
+                        {
+                            // Ctrl + V: paste
+                            if (!(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement)) {
+                                let cmd;
+                                let cmdGroup = new CommandGroupCmd('Paste from clipboard', this);
+                                let mappedContainerIds = {};
+                                for (let clipboardElement of this.clipboardElements) {
+                                    clipboardElement.id = this.getUniqueId();
+                                    if (clipboardElement.baseClass === 'DocElement') {
+                                        if (clipboardElement.linkedContainerId) {
+                                            let linkedContainerId = this.getUniqueId();
+                                            mappedContainerIds[clipboardElement.linkedContainerId] = linkedContainerId;
+                                            clipboardElement.linkedContainerId = linkedContainerId;
+                                        }
+                                        if (clipboardElement.elementType === DocElement.type.table) {
+                                            TableElement.removeIds(clipboardElement);
+                                        }
+                                    }
+                                }
+                                for (let clipboardElement of this.clipboardElements) {
+                                    if (clipboardElement.baseClass === 'DocElement') {
+                                        // map id of container in case element is inside other pasted container (frame/band)
+                                        if (clipboardElement.containerId in mappedContainerIds) {
+                                            clipboardElement.containerId = mappedContainerIds[clipboardElement.containerId];
+                                            // since element is inside pasted container we can keep x/y coordinates
+                                        } else {
+                                            let pasteToY = 0;
+                                            let container = this.getDataObject(clipboardElement.containerId);
+                                            if (container !== null) {
+                                                // determine new y-coord so pasted element is in
+                                                // visible area of scrollable document
+                                                let containerOffset = container.getOffset();
+                                                let containerSize = container.getContentSize();
+                                                let contentScrollY = this.getDocument().getContentScrollPosY();
+                                                if (contentScrollY > containerOffset.y &&
+                                                    (contentScrollY + clipboardElement.height) < (containerOffset.y + containerSize.height)) {
+                                                    pasteToY = contentScrollY - containerOffset.y;
                                                 }
                                             }
-                                        } else if (obj instanceof Parameter) {
-                                            serializedObj.baseClass = 'Parameter';
-                                        } else if (obj instanceof Style) {
-                                            serializedObj.baseClass = 'Style';
+                                            clipboardElement.x = 0;
+                                            clipboardElement.y = pasteToY;
                                         }
-                                    }
-                                }
-                            }
-                            event.preventDefault();
-                        }
-                        break;
-                    }
-                    case 86: {
-                        // Ctrl + V: paste
-                        if (!(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement)) {
-                            let cmd;
-                            let cmdGroup = new CommandGroupCmd('Paste from clipboard', this);
-                            let mappedContainerIds = {};
-                            for (let clipboardElement of this.clipboardElements) {
-                                clipboardElement.id = this.getUniqueId();
-                                if (clipboardElement.baseClass === 'DocElement') {
-                                    if (clipboardElement.linkedContainerId) {
-                                        let linkedContainerId = this.getUniqueId();
-                                        mappedContainerIds[clipboardElement.linkedContainerId] = linkedContainerId;
-                                        clipboardElement.linkedContainerId = linkedContainerId;
-                                    }
-                                    if (clipboardElement.elementType === DocElement.type.table) {
-                                        TableElement.removeIds(clipboardElement);
-                                    }
-                                }
-                            }
-                            for (let clipboardElement of this.clipboardElements) {
-                                if (clipboardElement.baseClass === 'DocElement') {
-                                    // map id of container in case element is inside other pasted container (frame/band)
-                                    if (clipboardElement.containerId in mappedContainerIds) {
-                                        clipboardElement.containerId = mappedContainerIds[clipboardElement.containerId];
-                                        // since element is inside pasted container we can keep x/y coordinates
-                                    } else {
-                                        let pasteToY = 0;
-                                        let container = this.getDataObject(clipboardElement.containerId);
-                                        if (container !== null) {
-                                            // determine new y-coord so pasted element is in
-                                            // visible area of scrollable document
-                                            let containerOffset = container.getOffset();
-                                            let containerSize = container.getContentSize();
-                                            let contentScrollY = this.getDocument().getContentScrollPosY();
-                                            if (contentScrollY > containerOffset.y &&
-                                                (contentScrollY + clipboardElement.height) < (containerOffset.y + containerSize.height)) {
-                                                pasteToY = contentScrollY - containerOffset.y;
-                                            }
-                                        }
-                                        clipboardElement.x = 0;
-                                        clipboardElement.y = pasteToY;
-                                    }
-                                    cmd = new AddDeleteDocElementCmd(
-                                        true, clipboardElement.elementType, clipboardElement,
-                                        clipboardElement.id, clipboardElement.containerId, -1, this);
-                                    cmdGroup.addCommand(cmd);
+                                        cmd = new AddDeleteDocElementCmd(
+                                            true, clipboardElement.elementType, clipboardElement,
+                                            clipboardElement.id, clipboardElement.containerId, -1, this);
+                                        cmdGroup.addCommand(cmd);
 
-                                } else if (clipboardElement.baseClass === 'Parameter') {
-                                    Parameter.removeIds(clipboardElement);
-                                    cmd = new AddDeleteParameterCmd(
-                                        true, clipboardElement, clipboardElement.id,
-                                        this.parameterContainer.getId(), -1, this);
-                                    cmdGroup.addCommand(cmd);
-                                } else if (clipboardElement.baseClass === 'Style') {
-                                    cmd = new AddDeleteStyleCmd(
-                                        true, clipboardElement, clipboardElement.id,
-                                        this.styleContainer.getId(), -1, this);
-                                    cmdGroup.addCommand(cmd);
+                                    } else if (clipboardElement.baseClass === 'Parameter') {
+                                        Parameter.removeIds(clipboardElement);
+                                        cmd = new AddDeleteParameterCmd(
+                                            true, clipboardElement, clipboardElement.id,
+                                            this.parameterContainer.getId(), -1, this);
+                                        cmdGroup.addCommand(cmd);
+                                    } else if (clipboardElement.baseClass === 'Style') {
+                                        cmd = new AddDeleteStyleCmd(
+                                            true, clipboardElement, clipboardElement.id,
+                                            this.styleContainer.getId(), -1, this);
+                                        cmdGroup.addCommand(cmd);
+                                    }
                                 }
-                            }
-                            if (!cmdGroup.isEmpty()) {
-                                this.executeCommand(cmdGroup);
-                                let clearSelection = true;
-                                for (let clipboardElement of this.clipboardElements) {
-                                    this.selectObject(clipboardElement.id, clearSelection);
-                                    clearSelection = false;
+                                if (!cmdGroup.isEmpty()) {
+                                    this.executeCommand(cmdGroup);
+                                    let clearSelection = true;
+                                    for (let clipboardElement of this.clipboardElements) {
+                                        this.selectObject(clipboardElement.id, clearSelection);
+                                        clearSelection = false;
+                                    }
                                 }
+                                event.preventDefault();
                             }
-                            event.preventDefault();
+                            break;
                         }
-                        break;
-                    }
-                    case 89: {
-                        // Ctrl + Y: redo
-                        this.redoCommand();
-                        event.preventDefault();
-                        break; 
-                    }
-                    case 90: {
-                        // Ctrl + Z: undo
-                        this.undoCommand();
-                        event.preventDefault();
-                        break;
-                    }
+                    case 89:
+                        {
+                            // Ctrl + Y: redo
+                            this.redoCommand();
+                            event.preventDefault();
+                            break;
+                        }
+                    case 90:
+                        {
+                            // Ctrl + Z: undo
+                            this.undoCommand();
+                            event.preventDefault();
+                            break;
+                        }
                 }
             } else {
-                if (event.which === 27) {  // escape
+                if (event.which === 27) { // escape
                     this.popupWindow.hide();
-                }
-                else if (!(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement)) {
+                } else if (!(event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement)) {
                     switch (event.which) {
-                        case 8:  // backspace
-                        case 46: {  // delete
-                            let cmdGroup = new CommandGroupCmd('Delete', this);
-                            for (let selectionId of this.selections) {
-                                let obj = this.getDataObject(selectionId);
-                                if (obj instanceof DocElement) {
-                                    obj.addCommandsForDelete(cmdGroup);
-                                }
-                            }
-                            if (!cmdGroup.isEmpty()) {
-                                this.executeCommand(cmdGroup);
-                            }
-                            event.preventDefault();
-                            break;
-                        }
-                        case 37:  // left
-                        case 38:  // up
-                        case 39:  // right
-                        case 40: {  // down
-                            let cmdGroup = new CommandGroupCmd('Move element', this);
-                            let tagId;
-                            let field = (event.which === 37 || event.which === 39) ? 'x' : 'y';
-                            let bandWidth = this.getDocumentProperties().getContentSize().width;
-                            for (let selectionId of this.selections) {
-                                let obj = this.getDataObject(selectionId);
-                                if (obj instanceof DocElement) {
-                                    if (event.which === 37 || event.which === 39) {
-                                        tagId = obj.getXTagId();
-                                    } else {
-                                        tagId = obj.getYTagId();
-                                    }
-                                    if (tagId !== '') {
-                                        let val = null;
-                                        if (event.which === 37) {
-                                            if (obj.getValue('xVal') > 0) {
-                                                val = obj.getValue('xVal') - 1;
-                                            }
-                                        } else if (event.which === 38) {
-                                            if (obj.getValue('yVal') > 0) {
-                                                val = obj.getValue('yVal') - 1;
-                                            }
-                                        } else if (event.which === 39) {
-                                            let containerSize = obj.getContainerContentSize();
-                                            if ((obj.getValue('xVal') + obj.getValue('widthVal')) < containerSize.width) {
-                                                val = obj.getValue('xVal') + 1;
-                                            }
-                                        } else if (event.which === 40) {
-                                            let containerSize = obj.getContainerContentSize();
-                                            if ((obj.getValue('yVal') + obj.getValue('heightVal')) < containerSize.height) {
-                                                val = obj.getValue('yVal') + 1;											
-                                            }
-                                        }
-                                        if (val !== null) {
-                                            let cmd = new SetValueCmd(selectionId, tagId, field,
-                                                val, SetValueCmd.type.text, this);
-                                            cmdGroup.addCommand(cmd);
-                                        }
+                        case 8: // backspace
+                        case 46:
+                            { // delete
+                                let cmdGroup = new CommandGroupCmd('Delete', this);
+                                for (let selectionId of this.selections) {
+                                    let obj = this.getDataObject(selectionId);
+                                    if (obj instanceof DocElement) {
+                                        obj.addCommandsForDelete(cmdGroup);
                                     }
                                 }
+                                if (!cmdGroup.isEmpty()) {
+                                    this.executeCommand(cmdGroup);
+                                }
+                                event.preventDefault();
+                                break;
                             }
-                            if (!cmdGroup.isEmpty()) {
-                                this.executeCommand(cmdGroup);
+                        case 37: // left
+                        case 38: // up
+                        case 39: // right
+                        case 40:
+                            { // down
+                                let cmdGroup = new CommandGroupCmd('Move element', this);
+                                let tagId;
+                                let field = (event.which === 37 || event.which === 39) ? 'x' : 'y';
+                                let bandWidth = this.getDocumentProperties().getContentSize().width;
+                                for (let selectionId of this.selections) {
+                                    let obj = this.getDataObject(selectionId);
+                                    if (obj instanceof DocElement) {
+                                        if (event.which === 37 || event.which === 39) {
+                                            tagId = obj.getXTagId();
+                                        } else {
+                                            tagId = obj.getYTagId();
+                                        }
+                                        if (tagId !== '') {
+                                            let val = null;
+                                            if (event.which === 37) {
+                                                if (obj.getValue('xVal') > 0) {
+                                                    val = obj.getValue('xVal') - 1;
+                                                }
+                                            } else if (event.which === 38) {
+                                                if (obj.getValue('yVal') > 0) {
+                                                    val = obj.getValue('yVal') - 1;
+                                                }
+                                            } else if (event.which === 39) {
+                                                let containerSize = obj.getContainerContentSize();
+                                                if ((obj.getValue('xVal') + obj.getValue('widthVal')) < containerSize.width) {
+                                                    val = obj.getValue('xVal') + 1;
+                                                }
+                                            } else if (event.which === 40) {
+                                                let containerSize = obj.getContainerContentSize();
+                                                if ((obj.getValue('yVal') + obj.getValue('heightVal')) < containerSize.height) {
+                                                    val = obj.getValue('yVal') + 1;
+                                                }
+                                            }
+                                            if (val !== null) {
+                                                let cmd = new SetValueCmd(selectionId, tagId, field,
+                                                    val, SetValueCmd.type.text, this);
+                                                cmdGroup.addCommand(cmd);
+                                            }
+                                        }
+                                    }
+                                }
+                                if (!cmdGroup.isEmpty()) {
+                                    this.executeCommand(cmdGroup);
+                                }
+                                event.preventDefault();
+                                break;
                             }
-                            event.preventDefault();
-                            break;
-                        }
                     }
                 }
             }
@@ -375,9 +380,7 @@ export default class ReportBro {
      * Adds default parameters like page count/number.
      */
     addDefaultParameters() {
-        for (let parameterData of [
-                { name: 'page_count', type: Parameter.type.number, eval: false, editable: false, showOnlyNameType: true },
-                { name: 'page_number', type: Parameter.type.number, eval: false, editable: false, showOnlyNameType: true }]) {
+        for (let parameterData of[{ name: 'page_count', type: Parameter.type.number, eval: false, editable: false, showOnlyNameType: true }, { name: 'page_number', type: Parameter.type.number, eval: false, editable: false, showOnlyNameType: true }]) {
             let parameter = new Parameter(this.getUniqueId(), parameterData, this);
             let parentPanel = this.mainPanel.getParametersItem();
             let panelItem = new MainPanelItem(
@@ -422,12 +425,12 @@ export default class ReportBro {
             .on('dragstart', event => {
                 // disable dragging per default, otherwise e.g. a text selection can be dragged in Chrome
                 event.preventDefault();
-           })
-           .mousemove(event => {
-               if (!this.mainPanel.processMouseMove(event)) {
-                   this.document.processMouseMove(event);
-               }
-           });
+            })
+            .mousemove(event => {
+                if (!this.mainPanel.processMouseMove(event)) {
+                    this.document.processMouseMove(event);
+                }
+            });
     }
 
     setup() {
@@ -522,7 +525,9 @@ export default class ReportBro {
             for (let dataSource of dataSources) {
                 if (dataSource.parameters.length > 0) {
                     parameters.push({
-                        separator: true, separatorClass: 'rbroParameterDataSourceGroup', id: 'ds' + dataSourceIndex,
+                        separator: true,
+                        separatorClass: 'rbroParameterDataSourceGroup',
+                        id: 'ds' + dataSourceIndex,
                         name: this.getLabel('parametersDataSource')
                     });
                     dataSourceIndex++;
@@ -658,7 +663,7 @@ export default class ReportBro {
         for (let panelName in this.detailPanels) {
             this.detailPanels[panelName].notifyEvent(obj, operation);
         }
-    }	
+    }
 
     addParameter(parameter) {
         this.addDataObject(parameter);
@@ -691,7 +696,7 @@ export default class ReportBro {
     }
 
     deleteDocElements() {
-        for (let i=0; i < this.docElements.length; i++) {
+        for (let i = 0; i < this.docElements.length; i++) {
             this.deleteDataObject(this.docElements[i]);
         }
         this.docElements = [];
@@ -836,8 +841,8 @@ export default class ReportBro {
     }
 
     debugCommandStack() {
-        console.clear();		
-        for (let i=0; i < this.commandStack.length; i++) {
+        console.clear();
+        for (let i = 0; i < this.commandStack.length; i++) {
             if (i > this.lastCommandIndex) {
                 console.log('( ' + i + ' ' + this.commandStack[i].getName() + ' )');
             } else {
@@ -953,7 +958,7 @@ export default class ReportBro {
         for (let i = 0; i < this.containers.length; i++) {
             let container = this.containers[i];
             if (container.getLevel() > bestMatchLevel && container.isElementAllowed(elementType) &&
-                    container.isInside(posX, posY)) {
+                container.isInside(posX, posY)) {
                 bestMatch = container;
                 bestMatchLevel = container.getLevel();
             }
@@ -1019,7 +1024,10 @@ export default class ReportBro {
     alignSelections(alignment) {
         let alignVal = NaN;
         let x, y, width, height;
-        let minX = Number.MAX_VALUE, maxX = Number.MIN_VALUE, minY = Number.MAX_VALUE, maxY = Number.MIN_VALUE;
+        let minX = Number.MAX_VALUE,
+            maxX = Number.MIN_VALUE,
+            minY = Number.MAX_VALUE,
+            maxY = Number.MIN_VALUE;
         let elementCount = 0;
         for (let selectionId of this.selections) {
             let obj = this.getDataObject(selectionId);
@@ -1044,49 +1052,55 @@ export default class ReportBro {
             }
         }
         let center = minX + ((maxX - minX) / 2);
-        let vcenter  = minY + ((maxY - minY) / 2);
+        let vcenter = minY + ((maxY - minY) / 2);
         if (elementCount > 1) {
             let cmdGroup = new CommandGroupCmd('Align elements', this);
             for (let selectionId of this.selections) {
                 let obj = this.getDataObject(selectionId);
                 if (obj instanceof DocElement && !(obj instanceof PageBreakElement)) {
                     switch (alignment) {
-                        case Style.alignment.left: {
-                            let cmd = new SetValueCmd(obj.getId(), obj.getXTagId(), 'x',
-                                '' + minX, SetValueCmd.type.text, this);
-                            cmdGroup.addCommand(cmd);
-                        }
-                        break;
-                        case Style.alignment.center: {
-                            let cmd = new SetValueCmd(obj.getId(), obj.getXTagId(), 'x',
-                                '' + (center - (obj.getValue('widthVal') / 2)), SetValueCmd.type.text, this);
-                            cmdGroup.addCommand(cmd);
-                        }
-                        break;
-                        case Style.alignment.right: {
-                            let cmd = new SetValueCmd(obj.getId(), obj.getXTagId(), 'x',
-                                '' + (maxX - obj.getValue('widthVal')), SetValueCmd.type.text, this);
-                            cmdGroup.addCommand(cmd);
-                        }
-                        break;
-                        case Style.alignment.top: {
-                            let cmd = new SetValueCmd(obj.getId(), obj.getYTagId(), 'y',
-                                '' + minY, SetValueCmd.type.text, this);
-                            cmdGroup.addCommand(cmd);
-                        }
-                        break;
-                        case Style.alignment.middle: {
-                            let cmd = new SetValueCmd(obj.getId(), obj.getYTagId(), 'y',
-                                '' + (vcenter - (obj.getValue('heightVal') / 2)), SetValueCmd.type.text, this);
-                            cmdGroup.addCommand(cmd);
-                        }
-                        break;
-                        case Style.alignment.bottom: {
-                            let cmd = new SetValueCmd(obj.getId(), obj.getYTagId(), 'y',
-                                '' + (maxY - obj.getValue('heightVal')), SetValueCmd.type.text, this);
-                            cmdGroup.addCommand(cmd);
-                        }
-                        break;
+                        case Style.alignment.left:
+                            {
+                                let cmd = new SetValueCmd(obj.getId(), obj.getXTagId(), 'x',
+                                    '' + minX, SetValueCmd.type.text, this);
+                                cmdGroup.addCommand(cmd);
+                            }
+                            break;
+                        case Style.alignment.center:
+                            {
+                                let cmd = new SetValueCmd(obj.getId(), obj.getXTagId(), 'x',
+                                    '' + (center - (obj.getValue('widthVal') / 2)), SetValueCmd.type.text, this);
+                                cmdGroup.addCommand(cmd);
+                            }
+                            break;
+                        case Style.alignment.right:
+                            {
+                                let cmd = new SetValueCmd(obj.getId(), obj.getXTagId(), 'x',
+                                    '' + (maxX - obj.getValue('widthVal')), SetValueCmd.type.text, this);
+                                cmdGroup.addCommand(cmd);
+                            }
+                            break;
+                        case Style.alignment.top:
+                            {
+                                let cmd = new SetValueCmd(obj.getId(), obj.getYTagId(), 'y',
+                                    '' + minY, SetValueCmd.type.text, this);
+                                cmdGroup.addCommand(cmd);
+                            }
+                            break;
+                        case Style.alignment.middle:
+                            {
+                                let cmd = new SetValueCmd(obj.getId(), obj.getYTagId(), 'y',
+                                    '' + (vcenter - (obj.getValue('heightVal') / 2)), SetValueCmd.type.text, this);
+                                cmdGroup.addCommand(cmd);
+                            }
+                            break;
+                        case Style.alignment.bottom:
+                            {
+                                let cmd = new SetValueCmd(obj.getId(), obj.getYTagId(), 'y',
+                                    '' + (maxY - obj.getValue('heightVal')), SetValueCmd.type.text, this);
+                                cmdGroup.addCommand(cmd);
+                            }
+                            break;
                     }
                 }
             }
@@ -1152,7 +1166,7 @@ export default class ReportBro {
                     }
                     ret[parameter.getName()] = testDataRows;
                 } else if (type === Parameter.type.string || type === Parameter.type.number ||
-                           type === Parameter.type.boolean || type === Parameter.type.date) {
+                    type === Parameter.type.boolean || type === Parameter.type.date) {
                     ret[parameter.getName()] = parameter.getValue('testData');
                 }
             }
@@ -1197,7 +1211,8 @@ export default class ReportBro {
                 data: data,
                 isTestData: isTestData
             }),
-            type: "PUT", contentType: "application/json",
+            type: "PUT",
+            contentType: "application/json",
             timeout: this.properties.reportServerTimeout,
             crossDomain: this.properties.reportServerUrlCrossDomain,
             success: function(data) {
@@ -1258,7 +1273,7 @@ export default class ReportBro {
             ret.styles.push(style.toJS());
         }
         ret.documentProperties = this.documentProperties.toJS();
-        
+
         return ret;
     }
 
@@ -1275,8 +1290,7 @@ export default class ReportBro {
                     // console.log(JSON.stringify(report));
                     window.localStorage.setItem(this.properties.localStorageReportKey, JSON.stringify(report));
                     this.modified = false;
-                } catch (e) {
-                }
+                } catch (e) {}
             }
         }
         this.updateMenuButtons();
@@ -1348,15 +1362,14 @@ export default class ReportBro {
                 let report = null;
                 try {
                     report = JSON.parse(window.localStorage[this.properties.localStorageReportKey]);
-                } catch (e) {
-                }
+                } catch (e) {}
                 if (report !== null) {
                     this.load(report);
                 }
             }
         }
     }
-  
+
     preview() {
         this.previewInternal(this.getTestData(), true);
     }
@@ -1462,8 +1475,7 @@ export default class ReportBro {
         let parameter = new Parameter(parameterData.id, parameterData, this);
         let parentPanel = this.mainPanel.getParametersItem();
         let panelItem = new MainPanelItem(
-            'parameter', parentPanel, parameter,
-            { hasChildren: true, showAdd: parameter.getValue('editable'), showDelete: parameter.getValue('editable'), draggable: true }, this);
+            'parameter', parentPanel, parameter, { hasChildren: true, showAdd: parameter.getValue('editable'), showDelete: parameter.getValue('editable'), draggable: true }, this);
         parameter.setPanelItem(panelItem);
         parentPanel.appendChild(panelItem);
         parameter.setup();
@@ -1505,7 +1517,7 @@ export default class ReportBro {
      * @param {DocElement} element - doc element to delete.
      */
     deleteDocElement(element) {
-        for (let i=0; i < this.docElements.length; i++) {
+        for (let i = 0; i < this.docElements.length; i++) {
             if (this.docElements[i].getId() === element.getId()) {
                 this.notifyEvent(element, Command.operation.remove);
                 if (this.detailData === this.docElements[i]) {

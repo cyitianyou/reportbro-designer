@@ -56,7 +56,8 @@ export default class ImageElement extends DocElement {
         return ['id', 'containerId', 'x', 'y', 'width', 'height', 'source', 'image', 'imageFilename',
             'horizontalAlignment', 'verticalAlignment', 'backgroundColor',
             'printIf', 'removeEmptyElement', 'link',
-            'spreadsheet_hide', 'spreadsheet_column', 'spreadsheet_addEmptyRow'];
+            'spreadsheet_hide', 'spreadsheet_column', 'spreadsheet_addEmptyRow'
+        ];
     }
 
     getElementType() {
@@ -65,8 +66,12 @@ export default class ImageElement extends DocElement {
 
     updateDisplayInternal(x, y, width, height) {
         if (this.el !== null) {
-            let props = { left: this.rb.toPixel(x), top: this.rb.toPixel(y),
-                width: this.rb.toPixel(width), height: this.rb.toPixel(height) };
+            let props = {
+                left: this.rb.toPixel(x),
+                top: this.rb.toPixel(y),
+                width: this.rb.toPixel(width),
+                height: this.rb.toPixel(height)
+            };
             this.el.css(props);
 
             let imgWidth = 0;

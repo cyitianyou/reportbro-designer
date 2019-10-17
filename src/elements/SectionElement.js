@@ -103,7 +103,7 @@ export default class SectionElement extends DocElement {
     registerEventHandlers() {
         super.registerContainerEventHandlers();
     }
-    
+
     /**
      * Returns highest id of this component, this is the max id of the footer band because it is created last.
      * @returns {Number}
@@ -260,7 +260,7 @@ export default class SectionElement extends DocElement {
      * instead of the actual stored height value. This is needed to update the divider display during drag
      * of section band height.
      * @param {Number} bandHeight - used band height for given band parameter instead of stored height value.
-    */
+     */
     updateHeight(band, bandHeight) {
         let height = 0;
         if (this.header && this.headerData !== null) {
@@ -326,7 +326,7 @@ export default class SectionElement extends DocElement {
     getLinkedContainers() {
         let containers = [];
         let container;
-        for (let band of ['headerData', 'contentData', 'footerData']) {
+        for (let band of['headerData', 'contentData', 'footerData']) {
             if (this[band] !== null) {
                 container = this[band].getLinkedContainer();
                 if (container !== null) {
@@ -346,7 +346,7 @@ export default class SectionElement extends DocElement {
         let dataSource = this.dataSource.trim();
         let dataSourceParameter = '';
         if (dataSource.length >= 3 && dataSource.substr(0, 2) === '${' &&
-                dataSource.charAt(dataSource.length - 1) === '}') {
+            dataSource.charAt(dataSource.length - 1) === '}') {
             dataSourceParameter = dataSource.substring(2, dataSource.length - 1);
             let param = this.rb.getParameterByName(dataSourceParameter);
             if (param !== null && param.getValue('type') === Parameter.type.array) {
