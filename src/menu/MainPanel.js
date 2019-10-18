@@ -8,7 +8,8 @@ import Document from '../Document';
  * @class
  */
 export default class MainPanel {
-    constructor(rootElement, headerBand, contentBand, footerBand, parameterContainer, styleContainer, rb) {
+    constructor(rootElement, headerBand, contentBand, footerBand, pageHeaderBand, startSectionBand, repetitionBand,
+        endSectionBand, pageFooterBand, parameterContainer, styleContainer, rb) {
         this.rootElement = rootElement;
         this.rb = rb;
         this.headerItem = new MainPanelItem(
@@ -28,14 +29,55 @@ export default class MainPanel {
 
         this.documentPropertiesItem = new MainPanelItem(
             'documentProperties', null, rb.getDocumentProperties(), { showDelete: false, hasDetails: true }, rb);
-
+        this.pageHeaderItem = new MainPanelItem(
+            'band', null, pageHeaderBand, {
+                hasChildren: true,
+                showAdd: false,
+                showDelete: false,
+                hasDetails: false
+            }, rb);
+        this.startSectionItem = new MainPanelItem(
+            'band', null, startSectionBand, {
+                hasChildren: true,
+                showAdd: false,
+                showDelete: false,
+                hasDetails: false
+            }, rb);
+        this.repetitionItem = new MainPanelItem(
+            'table', null, repetitionBand, {
+                hasChildren: true,
+                showAdd: false,
+                showDelete: false,
+                hasDetails: true
+            }, rb);
+        this.repetitionItem.setActive = function() {
+            $('.rbroMenuItem').removeClass('rbroMenuItemActive');
+            $(`#rbro_menu_item${this.id}`).addClass('rbroMenuItemActive');
+            if (this.properties.hasDetails) {
+                this.rb.setDetailPanel(this.panelName, this.tableData);
+            }
+        }.bind(this.repetitionItem);
+        this.endSectionItem = new MainPanelItem(
+            'band', null, endSectionBand, {
+                hasChildren: true,
+                showAdd: false,
+                showDelete: false,
+                hasDetails: false
+            }, rb);
+        this.pageFooterItem = new MainPanelItem(
+            'band', null, pageFooterBand, {
+                hasChildren: true,
+                showAdd: false,
+                showDelete: false,
+                hasDetails: false
+            }, rb);
         this.items = [
-            this.headerItem,
-            this.documentItem,
-            this.footerItem,
-            this.parametersItem,
-            this.stylesItem,
-            this.documentPropertiesItem
+            this.documentPropertiesItem,
+            this.pageHeaderItem,
+            this.startSectionItem,
+            this.repetitionItem,
+            this.endSectionItem,
+            this.pageFooterItem
         ];
 
         this.dragMainPanelSizer = false;
@@ -48,6 +90,12 @@ export default class MainPanel {
         footerBand.setPanelItem(this.footerItem);
         parameterContainer.setPanelItem(this.parametersItem);
         styleContainer.setPanelItem(this.stylesItem);
+
+        pageHeaderBand.setPanelItem(this.pageHeaderItem);
+        startSectionBand.setPanelItem(this.startSectionItem);
+        repetitionBand.setPanelItem(this.repetitionItem);
+        endSectionBand.setPanelItem(this.endSectionItem);
+        pageFooterBand.setPanelItem(this.pageFooterItem);
     }
 
     getHeaderItem() {

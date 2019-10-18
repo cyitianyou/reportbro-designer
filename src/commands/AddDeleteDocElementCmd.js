@@ -100,8 +100,13 @@ export default class AddDeleteDocElementCmd {
         rb.addDocElement(element);
         let parentPanel = element.getContainer().getPanelItem();
         let panelItem = new MainPanelItem(elementType, parentPanel, element, properties, rb);
-        element.setPanelItem(panelItem);
-        parentPanel.insertChild(panelPos, panelItem);
+        if (elementType === DocElement.type.table && parentPanel.data.bandType === "repetition") {
+            parentPanel.tableData = panelItem.data;
+            element.setPanelItem(parentPanel);
+        } else {
+            element.setPanelItem(panelItem);
+            parentPanel.insertChild(panelPos, panelItem);
+        }
         element.setup(openPanelItem);
         return element;
     }

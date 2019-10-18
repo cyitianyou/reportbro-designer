@@ -38,12 +38,12 @@ export default class MenuPanel {
                 this.rb.redoCommand();
             })
         );
-        panelLeft.append($(`<button id="rbro_menu_preview" class="rbroButton rbroMenuButton" title="${this.rb.getLabel('menuPreviewTip')}">
-                <span class="rbroIcon-play"></span><span class="${menuButtonClass}">${this.rb.getLabel('menuPreview')}</span></button>`)
-            .click(event => {
-                this.rb.preview();
-            })
-        );
+        // panelLeft.append($(`<button id="rbro_menu_preview" class="rbroButton rbroMenuButton" title="${this.rb.getLabel('menuPreviewTip')}">
+        //         <span class="rbroIcon-play"></span><span class="${menuButtonClass}">${this.rb.getLabel('menuPreview')}</span></button>`)
+        //     .click(event => {
+        //         this.rb.preview();
+        //     })
+        // );
         panel.append(panelLeft);
 
         let panelRight = $('<div class="rbroElementButtonContainer"></div>');
@@ -77,27 +77,27 @@ export default class MenuPanel {
             })
         );
 
-        elElementsDiv.append($(`<div id="rbro_menu_element_line" class="rbroButton rbroMenuButton" draggable="true"
-                title="${this.rb.getLabel('docElementLine')}">
-                    <span class="rbroIcon-line"></span>
-                </div>`)
-            .on('dragstart', event => {
-                event.originalEvent.dataTransfer.setData('text/plain', '');
-                event.originalEvent.dataTransfer.effectAllowed = 'copy';
-                this.rb.startBrowserDrag('docElement', DocElement.type.line, '');
-                event.stopPropagation();
-            })
-            .on('touchstart', event => {
-                this.rb.startBrowserDrag('docElement', DocElement.type.line, '');
-                event.preventDefault();
-            })
-            .on('touchmove', event => {
-                this.rb.getDocument().processDragover(event);
-            })
-            .on('touchend', event => {
-                this.rb.getDocument().processDrop(event);
-            })
-        );
+        // elElementsDiv.append($(`<div id="rbro_menu_element_line" class="rbroButton rbroMenuButton" draggable="true"
+        //         title="${this.rb.getLabel('docElementLine')}">
+        //             <span class="rbroIcon-line"></span>
+        //         </div>`)
+        //     .on('dragstart', event => {
+        //         event.originalEvent.dataTransfer.setData('text/plain', '');
+        //         event.originalEvent.dataTransfer.effectAllowed = 'copy';
+        //         this.rb.startBrowserDrag('docElement', DocElement.type.line, '');
+        //         event.stopPropagation();
+        //     })
+        //     .on('touchstart', event => {
+        //         this.rb.startBrowserDrag('docElement', DocElement.type.line, '');
+        //         event.preventDefault();
+        //     })
+        //     .on('touchmove', event => {
+        //         this.rb.getDocument().processDragover(event);
+        //     })
+        //     .on('touchend', event => {
+        //         this.rb.getDocument().processDrop(event);
+        //     })
+        // );
 
         elElementsDiv.append($(`<div id="rbro_menu_element_image" class="rbroButton rbroMenuButton" draggable="true"
                 title="${this.rb.getLabel('docElementImage')}">
@@ -121,114 +121,114 @@ export default class MenuPanel {
             })
         );
 
-        elElementsDiv.append($(`<div id="rbro_menu_element_bar_code" class="rbroButton rbroMenuButton" draggable="true"
-                title="${this.rb.getLabel('docElementBarCode')}">
-                    <span class="rbroIcon-barcode"></span>
-                </div>`)
-            .on('dragstart', event => {
-                event.originalEvent.dataTransfer.setData('text/plain', '');
-                event.originalEvent.dataTransfer.effectAllowed = 'copy';
-                this.rb.startBrowserDrag('docElement', DocElement.type.barCode, '');
-                event.stopPropagation();
-            })
-            .on('touchstart', event => {
-                this.rb.startBrowserDrag('docElement', DocElement.type.barCode, '');
-                event.preventDefault();
-            })
-            .on('touchmove', event => {
-                this.rb.getDocument().processDragover(event);
-            })
-            .on('touchend', event => {
-                this.rb.getDocument().processDrop(event);
-            })
-        );
-        elElementsDiv.append($(`<div id="rbro_menu_element_table" class="rbroButton rbroMenuButton" draggable="true"
-                title="${this.rb.getLabel('docElementTable')}">
-                    <span class="rbroIcon-table"></span>
-                </div>`)
-            .on('dragstart', event => {
-                event.originalEvent.dataTransfer.setData('text/plain', '');
-                event.originalEvent.dataTransfer.effectAllowed = 'copy';
-                this.rb.startBrowserDrag('docElement', DocElement.type.table, '');
-                event.stopPropagation();
-            })
-            .on('touchstart', event => {
-                this.rb.startBrowserDrag('docElement', DocElement.type.table, '');
-                event.preventDefault();
-            })
-            .on('touchmove', event => {
-                this.rb.getDocument().processDragover(event);
-            })
-            .on('touchend', event => {
-                this.rb.getDocument().processDrop(event);
-            })
-        );
+        // elElementsDiv.append($(`<div id="rbro_menu_element_bar_code" class="rbroButton rbroMenuButton" draggable="true"
+        //         title="${this.rb.getLabel('docElementBarCode')}">
+        //             <span class="rbroIcon-barcode"></span>
+        //         </div>`)
+        //     .on('dragstart', event => {
+        //         event.originalEvent.dataTransfer.setData('text/plain', '');
+        //         event.originalEvent.dataTransfer.effectAllowed = 'copy';
+        //         this.rb.startBrowserDrag('docElement', DocElement.type.barCode, '');
+        //         event.stopPropagation();
+        //     })
+        //     .on('touchstart', event => {
+        //         this.rb.startBrowserDrag('docElement', DocElement.type.barCode, '');
+        //         event.preventDefault();
+        //     })
+        //     .on('touchmove', event => {
+        //         this.rb.getDocument().processDragover(event);
+        //     })
+        //     .on('touchend', event => {
+        //         this.rb.getDocument().processDrop(event);
+        //     })
+        // );
+        // elElementsDiv.append($(`<div id="rbro_menu_element_table" class="rbroButton rbroMenuButton" draggable="true"
+        //         title="${this.rb.getLabel('docElementTable')}">
+        //             <span class="rbroIcon-table"></span>
+        //         </div>`)
+        //     .on('dragstart', event => {
+        //         event.originalEvent.dataTransfer.setData('text/plain', '');
+        //         event.originalEvent.dataTransfer.effectAllowed = 'copy';
+        //         this.rb.startBrowserDrag('docElement', DocElement.type.table, '');
+        //         event.stopPropagation();
+        //     })
+        //     .on('touchstart', event => {
+        //         this.rb.startBrowserDrag('docElement', DocElement.type.table, '');
+        //         event.preventDefault();
+        //     })
+        //     .on('touchmove', event => {
+        //         this.rb.getDocument().processDragover(event);
+        //     })
+        //     .on('touchend', event => {
+        //         this.rb.getDocument().processDrop(event);
+        //     })
+        // );
 
-        elElementsDiv.append($(`<div id="rbro_menu_element_frame" class="rbroButton rbroMenuButton" draggable="true"
-                title="${this.rb.getLabel('docElementFrame')}">
-                    <span class="rbroIcon-frame"></span>
-                </div>`)
-            .on('dragstart', event => {
-                event.originalEvent.dataTransfer.setData('text/plain', '');
-                event.originalEvent.dataTransfer.effectAllowed = 'copy';
-                this.rb.startBrowserDrag('docElement', DocElement.type.frame, '');
-                event.stopPropagation();
-            })
-            .on('touchstart', event => {
-                this.rb.startBrowserDrag('docElement', DocElement.type.frame, '');
-                event.preventDefault();
-            })
-            .on('touchmove', event => {
-                this.rb.getDocument().processDragover(event);
-            })
-            .on('touchend', event => {
-                this.rb.getDocument().processDrop(event);
-            })
-        );
+        // elElementsDiv.append($(`<div id="rbro_menu_element_frame" class="rbroButton rbroMenuButton" draggable="true"
+        //         title="${this.rb.getLabel('docElementFrame')}">
+        //             <span class="rbroIcon-frame"></span>
+        //         </div>`)
+        //     .on('dragstart', event => {
+        //         event.originalEvent.dataTransfer.setData('text/plain', '');
+        //         event.originalEvent.dataTransfer.effectAllowed = 'copy';
+        //         this.rb.startBrowserDrag('docElement', DocElement.type.frame, '');
+        //         event.stopPropagation();
+        //     })
+        //     .on('touchstart', event => {
+        //         this.rb.startBrowserDrag('docElement', DocElement.type.frame, '');
+        //         event.preventDefault();
+        //     })
+        //     .on('touchmove', event => {
+        //         this.rb.getDocument().processDragover(event);
+        //     })
+        //     .on('touchend', event => {
+        //         this.rb.getDocument().processDrop(event);
+        //     })
+        // );
 
-        elElementsDiv.append($(`<div id="rbro_menu_element_section" class="rbroButton rbroMenuButton" draggable="true"
-                title="${this.rb.getLabel('docElementSection')}">
-                    <span class="rbroIcon-section"></span>
-                </div>`)
-            .on('dragstart', event => {
-                event.originalEvent.dataTransfer.setData('text/plain', '');
-                event.originalEvent.dataTransfer.effectAllowed = 'copy';
-                this.rb.startBrowserDrag('docElement', DocElement.type.section, '');
-                event.stopPropagation();
-            })
-            .on('touchstart', event => {
-                this.rb.startBrowserDrag('docElement', DocElement.type.section, '');
-                event.preventDefault();
-            })
-            .on('touchmove', event => {
-                this.rb.getDocument().processDragover(event);
-            })
-            .on('touchend', event => {
-                this.rb.getDocument().processDrop(event);
-            })
-        );
+        // elElementsDiv.append($(`<div id="rbro_menu_element_section" class="rbroButton rbroMenuButton" draggable="true"
+        //         title="${this.rb.getLabel('docElementSection')}">
+        //             <span class="rbroIcon-section"></span>
+        //         </div>`)
+        //     .on('dragstart', event => {
+        //         event.originalEvent.dataTransfer.setData('text/plain', '');
+        //         event.originalEvent.dataTransfer.effectAllowed = 'copy';
+        //         this.rb.startBrowserDrag('docElement', DocElement.type.section, '');
+        //         event.stopPropagation();
+        //     })
+        //     .on('touchstart', event => {
+        //         this.rb.startBrowserDrag('docElement', DocElement.type.section, '');
+        //         event.preventDefault();
+        //     })
+        //     .on('touchmove', event => {
+        //         this.rb.getDocument().processDragover(event);
+        //     })
+        //     .on('touchend', event => {
+        //         this.rb.getDocument().processDrop(event);
+        //     })
+        // );
 
-        elElementsDiv.append($(`<div id="rbro_menu_element_page_break" class="rbroButton rbroMenuButton" draggable="true"
-                title="${this.rb.getLabel('docElementPageBreak')}">
-                    <span class="rbroIcon-page-break"></span>
-                </div>`)
-            .on('dragstart', event => {
-                event.originalEvent.dataTransfer.setData('text/plain', '');
-                event.originalEvent.dataTransfer.effectAllowed = 'copy';
-                this.rb.startBrowserDrag('docElement', DocElement.type.pageBreak, '');
-                event.stopPropagation();
-            })
-            .on('touchstart', event => {
-                this.rb.startBrowserDrag('docElement', DocElement.type.pageBreak, '');
-                event.preventDefault();
-            })
-            .on('touchmove', event => {
-                this.rb.getDocument().processDragover(event);
-            })
-            .on('touchend', event => {
-                this.rb.getDocument().processDrop(event);
-            })
-        );
+        // elElementsDiv.append($(`<div id="rbro_menu_element_page_break" class="rbroButton rbroMenuButton" draggable="true"
+        //         title="${this.rb.getLabel('docElementPageBreak')}">
+        //             <span class="rbroIcon-page-break"></span>
+        //         </div>`)
+        //     .on('dragstart', event => {
+        //         event.originalEvent.dataTransfer.setData('text/plain', '');
+        //         event.originalEvent.dataTransfer.effectAllowed = 'copy';
+        //         this.rb.startBrowserDrag('docElement', DocElement.type.pageBreak, '');
+        //         event.stopPropagation();
+        //     })
+        //     .on('touchstart', event => {
+        //         this.rb.startBrowserDrag('docElement', DocElement.type.pageBreak, '');
+        //         event.preventDefault();
+        //     })
+        //     .on('touchmove', event => {
+        //         this.rb.getDocument().processDragover(event);
+        //     })
+        //     .on('touchend', event => {
+        //         this.rb.getDocument().processDrop(event);
+        //     })
+        // );
 
         panelRight.append(elElementsDiv);
 

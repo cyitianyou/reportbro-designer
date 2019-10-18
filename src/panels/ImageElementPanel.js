@@ -19,83 +19,147 @@ export default class ImageElementPanel {
 
     render() {
         let panel = $('<div id="rbro_image_element_panel" class="rbroHidden"></div>');
-        let elDiv = $('<div id="rbro_image_element_source_row" class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_image_element_source">${this.rb.getLabel('imageElementSource')}:</label>`);
-        let elFormField = $('<div class="rbroFormField rbroSplit rbroSelector"></div>');
-        let elSource = $(`<textarea id="rbro_image_element_source" rows="1"></textarea>`)
-            .on('input', event => {
+        let elDiv = $('<div class="rbroFormRow"></div>');
+        elDiv.append(`<label for="rbro_image_element_source_type">${this.rb.getLabel('textElementSourceType')}:</label>`);
+        let elFormField = $('<div class="rbroFormField"></div>');
+        let elSourceType = $(`<select id="rbro_image_element_source_type">
+                <option value="TEXT">${this.rb.getLabel('textElementSourceTypeText')}</option>
+                <option value="PATH">${this.rb.getLabel('textElementSourceTypePath')}</option>
+                <option value="QUERY">${this.rb.getLabel('textElementSourceTypeQuery')}</option>
+            </select>`)
+            .change(event => {
                 if (this.rb.getDataObject(this.selectedObjId) !== null) {
-                    let cmd = new SetValueCmd(this.selectedObjId, 'rbro_image_element_source', 'source',
-                        elSource.val(), SetValueCmd.type.text, this.rb);
+                    let cmd = new SetValueCmd(this.selectedObjId, 'rbro_image_element_source_type', 'sourceType',
+                        elSourceType.val(), SetValueCmd.type.select, this.rb);
                     this.rb.executeCommand(cmd);
                 }
             });
-        autosize(elSource);
-        elFormField.append(elSource);
+        elFormField.append(elSourceType);
+        elDiv.append(elFormField);
+        panel.append(elDiv);
+
+        elDiv = $('<div id="rbro_image_element_content_row" class="rbroFormRow"></div>');
+        elDiv.append(`<label for="rbro_image_element_content">${this.rb.getLabel('textElementContent')}:</label>`);
+        elFormField = $('<div class="rbroFormField rbroSplit rbroSelector"></div>');
+        let elContent = $(`<textarea id="rbro_image_element_content" rows="1"></textarea>`)
+            .on('input', event => {
+                let obj = this.rb.getDataObject(this.selectedObjId);
+                if (obj !== null && obj.getValue('content') !== elContent.val()) {
+                    let cmd = new SetValueCmd(this.selectedObjId, 'rbro_image_element_content', 'content',
+                        elContent.val(), SetValueCmd.type.text, this.rb);
+                    this.rb.executeCommand(cmd);
+                }
+            })
+            .blur(event => {
+                this.rb.getPopupWindow().hide();
+            });
+        autosize(elContent);
+        elFormField.append(elContent);
         let elParameterButton = $('<div class="rbroButton rbroRoundButton rbroIcon-select"></div>')
             .click(event => {
                 let selectedObj = this.rb.getDataObject(this.selectedObjId);
                 if (selectedObj !== null) {
-                    this.rb.getPopupWindow().show(this.rb.getParameterItems(selectedObj, [Parameter.type.image, Parameter.type.string]), this.selectedObjId,
-                        'rbro_image_element_source', 'source', PopupWindow.type.parameterSet);
+                    this.rb.getPopupWindow().show(this.rb.getParameterItems(selectedObj), this.selectedObjId,
+                        'rbro_image_element_content', 'content', PopupWindow.type.vstore);
                 }
             });
         elFormField.append(elParameterButton);
-        elFormField.append('<div id="rbro_image_element_source_error" class="rbroErrorMessage"></div>');
+        elFormField.append('<div id="rbro_image_element_content_error" class="rbroErrorMessage"></div>');
         elDiv.append(elFormField);
         panel.append(elDiv);
 
-        elDiv = $('<div id="rbro_image_element_image_row" class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_image_element_image">${this.rb.getLabel('imageElementImage')}:</label>`);
+        elDiv = $('<div class="rbroFormRow"></div>');
+        elDiv.append(`<label for="rbro_image_element_format">${this.rb.getLabel('textElementFormat')}:</label>`);
         elFormField = $('<div class="rbroFormField"></div>');
-        let elImage = $('<input id="rbro_image_element_image" type="file">')
+        let elFormat = $('<input id="rbro_image_element_format">')
             .change(event => {
                 if (this.rb.getDataObject(this.selectedObjId) !== null) {
-                    let files = event.target.files;
-                    if (files && files[0]) {
-                        let fileReader = new FileReader();
-                        let rb = this.rb;
-                        let fileName = files[0].name;
-                        let objId = this.selectedObjId;
-                        fileReader.onload = function(e) {
-                            let cmdGroup = new CommandGroupCmd('Load image', this.rb);
-                            let cmd = new SetValueCmd(objId, 'rbro_image_element_image', 'image',
-                                e.target.result, SetValueCmd.type.file, rb);
-                            cmdGroup.addCommand(cmd);
-                            cmd = new SetValueCmd(objId, 'rbro_image_element_image_filename', 'imageFilename',
-                                fileName, SetValueCmd.type.filename, rb);
-                            cmdGroup.addCommand(cmd);
-                            rb.executeCommand(cmdGroup);
-                        };
-                        fileReader.onerror = function(e) {
-                            alert(this.rb.getLabel('imageElementLoadErrorMsg'));
-                        };
-                        fileReader.readAsDataURL(files[0]);
-                    }
+                    let cmd = new SetValueCmd(this.selectedObjId,
+                        'rbro_image_element_format', 'format',
+                        elFormat.val(), SetValueCmd.type.text, this.rb);
+                    this.rb.executeCommand(cmd);
                 }
             });
-        elFormField.append(elImage);
-        let elFilenameDiv = $('<div class="rbroSplit rbroHidden" id="rbro_image_element_image_filename_container"></div>');
-        elFilenameDiv.append($('<div id="rbro_image_element_image_filename"></div>'));
-        elFilenameDiv.append($('<div id="rbro_image_element_image_filename_clear" class="rbroIcon-cancel rbroButton rbroDeleteButton rbroRoundButton"></div>')
-            .click(event => {
-                if (this.rb.getDataObject(this.selectedObjId) !== null) {
-                    elImage.val('');
-                    let cmdGroup = new CommandGroupCmd('Clear image', this.rb);
-                    let cmd = new SetValueCmd(this.selectedObjId, 'rbro_image_element_image', 'image',
-                        '', SetValueCmd.type.file, this.rb);
-                    cmdGroup.addCommand(cmd);
-                    cmd = new SetValueCmd(this.selectedObjId, 'rbro_image_element_image_filename', 'imageFilename',
-                        '', SetValueCmd.type.filename, this.rb);
-                    cmdGroup.addCommand(cmd);
-                    this.rb.executeCommand(cmdGroup);
-                }
-            })
-        );
-        elFormField.append(elFilenameDiv);
-        elFormField.append('<div id="rbro_image_element_image_error" class="rbroErrorMessage"></div>');
+        elFormField.append(elFormat);
         elDiv.append(elFormField);
         panel.append(elDiv);
+        // let elDiv = $('<div id="rbro_image_element_source_row" class="rbroFormRow"></div>');
+        // elDiv.append(`<label for="rbro_image_element_source">${this.rb.getLabel('imageElementSource')}:</label>`);
+        // let elFormField = $('<div class="rbroFormField rbroSplit rbroSelector"></div>');
+        // let elSource = $(`<textarea id="rbro_image_element_source" rows="1"></textarea>`)
+        //     .on('input', event => {
+        //         if (this.rb.getDataObject(this.selectedObjId) !== null) {
+        //             let cmd = new SetValueCmd(this.selectedObjId, 'rbro_image_element_source', 'source',
+        //                 elSource.val(), SetValueCmd.type.text, this.rb);
+        //             this.rb.executeCommand(cmd);
+        //         }
+        //     });
+        // autosize(elSource);
+        // elFormField.append(elSource);
+        // let elParameterButton = $('<div class="rbroButton rbroRoundButton rbroIcon-select"></div>')
+        //     .click(event => {
+        //         let selectedObj = this.rb.getDataObject(this.selectedObjId);
+        //         if (selectedObj !== null) {
+        //             this.rb.getPopupWindow().show(this.rb.getParameterItems(selectedObj, [Parameter.type.image, Parameter.type.string]), this.selectedObjId,
+        //                 'rbro_image_element_source', 'source', PopupWindow.type.parameterSet);
+        //         }
+        //     });
+        // elFormField.append(elParameterButton);
+        // elFormField.append('<div id="rbro_image_element_source_error" class="rbroErrorMessage"></div>');
+        // elDiv.append(elFormField);
+        // panel.append(elDiv);
+
+        // elDiv = $('<div id="rbro_image_element_image_row" class="rbroFormRow"></div>');
+        // elDiv.append(`<label for="rbro_image_element_image">${this.rb.getLabel('imageElementImage')}:</label>`);
+        // elFormField = $('<div class="rbroFormField"></div>');
+        // let elImage = $('<input id="rbro_image_element_image" type="file">')
+        //     .change(event => {
+        //         if (this.rb.getDataObject(this.selectedObjId) !== null) {
+        //             let files = event.target.files;
+        //             if (files && files[0]) {
+        //                 let fileReader = new FileReader();
+        //                 let rb = this.rb;
+        //                 let fileName = files[0].name;
+        //                 let objId = this.selectedObjId;
+        //                 fileReader.onload = function(e) {
+        //                     let cmdGroup = new CommandGroupCmd('Load image', this.rb);
+        //                     let cmd = new SetValueCmd(objId, 'rbro_image_element_image', 'image',
+        //                         e.target.result, SetValueCmd.type.file, rb);
+        //                     cmdGroup.addCommand(cmd);
+        //                     cmd = new SetValueCmd(objId, 'rbro_image_element_image_filename', 'imageFilename',
+        //                         fileName, SetValueCmd.type.filename, rb);
+        //                     cmdGroup.addCommand(cmd);
+        //                     rb.executeCommand(cmdGroup);
+        //                 };
+        //                 fileReader.onerror = function(e) {
+        //                     alert(this.rb.getLabel('imageElementLoadErrorMsg'));
+        //                 };
+        //                 fileReader.readAsDataURL(files[0]);
+        //             }
+        //         }
+        //     });
+        // elFormField.append(elImage);
+        // let elFilenameDiv = $('<div class="rbroSplit rbroHidden" id="rbro_image_element_image_filename_container"></div>');
+        // elFilenameDiv.append($('<div id="rbro_image_element_image_filename"></div>'));
+        // elFilenameDiv.append($('<div id="rbro_image_element_image_filename_clear" class="rbroIcon-cancel rbroButton rbroDeleteButton rbroRoundButton"></div>')
+        //     .click(event => {
+        //         if (this.rb.getDataObject(this.selectedObjId) !== null) {
+        //             elImage.val('');
+        //             let cmdGroup = new CommandGroupCmd('Clear image', this.rb);
+        //             let cmd = new SetValueCmd(this.selectedObjId, 'rbro_image_element_image', 'image',
+        //                 '', SetValueCmd.type.file, this.rb);
+        //             cmdGroup.addCommand(cmd);
+        //             cmd = new SetValueCmd(this.selectedObjId, 'rbro_image_element_image_filename', 'imageFilename',
+        //                 '', SetValueCmd.type.filename, this.rb);
+        //             cmdGroup.addCommand(cmd);
+        //             this.rb.executeCommand(cmdGroup);
+        //         }
+        //     })
+        // );
+        // elFormField.append(elFilenameDiv);
+        // elFormField.append('<div id="rbro_image_element_image_error" class="rbroErrorMessage"></div>');
+        // elDiv.append(elFormField);
+        // panel.append(elDiv);
 
         elDiv = $('<div id="rbro_image_element_position_row" class="rbroFormRow"></div>');
         elDiv.append(`<label for="rbro_image_element_position">${this.rb.getLabel('docElementPosition')}:</label>`);
@@ -388,6 +452,9 @@ export default class ImageElementPanel {
             } else {
                 $('#rbro_image_element_image_filename_container').addClass('rbroHidden');
             }
+            $('#rbro_image_element_source_type').val(data.getValue('sourceType'));
+            $('#rbro_image_element_format').val(data.getValue('format'));
+            $('#rbro_image_element_content').val(data.getValue('content'));
             $('#rbro_image_element_position_x').val(data.getValue('x'));
             $('#rbro_image_element_position_y').val(data.getValue('y'));
             $('#rbro_image_element_width').val(data.getValue('width'));

@@ -9,13 +9,15 @@ export default class DocumentProperties {
     constructor(rb) {
         this.rb = rb;
         this.id = '0_document_properties';
+        this.name = '';
+        this.boCode = '';
         this.panelItem = null;
         this.errors = [];
 
         this.pageFormat = DocumentProperties.pageFormat.A4;
         this.pageWidth = '';
         this.pageHeight = '';
-        this.unit = DocumentProperties.unit.mm;
+        this.unit = DocumentProperties.unit.px;
         this.orientation = DocumentProperties.orientation.portrait;
         this.contentHeight = '';
         this.marginLeft = '';
@@ -27,12 +29,18 @@ export default class DocumentProperties {
         this.marginBottom = '';
         this.marginBottomVal = 0;
 
-        this.header = true;
+        this.header = false;
         this.headerSize = '80';
         this.headerDisplay = DocumentProperties.display.always;
-        this.footer = true;
+        this.footer = false;
         this.footerSize = '80';
         this.footerDisplay = DocumentProperties.display.always;
+
+        this.pageHeaderSize = '80';
+        this.startSectionSize = '300';
+        this.repetitionSize = '60';
+        this.endSectionSize = '80';
+        this.pageFooterSize = '80';
 
         this.headerSizeVal = this.header ? utils.convertInputToNumber(this.headerSize) : 0;
         this.footerSizeVal = this.footer ? utils.convertInputToNumber(this.footerSize) : 0;
@@ -80,7 +88,9 @@ export default class DocumentProperties {
         return ['pageFormat', 'pageWidth', 'pageHeight', 'unit', 'orientation',
             'contentHeight', 'marginLeft', 'marginTop', 'marginRight', 'marginBottom',
             'header', 'headerSize', 'headerDisplay', 'footer', 'footerSize', 'footerDisplay',
-            'patternLocale', 'patternCurrencySymbol'
+            'patternLocale', 'patternCurrencySymbol',
+            'name', 'boCode',
+            'pageHeaderSize', 'startSectionSize', 'repetitionSize', 'endSectionSize', 'pageFooterSize'
         ];
     }
 
@@ -115,6 +125,10 @@ export default class DocumentProperties {
             this.updateHeader();
         } else if (field === 'footer') {
             this.updateFooter();
+        }
+        if (field === 'pageHeaderSize' || field === 'startSectionSize' || field === 'repetitionSize' ||
+            field === 'endSectionSize' || field === 'pageFooterSize') {
+            this.rb.getDocument().updatePosition();
         }
         if (field === 'header' || field === 'headerSize') {
             this.rb.getDocument().updateHeader();
@@ -171,6 +185,9 @@ export default class DocumentProperties {
         let pageHeight;
         let unit;
         let dpi = 72;
+        // A4纸的尺寸是210mm*297mm，也就是21.0cm*29.7cm，而1英寸=2.54cm，
+        // 如果屏幕DPI分辨率为72像素/英寸，
+        // 换算一下：相当于1cm可呈现 (72px/2.54cm) = 28.34px
         if (this.pageFormat === DocumentProperties.pageFormat.A4) {
             if (this.orientation === DocumentProperties.orientation.portrait) {
                 pageWidth = 210;
@@ -206,7 +223,7 @@ export default class DocumentProperties {
         if (unit === DocumentProperties.unit.mm) {
             pageWidth = Math.round((dpi * pageWidth) / 25.4);
             pageHeight = Math.round((dpi * pageHeight) / 25.4);
-        } else {
+        } else if (unit === DocumentProperties.unit.inch) {
             pageWidth = Math.round(dpi * pageWidth);
             pageHeight = Math.round(dpi * pageHeight);
         }
@@ -277,7 +294,8 @@ DocumentProperties.pageFormat = {
 
 DocumentProperties.unit = {
     mm: 'mm',
-    inch: 'inch'
+    inch: 'inch',
+    px: 'px'
 };
 
 DocumentProperties.orientation = {

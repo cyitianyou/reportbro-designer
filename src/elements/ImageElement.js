@@ -10,6 +10,9 @@ import * as utils from '../utils';
 export default class ImageElement extends DocElement {
     constructor(id, initialData, rb) {
         super(rb.getLabel('docElementImage'), id, 80, 80, rb);
+        this.content = '';
+        this.sourceType = 'TEXT';
+        this.format = '';
         this.source = '';
         this.image = '';
         this.imageWidth = 0;
@@ -30,9 +33,9 @@ export default class ImageElement extends DocElement {
     setup(openPanelItem) {
         super.setup(openPanelItem);
         this.createElement();
-        if (this.image !== '') {
+        if (this.content !== '') {
             // setImage must be called after createElement so load event handler of image element is triggered
-            this.setImage(this.image);
+            this.setImage(this.content);
         }
         this.updateDisplay();
         this.updateStyle();
@@ -45,6 +48,8 @@ export default class ImageElement extends DocElement {
             this.updateName();
         } else if (field === 'image') {
             this.setImage(value);
+        } else if (field === 'content' || field === 'format' || field === 'sourceType') {
+            this.setImage(this['content']);
         }
     }
 
@@ -54,7 +59,7 @@ export default class ImageElement extends DocElement {
      */
     getFields() {
         return ['id', 'containerId', 'x', 'y', 'width', 'height', 'source', 'image', 'imageFilename',
-            'horizontalAlignment', 'verticalAlignment', 'backgroundColor',
+            'horizontalAlignment', 'verticalAlignment', 'backgroundColor', 'content', 'sourceType', 'format',
             'printIf', 'removeEmptyElement', 'link',
             'spreadsheet_hide', 'spreadsheet_column', 'spreadsheet_addEmptyRow'
         ];
@@ -141,7 +146,7 @@ export default class ImageElement extends DocElement {
                 .append(this.elImg)
             );
         this.appendToContainer();
-        this.setImage(this.image);
+        this.setImage(this.content);
         super.registerEventHandlers();
     }
 

@@ -18,6 +18,13 @@ export default class Document {
         this.elHeader = null;
         this.elContent = null;
         this.elFooter = null;
+        ///////////////////////////
+        this.elPageHeader = null;
+        this.elStartSection = null;
+        this.elRepetition = null;
+        this.elEndSection = null;
+        this.elPageFooter = null;
+        ///////////////////////////
         this.elSelectionArea = null;
         this.gridVisible = showGrid;
         this.gridSize = 10;
@@ -82,24 +89,51 @@ export default class Document {
         btnPdfPreview.append($(
                 `<span class="rbroIcon-cancel" title="${this.rb.getLabel('documentTabClose')}"></span>`)
             .click(event => { this.closePdfPreviewTab(); }));
-        elDocTabs.append(btnPdfPreview);
+        // elDocTabs.append(btnPdfPreview);
         panel.append(elDocTabs);
 
         let elDoc = $('<div id="rbro_document_pdf" class="rbroDocument rbroDragTarget rbroHidden"></div>');
         let docProperties = this.rb.getDocumentProperties();
         this.elDocContent = $(`<div id="rbro_document_content"
             class="rbroDocumentContent ${this.gridVisible ? 'rbroDocumentGrid' : ''}"></div>`);
+        /////////////////////////////////////////
         this.elHeader = $(`<div id="rbro_header" class="rbroDocumentBand rbroElementContainer"
             style="top: 0px; left: 0px;"></div>`);
         this.elHeader.append($(`<div class="rbroDocumentBandDescription">${this.rb.getLabel('bandHeader')}</div>`));
-        this.elDocContent.append(this.elHeader);
+        // this.elDocContent.append(this.elHeader);
         this.elContent = $('<div id="rbro_content" class="rbroDocumentBand rbroElementContainer"></div>');
         this.elContent.append($(`<div class="rbroDocumentBandDescription">${this.rb.getLabel('bandContent')}</div>`));
-        this.elDocContent.append(this.elContent);
+        // this.elDocContent.append(this.elContent);
         this.elFooter = $(`<div id="rbro_footer" class="rbroDocumentBand rbroElementContainer"
             style="bottom: 0px; left 0px;"></div>`);
         this.elFooter.append($(`<div class="rbroDocumentBandDescription">${this.rb.getLabel('bandFooter')}</div>`));
-        this.elDocContent.append(this.elFooter);
+        // this.elDocContent.append(this.elFooter);
+
+        this.elPageHeader = $(`<div id="rbro_page_header" class="rbroDocumentBand rbroElementContainer"
+            style="top: 0px; left: 0px;"></div>`);
+        this.elPageHeader.append($(`<div class="rbroDocumentBandDescription">${this.rb.getLabel('bandPageHeader')}</div>`));
+        this.elDocContent.append(this.elPageHeader);
+
+        this.elStartSection = $(`<div id="rbro_start_section" class="rbroDocumentBand rbroElementContainer"
+            style="top: 0px; left: 0px;"></div>`);
+        this.elStartSection.append($(`<div class="rbroDocumentBandDescription">${this.rb.getLabel('bandStartSection')}</div>`));
+        this.elDocContent.append(this.elStartSection);
+
+        this.elRepetition = $(`<div id="rbro_repetition" class="rbroDocumentBand rbroElementContainer"
+            style="top: 0px; left: 0px;"></div>`);
+        this.elRepetition.append($(`<div class="rbroDocumentBandDescription">${this.rb.getLabel('bandRepetition')}</div>`));
+        this.elDocContent.append(this.elRepetition);
+
+        this.elEndSection = $(`<div id="rbro_end_section" class="rbroDocumentBand rbroElementContainer"
+            style="top: 0px; left: 0px;"></div>`);
+        this.elEndSection.append($(`<div class="rbroDocumentBandDescription">${this.rb.getLabel('bandEndSection')}</div>`));
+        this.elDocContent.append(this.elEndSection);
+
+        this.elPageFooter = $(`<div id="rbro_page_footer" class="rbroDocumentBand rbroDocumentPageFooter rbroElementContainer"
+            style="bottom: 0px; left 0px;"></div>`);
+        this.elPageFooter.append($(`<div class="rbroDocumentBandDescription">${this.rb.getLabel('bandPageFooter')}</div>`));
+        this.elDocContent.append(this.elPageFooter);
+        /////////////////////////////////////////////////////////
         elDoc.append(this.elDocContent);
 
         this.elSelectionArea = $('<div id="rbro_selection_area" class="rbroHidden rbroSelectionArea"></div>');
@@ -111,14 +145,22 @@ export default class Document {
         elDoc.append('<div id="rbro_divider_margin_top" class="rbroDivider rbroDividerMarginTop"></div>');
         elDoc.append('<div id="rbro_divider_margin_right" class="rbroDivider rbroDividerMarginRight"></div>');
         elDoc.append('<div id="rbro_divider_margin_bottom" class="rbroDivider rbroDividerMarginBottom"></div>');
-        elDoc.append('<div id="rbro_divider_header" class="rbroDivider rbroDividerHeader"></div>');
-        elDoc.append('<div id="rbro_divider_footer" class="rbroDivider rbroDividerFooter"></div>');
+        // elDoc.append('<div id="rbro_divider_header" class="rbroDivider rbroDividerHeader"></div>');
+        // elDoc.append('<div id="rbro_divider_footer" class="rbroDivider rbroDividerFooter"></div>');
+        elDoc.append('<div id="rbro_divider_header" class="rbroDivider rbroDividerHeader" style="display:none;"></div>');
+        elDoc.append('<div id="rbro_divider_footer" class="rbroDivider rbroDividerFooter" style="display:none;"></div>');
+        elDoc.append('<div id="rbro_divider_page_header" class="rbroDivider rbroDividerMarginBottom"></div>');
+        elDoc.append('<div id="rbro_divider_start_section" class="rbroDivider rbroDividerMarginBottom"></div>');
+        elDoc.append('<div id="rbro_divider_repetition" class="rbroDivider rbroDividerMarginBottom"></div>');
+        elDoc.append('<div id="rbro_divider_end_section" class="rbroDivider rbroDividerMarginBottom"></div>');
+        elDoc.append('<div id="rbro_divider_page_footer" class="rbroDivider rbroDividerMarginBottom"></div>');
         panel.append(elDoc);
 
         panel.append($('<div id="rbro_document_pdf_preview" class="rbroDocumentPreview"></div>'));
 
         let size = docProperties.getPageSize();
         this.updatePageSize(size.width, size.height);
+        this.updatePosition();
         this.updateHeader();
         this.updateFooter();
         this.updatePageMargins();
@@ -297,7 +339,32 @@ export default class Document {
         }
         this.elDocContent.css({ left: left, top: top, right: right, bottom: bottom });
     }
+    updatePosition() {
+        let docProperties = this.rb.getDocumentProperties();
+        let top = 0;
+        let pageHeader = utils.convertInputToNumber(docProperties.getValue('pageHeaderSize'));
+        this.elPageHeader.css('height', this.rb.toPixel(pageHeader));
+        top += pageHeader;
 
+        let startSection = utils.convertInputToNumber(docProperties.getValue('startSectionSize'));
+        this.elStartSection.css('top', this.rb.toPixel(top));
+        this.elStartSection.css('height', this.rb.toPixel(startSection));
+        top += startSection;
+
+        let repetition = utils.convertInputToNumber(docProperties.getValue('repetitionSize'));
+        this.elRepetition.css('top', this.rb.toPixel(top));
+        this.elRepetition.css('height', this.rb.toPixel(repetition));
+        top += repetition;
+
+        let endSection = utils.convertInputToNumber(docProperties.getValue('endSectionSize'));
+        this.elEndSection.css('top', this.rb.toPixel(top));
+        this.elEndSection.css('height', this.rb.toPixel(endSection));
+        top += endSection;
+
+        let pageFooter = utils.convertInputToNumber(docProperties.getValue('pageFooterSize'));
+        this.elPageFooter.css('height', this.rb.toPixel(pageFooter));
+
+    }
     updateHeader() {
         let docProperties = this.rb.getDocumentProperties();
         if (docProperties.getValue('header')) {
@@ -436,6 +503,16 @@ export default class Document {
             return this.elContent;
         } else if (band === Band.bandType.footer) {
             return this.elFooter;
+        } else if (band === Band.bandType.page_header) {
+            return this.elPageHeader;
+        } else if (band === Band.bandType.start_section) {
+            return this.elStartSection;
+        } else if (band === Band.bandType.repetition) {
+            return this.elRepetition;
+        } else if (band === Band.bandType.end_section) {
+            return this.elEndSection;
+        } else if (band === Band.bandType.page_footer) {
+            return this.elPageFooter;
         }
         return null;
     }

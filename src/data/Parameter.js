@@ -26,6 +26,7 @@ export default class Parameter {
         this.children = [];
         this.editable = rb.getProperty('adminMode');
         this.showOnlyNameType = false;
+        this.description = '';
         this.setInitialData(initialData);
     }
 
@@ -310,7 +311,8 @@ export default class Parameter {
                     separator: true,
                     id: this.id,
                     separatorClass: 'rbroParameterGroup',
-                    name: this.name
+                    name: this.name,
+                    description: this.description || ''
                 });
             }
             for (let parameter of parametersToAppend) {
@@ -319,7 +321,7 @@ export default class Parameter {
                     name: paramName,
                     nameLowerCase: paramName.toLowerCase(),
                     id: parameter.getId(),
-                    description: ''
+                    description: parameter.description || ''
                 });
             }
         } else if (this.type !== Parameter.type.array) {
@@ -328,7 +330,7 @@ export default class Parameter {
                     name: this.name,
                     nameLowerCase: this.name.toLowerCase(),
                     id: this.id,
-                    description: ''
+                    description: this.description || ''
                 });
             }
         } else if (Array.isArray(allowedTypes) && allowedTypes.indexOf(this.type) !== -1) {
@@ -337,7 +339,7 @@ export default class Parameter {
                 name: this.name,
                 nameLowerCase: this.name.toLowerCase(),
                 id: this.id,
-                description: ''
+                description: this.description || ''
             });
         }
     }

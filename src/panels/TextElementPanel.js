@@ -24,9 +24,28 @@ export default class TextElementPanel {
 
     render() {
         let panel = $('<div id="rbro_text_element_panel" class="rbroHidden"></div>');
-        let elDiv = $('<div id="rbro_text_element_content_row" class="rbroFormRow"></div>');
+        let elDiv = $('<div class="rbroFormRow"></div>');
+        elDiv.append(`<label for="rbro_text_element_source_type">${this.rb.getLabel('textElementSourceType')}:</label>`);
+        let elFormField = $('<div class="rbroFormField"></div>');
+        let elSourceType = $(`<select id="rbro_text_element_source_type">
+                <option value="TEXT">${this.rb.getLabel('textElementSourceTypeText')}</option>
+                <option value="PATH">${this.rb.getLabel('textElementSourceTypePath')}</option>
+                <option value="QUERY">${this.rb.getLabel('textElementSourceTypeQuery')}</option>
+            </select>`)
+            .change(event => {
+                if (this.rb.getDataObject(this.selectedObjId) !== null) {
+                    let cmd = new SetValueCmd(this.selectedObjId, 'rbro_text_element_source_type', 'sourceType',
+                        elSourceType.val(), SetValueCmd.type.select, this.rb);
+                    this.rb.executeCommand(cmd);
+                }
+            });
+        elFormField.append(elSourceType);
+        elDiv.append(elFormField);
+        panel.append(elDiv);
+
+        elDiv = $('<div id="rbro_text_element_content_row" class="rbroFormRow"></div>');
         elDiv.append(`<label for="rbro_text_element_content">${this.rb.getLabel('textElementContent')}:</label>`);
-        let elFormField = $('<div class="rbroFormField rbroSplit rbroSelector"></div>');
+        elFormField = $('<div class="rbroFormField rbroSplit rbroSelector"></div>');
         let elContent = $(`<textarea id="rbro_text_element_content" rows="1"></textarea>`)
             .on('input', event => {
                 let obj = this.rb.getDataObject(this.selectedObjId);
@@ -46,7 +65,7 @@ export default class TextElementPanel {
                 let selectedObj = this.rb.getDataObject(this.selectedObjId);
                 if (selectedObj !== null) {
                     this.rb.getPopupWindow().show(this.rb.getParameterItems(selectedObj), this.selectedObjId,
-                        'rbro_text_element_content', 'content', PopupWindow.type.parameterAppend);
+                        'rbro_text_element_content', 'content', PopupWindow.type.vstore);
                 }
             });
         elFormField.append(elParameterButton);
@@ -54,21 +73,37 @@ export default class TextElementPanel {
         elDiv.append(elFormField);
         panel.append(elDiv);
 
-        elDiv = $('<div class="rbroFormRow" id="rbro_text_element_eval_row"></div>');
-        elDiv.append(`<label for="rbro_text_element_eval">${this.rb.getLabel('textElementEval')}:</label>`);
+        elDiv = $('<div class="rbroFormRow"></div>');
+        elDiv.append(`<label for="rbro_text_element_format">${this.rb.getLabel('textElementFormat')}:</label>`);
         elFormField = $('<div class="rbroFormField"></div>');
-        let elEval = $(`<input id="rbro_text_element_eval" type="checkbox">`)
+        let elFormat = $('<input id="rbro_text_element_format">')
             .change(event => {
                 if (this.rb.getDataObject(this.selectedObjId) !== null) {
                     let cmd = new SetValueCmd(this.selectedObjId,
-                        'rbro_text_element_eval', 'eval',
-                        elEval.is(":checked"), SetValueCmd.type.checkbox, this.rb);
+                        'rbro_text_element_format', 'format',
+                        elFormat.val(), SetValueCmd.type.text, this.rb);
                     this.rb.executeCommand(cmd);
                 }
             });
-        elFormField.append(elEval);
+        elFormField.append(elFormat);
         elDiv.append(elFormField);
         panel.append(elDiv);
+
+        // elDiv = $('<div class="rbroFormRow" id="rbro_text_element_eval_row"></div>');
+        // elDiv.append(`<label for="rbro_text_element_eval">${this.rb.getLabel('textElementEval')}:</label>`);
+        // elFormField = $('<div class="rbroFormField"></div>');
+        // let elEval = $(`<input id="rbro_text_element_eval" type="checkbox">`)
+        //     .change(event => {
+        //         if (this.rb.getDataObject(this.selectedObjId) !== null) {
+        //             let cmd = new SetValueCmd(this.selectedObjId,
+        //                 'rbro_text_element_eval', 'eval',
+        //                 elEval.is(":checked"), SetValueCmd.type.checkbox, this.rb);
+        //             this.rb.executeCommand(cmd);
+        //         }
+        //     });
+        // elFormField.append(elEval);
+        // elDiv.append(elFormField);
+        // panel.append(elDiv);
 
         elDiv = $('<div id="rbro_text_element_position_row" class="rbroFormRow"></div>');
         elDiv.append(`<label for="rbro_text_element_position_x">${this.rb.getLabel('docElementPosition')}:</label>`);
@@ -173,19 +208,19 @@ export default class TextElementPanel {
         panel.append(elDiv);
 
         let elStyleSectionDiv = $('<div id="rbro_text_element_style_section"></div>');
-        elDiv = $('<div class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_text_element_style_id">${this.rb.getLabel('docElementStyle')}:</label>`);
-        elFormField = $('<div class="rbroFormField"></div>');
-        this.elStyle = $('<select id="rbro_text_element_style_id"></select>')
-            .change(event => {
-                if (this.rb.getDataObject(this.selectedObjId) !== null) {
-                    let cmd = new SetValueCmd(this.selectedObjId, 'rbro_text_element_style_id', 'styleId',
-                        this.elStyle.val(), SetValueCmd.type.select, this.rb);
-                    this.rb.executeCommand(cmd);
-                }
-            });
-        elFormField.append(this.elStyle);
-        elDiv.append(elFormField);
+        // elDiv = $('<div class="rbroFormRow"></div>');
+        // elDiv.append(`<label for="rbro_text_element_style_id">${this.rb.getLabel('docElementStyle')}:</label>`);
+        // elFormField = $('<div class="rbroFormField"></div>');
+        // this.elStyle = $('<select id="rbro_text_element_style_id"></select>')
+        //     .change(event => {
+        //         if (this.rb.getDataObject(this.selectedObjId) !== null) {
+        //             let cmd = new SetValueCmd(this.selectedObjId, 'rbro_text_element_style_id', 'styleId',
+        //                 this.elStyle.val(), SetValueCmd.type.select, this.rb);
+        //             this.rb.executeCommand(cmd);
+        //         }
+        //     });
+        // elFormField.append(this.elStyle);
+        // elDiv.append(elFormField);
         elStyleSectionDiv.append(elDiv);
 
         let elStyleDiv = $('<div id="rbro_text_element_style_settings"></div>');
@@ -193,315 +228,315 @@ export default class TextElementPanel {
         elStyleSectionDiv.append(elStyleDiv);
         panel.append(elStyleSectionDiv);
 
-        let elPrintHeader = $('<div class="rbroPanelSectionHeader"></div>');
-        let elPrintHeaderIcon = $('<span id="rbro_text_element_print_header_icon" class="rbroIcon-plus"></span>');
-        elDiv = $('<div id="rbro_text_element_print_header" class="rbroFormRow rbroPanelSection"></div>')
-            .click(event => {
-                if (this.rb.getDataObject(this.selectedObjId) !== null) {
-                    $('#rbro_text_element_print_header').toggleClass('rbroPanelSectionHeaderOpen');
-                    $('#rbro_text_element_print_section').toggleClass('rbroHidden');
-                    elPrintHeaderIcon.toggleClass('rbroIcon-plus');
-                    elPrintHeaderIcon.toggleClass('rbroIcon-minus');
-                    if (elPrintHeaderIcon.hasClass('rbroIcon-minus')) {
-                        $('#rbro_detail_panel').scrollTop($('#rbro_detail_panel').scrollTop() + elPrintHeader.position().top);
-                    }
-                    autosize.update($('#rbro_text_element_print_if'));
-                }
-            });
-        elPrintHeader.append(elPrintHeaderIcon);
-        elPrintHeader.append(`<span>${this.rb.getLabel('docElementPrintSettings')}</span>`);
-        elDiv.append(elPrintHeader);
-        panel.append(elDiv);
+        // let elPrintHeader = $('<div class="rbroPanelSectionHeader"></div>');
+        // let elPrintHeaderIcon = $('<span id="rbro_text_element_print_header_icon" class="rbroIcon-plus"></span>');
+        // elDiv = $('<div id="rbro_text_element_print_header" class="rbroFormRow rbroPanelSection"></div>')
+        //     .click(event => {
+        //         if (this.rb.getDataObject(this.selectedObjId) !== null) {
+        //             $('#rbro_text_element_print_header').toggleClass('rbroPanelSectionHeaderOpen');
+        //             $('#rbro_text_element_print_section').toggleClass('rbroHidden');
+        //             elPrintHeaderIcon.toggleClass('rbroIcon-plus');
+        //             elPrintHeaderIcon.toggleClass('rbroIcon-minus');
+        //             if (elPrintHeaderIcon.hasClass('rbroIcon-minus')) {
+        //                 $('#rbro_detail_panel').scrollTop($('#rbro_detail_panel').scrollTop() + elPrintHeader.position().top);
+        //             }
+        //             autosize.update($('#rbro_text_element_print_if'));
+        //         }
+        //     });
+        // elPrintHeader.append(elPrintHeaderIcon);
+        // elPrintHeader.append(`<span>${this.rb.getLabel('docElementPrintSettings')}</span>`);
+        // elDiv.append(elPrintHeader);
+        // panel.append(elDiv);
 
-        let elPrintSectionDiv = $('<div id="rbro_text_element_print_section" class="rbroHidden"></div>');
-        elDiv = $('<div id="rbro_text_element_print_if_row" class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_text_element_print_if">${this.rb.getLabel('docElementPrintIf')}:</label>`);
-        elFormField = $('<div class="rbroFormField rbroSplit rbroSelector"></div>');
-        let elPrintIf = $(`<textarea id="rbro_text_element_print_if" rows="1"></textarea>`)
-            .on('input', event => {
-                let obj = this.rb.getDataObject(this.selectedObjId);
-                if (obj !== null && obj.getValue('printIf') !== elPrintIf.val()) {
-                    let cmd = new SetValueCmd(this.selectedObjId,
-                        'rbro_text_element_print_if', 'printIf',
-                        elPrintIf.val(), SetValueCmd.type.text, this.rb);
-                    this.rb.executeCommand(cmd);
-                }
-            });
-        autosize(elPrintIf);
-        elFormField.append(elPrintIf);
-        elParameterButton = $('<div class="rbroButton rbroRoundButton rbroIcon-select"></div>')
-            .click(event => {
-                let selectedObj = this.rb.getDataObject(this.selectedObjId);
-                if (selectedObj !== null) {
-                    this.rb.getPopupWindow().show(this.rb.getParameterItems(selectedObj), this.selectedObjId,
-                        'rbro_text_element_print_if', 'printIf', PopupWindow.type.parameterAppend);
-                }
-            });
-        elFormField.append(elParameterButton);
-        elFormField.append('<div id="rbro_text_element_print_if_error" class="rbroErrorMessage"></div>');
-        elDiv.append(elFormField);
-        elPrintSectionDiv.append(elDiv);
+        // let elPrintSectionDiv = $('<div id="rbro_text_element_print_section" class="rbroHidden"></div>');
+        // elDiv = $('<div id="rbro_text_element_print_if_row" class="rbroFormRow"></div>');
+        // elDiv.append(`<label for="rbro_text_element_print_if">${this.rb.getLabel('docElementPrintIf')}:</label>`);
+        // elFormField = $('<div class="rbroFormField rbroSplit rbroSelector"></div>');
+        // let elPrintIf = $(`<textarea id="rbro_text_element_print_if" rows="1"></textarea>`)
+        //     .on('input', event => {
+        //         let obj = this.rb.getDataObject(this.selectedObjId);
+        //         if (obj !== null && obj.getValue('printIf') !== elPrintIf.val()) {
+        //             let cmd = new SetValueCmd(this.selectedObjId,
+        //                 'rbro_text_element_print_if', 'printIf',
+        //                 elPrintIf.val(), SetValueCmd.type.text, this.rb);
+        //             this.rb.executeCommand(cmd);
+        //         }
+        //     });
+        // autosize(elPrintIf);
+        // elFormField.append(elPrintIf);
+        // elParameterButton = $('<div class="rbroButton rbroRoundButton rbroIcon-select"></div>')
+        //     .click(event => {
+        //         let selectedObj = this.rb.getDataObject(this.selectedObjId);
+        //         if (selectedObj !== null) {
+        //             this.rb.getPopupWindow().show(this.rb.getParameterItems(selectedObj), this.selectedObjId,
+        //                 'rbro_text_element_print_if', 'printIf', PopupWindow.type.parameterAppend);
+        //         }
+        //     });
+        // elFormField.append(elParameterButton);
+        // elFormField.append('<div id="rbro_text_element_print_if_error" class="rbroErrorMessage"></div>');
+        // elDiv.append(elFormField);
+        // elPrintSectionDiv.append(elDiv);
 
-        elDiv = $('<div id="rbro_text_element_remove_empty_element_row" class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_text_element_remove_empty_element">${this.rb.getLabel('docElementRemoveEmptyElement')}:</label>`);
-        elFormField = $('<div class="rbroFormField"></div>');
-        let elRemoveEmptyElement = $(`<input id="rbro_text_element_remove_empty_element" type="checkbox">`)
-            .change(event => {
-                if (this.rb.getDataObject(this.selectedObjId) !== null) {
-                    let cmd = new SetValueCmd(this.selectedObjId,
-                        'rbro_text_element_remove_empty_element', 'removeEmptyElement',
-                        elRemoveEmptyElement.is(":checked"), SetValueCmd.type.checkbox, this.rb);
-                    this.rb.executeCommand(cmd);
-                }
-            });
-        elFormField.append(elRemoveEmptyElement);
-        elDiv.append(elFormField);
-        elPrintSectionDiv.append(elDiv);
+        // elDiv = $('<div id="rbro_text_element_remove_empty_element_row" class="rbroFormRow"></div>');
+        // elDiv.append(`<label for="rbro_text_element_remove_empty_element">${this.rb.getLabel('docElementRemoveEmptyElement')}:</label>`);
+        // elFormField = $('<div class="rbroFormField"></div>');
+        // let elRemoveEmptyElement = $(`<input id="rbro_text_element_remove_empty_element" type="checkbox">`)
+        //     .change(event => {
+        //         if (this.rb.getDataObject(this.selectedObjId) !== null) {
+        //             let cmd = new SetValueCmd(this.selectedObjId,
+        //                 'rbro_text_element_remove_empty_element', 'removeEmptyElement',
+        //                 elRemoveEmptyElement.is(":checked"), SetValueCmd.type.checkbox, this.rb);
+        //             this.rb.executeCommand(cmd);
+        //         }
+        //     });
+        // elFormField.append(elRemoveEmptyElement);
+        // elDiv.append(elFormField);
+        // elPrintSectionDiv.append(elDiv);
 
-        elDiv = $('<div id="rbro_text_element_always_print_on_same_page_row" class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_text_element_always_print_on_same_page">${this.rb.getLabel('docElementAlwaysPrintOnSamePage')}:</label>`);
-        elFormField = $('<div class="rbroFormField"></div>');
-        let elAlwaysPrintOnSamePage = $(`<input id="rbro_text_element_always_print_on_same_page" type="checkbox">`)
-            .change(event => {
-                if (this.rb.getDataObject(this.selectedObjId) !== null) {
-                    let cmd = new SetValueCmd(this.selectedObjId,
-                        'rbro_text_element_always_print_on_same_page', 'alwaysPrintOnSamePage',
-                        elAlwaysPrintOnSamePage.is(":checked"), SetValueCmd.type.checkbox, this.rb);
-                    this.rb.executeCommand(cmd);
-                }
-            });
-        elFormField.append(elAlwaysPrintOnSamePage);
-        elDiv.append(elFormField);
-        elPrintSectionDiv.append(elDiv);
+        // elDiv = $('<div id="rbro_text_element_always_print_on_same_page_row" class="rbroFormRow"></div>');
+        // elDiv.append(`<label for="rbro_text_element_always_print_on_same_page">${this.rb.getLabel('docElementAlwaysPrintOnSamePage')}:</label>`);
+        // elFormField = $('<div class="rbroFormField"></div>');
+        // let elAlwaysPrintOnSamePage = $(`<input id="rbro_text_element_always_print_on_same_page" type="checkbox">`)
+        //     .change(event => {
+        //         if (this.rb.getDataObject(this.selectedObjId) !== null) {
+        //             let cmd = new SetValueCmd(this.selectedObjId,
+        //                 'rbro_text_element_always_print_on_same_page', 'alwaysPrintOnSamePage',
+        //                 elAlwaysPrintOnSamePage.is(":checked"), SetValueCmd.type.checkbox, this.rb);
+        //             this.rb.executeCommand(cmd);
+        //         }
+        //     });
+        // elFormField.append(elAlwaysPrintOnSamePage);
+        // elDiv.append(elFormField);
+        // elPrintSectionDiv.append(elDiv);
 
-        elDiv = $('<div class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_text_element_pattern">${this.rb.getLabel('textElementPattern')}:</label>`);
-        elFormField = $('<div class="rbroFormField rbroSplit rbroSelector"></div>');
-        let elPattern = $(`<input id="rbro_text_element_pattern">`)
-            .on('input', event => {
-                let obj = this.rb.getDataObject(this.selectedObjId);
-                if (obj !== null && obj.getValue('pattern') !== elPattern.val()) {
-                    let cmd = new SetValueCmd(this.selectedObjId,
-                        'rbro_text_element_pattern', 'pattern',
-                        elPattern.val(), SetValueCmd.type.text, this.rb);
-                    this.rb.executeCommand(cmd);
-                }
-            });
-        elFormField.append(elPattern);
-        elParameterButton = $('<div class="rbroButton rbroRoundButton rbroIcon-select"></div>')
-            .click(event => {
-                let selectedObj = this.rb.getDataObject(this.selectedObjId);
-                if (selectedObj !== null) {
-                    this.rb.getPopupWindow().show(this.rb.getPatterns(), this.selectedObjId,
-                        'rbro_text_element_pattern', 'pattern', PopupWindow.type.pattern);
-                }
-            });
-        elFormField.append(elParameterButton);
-        elFormField.append('<div id="rbro_text_element_pattern_error" class="rbroErrorMessage"></div>');
-        elDiv.append(elFormField);
-        elPrintSectionDiv.append(elDiv);
+        // elDiv = $('<div class="rbroFormRow"></div>');
+        // elDiv.append(`<label for="rbro_text_element_pattern">${this.rb.getLabel('textElementPattern')}:</label>`);
+        // elFormField = $('<div class="rbroFormField rbroSplit rbroSelector"></div>');
+        // let elPattern = $(`<input id="rbro_text_element_pattern">`)
+        //     .on('input', event => {
+        //         let obj = this.rb.getDataObject(this.selectedObjId);
+        //         if (obj !== null && obj.getValue('pattern') !== elPattern.val()) {
+        //             let cmd = new SetValueCmd(this.selectedObjId,
+        //                 'rbro_text_element_pattern', 'pattern',
+        //                 elPattern.val(), SetValueCmd.type.text, this.rb);
+        //             this.rb.executeCommand(cmd);
+        //         }
+        //     });
+        // elFormField.append(elPattern);
+        // elParameterButton = $('<div class="rbroButton rbroRoundButton rbroIcon-select"></div>')
+        //     .click(event => {
+        //         let selectedObj = this.rb.getDataObject(this.selectedObjId);
+        //         if (selectedObj !== null) {
+        //             this.rb.getPopupWindow().show(this.rb.getPatterns(), this.selectedObjId,
+        //                 'rbro_text_element_pattern', 'pattern', PopupWindow.type.pattern);
+        //         }
+        //     });
+        // elFormField.append(elParameterButton);
+        // elFormField.append('<div id="rbro_text_element_pattern_error" class="rbroErrorMessage"></div>');
+        // elDiv.append(elFormField);
+        // elPrintSectionDiv.append(elDiv);
 
-        elDiv = $('<div class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_text_element_link">${this.rb.getLabel('docElementLink')}:</label>`);
-        elFormField = $('<div class="rbroFormField rbroSplit rbroSelector"></div>');
-        let elLink = $(`<input id="rbro_text_element_link">`)
-            .on('input', event => {
-                let obj = this.rb.getDataObject(this.selectedObjId);
-                if (obj !== null && obj.getValue('link') !== elLink.val()) {
-                    let cmd = new SetValueCmd(this.selectedObjId,
-                        'rbro_text_element_link', 'link',
-                        elLink.val(), SetValueCmd.type.text, this.rb);
-                    this.rb.executeCommand(cmd);
-                }
-            });
-        elFormField.append(elLink);
-        elParameterButton = $('<div class="rbroButton rbroRoundButton rbroIcon-select"></div>')
-            .click(event => {
-                let selectedObj = this.rb.getDataObject(this.selectedObjId);
-                if (selectedObj !== null) {
-                    this.rb.getPopupWindow().show(this.rb.getParameterItems(selectedObj), this.selectedObjId,
-                        'rbro_text_element_link', 'link', PopupWindow.type.parameterSet);
-                }
-            });
-        elFormField.append(elParameterButton);
-        elFormField.append('<div id="rbro_text_element_link_error" class="rbroErrorMessage"></div>');
-        elDiv.append(elFormField);
-        elPrintSectionDiv.append(elDiv);
-        panel.append(elPrintSectionDiv);
+        // elDiv = $('<div class="rbroFormRow"></div>');
+        // elDiv.append(`<label for="rbro_text_element_link">${this.rb.getLabel('docElementLink')}:</label>`);
+        // elFormField = $('<div class="rbroFormField rbroSplit rbroSelector"></div>');
+        // let elLink = $(`<input id="rbro_text_element_link">`)
+        //     .on('input', event => {
+        //         let obj = this.rb.getDataObject(this.selectedObjId);
+        //         if (obj !== null && obj.getValue('link') !== elLink.val()) {
+        //             let cmd = new SetValueCmd(this.selectedObjId,
+        //                 'rbro_text_element_link', 'link',
+        //                 elLink.val(), SetValueCmd.type.text, this.rb);
+        //             this.rb.executeCommand(cmd);
+        //         }
+        //     });
+        // elFormField.append(elLink);
+        // elParameterButton = $('<div class="rbroButton rbroRoundButton rbroIcon-select"></div>')
+        //     .click(event => {
+        //         let selectedObj = this.rb.getDataObject(this.selectedObjId);
+        //         if (selectedObj !== null) {
+        //             this.rb.getPopupWindow().show(this.rb.getParameterItems(selectedObj), this.selectedObjId,
+        //                 'rbro_text_element_link', 'link', PopupWindow.type.parameterSet);
+        //         }
+        //     });
+        // elFormField.append(elParameterButton);
+        // elFormField.append('<div id="rbro_text_element_link_error" class="rbroErrorMessage"></div>');
+        // elDiv.append(elFormField);
+        // elPrintSectionDiv.append(elDiv);
+        // panel.append(elPrintSectionDiv);
 
-        let elConditionalStyleHeader = $('<div class="rbroPanelSectionHeader"></div>');
-        let elConditionalStyleHeaderIcon = $('<span id="rbro_text_element_cs_header_icon" class="rbroIcon-plus"></span>');
-        elDiv = $('<div id="rbro_text_element_cs_header" class="rbroFormRow rbroPanelSection"></div>')
-            .click(event => {
-                if (this.rb.getDataObject(this.selectedObjId) !== null) {
-                    $('#rbro_text_element_cs_header').toggleClass('rbroPanelSectionHeaderOpen');
-                    $('#rbro_text_element_cs_section').toggleClass('rbroHidden');
-                    elConditionalStyleHeaderIcon.toggleClass('rbroIcon-plus');
-                    elConditionalStyleHeaderIcon.toggleClass('rbroIcon-minus');
-                    if (elConditionalStyleHeaderIcon.hasClass('rbroIcon-minus')) {
-                        $('#rbro_detail_panel').scrollTop($('#rbro_detail_panel').scrollTop() + elConditionalStyleHeader.position().top);
-                    }
-                    autosize.update($('#rbro_text_element_cs_condition'));
-                }
-            });
-        elConditionalStyleHeader.append(elConditionalStyleHeaderIcon);
-        elConditionalStyleHeader.append(`<span>${this.rb.getLabel('docElementConditionalStyle')}</span>`);
-        elDiv.append(elConditionalStyleHeader);
-        panel.append(elDiv);
+        // let elConditionalStyleHeader = $('<div class="rbroPanelSectionHeader"></div>');
+        // let elConditionalStyleHeaderIcon = $('<span id="rbro_text_element_cs_header_icon" class="rbroIcon-plus"></span>');
+        // elDiv = $('<div id="rbro_text_element_cs_header" class="rbroFormRow rbroPanelSection"></div>')
+        //     .click(event => {
+        //         if (this.rb.getDataObject(this.selectedObjId) !== null) {
+        //             $('#rbro_text_element_cs_header').toggleClass('rbroPanelSectionHeaderOpen');
+        //             $('#rbro_text_element_cs_section').toggleClass('rbroHidden');
+        //             elConditionalStyleHeaderIcon.toggleClass('rbroIcon-plus');
+        //             elConditionalStyleHeaderIcon.toggleClass('rbroIcon-minus');
+        //             if (elConditionalStyleHeaderIcon.hasClass('rbroIcon-minus')) {
+        //                 $('#rbro_detail_panel').scrollTop($('#rbro_detail_panel').scrollTop() + elConditionalStyleHeader.position().top);
+        //             }
+        //             autosize.update($('#rbro_text_element_cs_condition'));
+        //         }
+        //     });
+        // elConditionalStyleHeader.append(elConditionalStyleHeaderIcon);
+        // elConditionalStyleHeader.append(`<span>${this.rb.getLabel('docElementConditionalStyle')}</span>`);
+        // elDiv.append(elConditionalStyleHeader);
+        // panel.append(elDiv);
 
-        let elCondStyleSectionDiv = $('<div id="rbro_text_element_cs_section" class="rbroHidden"></div>');
-        elDiv = $('<div id="rbro_text_element_cs_condition_row" class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_text_element_cs_condition">${this.rb.getLabel('docElementConditionalStyleCondition')}:</label>`);
-        elFormField = $('<div class="rbroFormField rbroSplit rbroSelector"></div>');
-        let elCondStyleCondition = $(`<textarea id="rbro_text_element_cs_condition" rows="1"></textarea>`)
-            .on('input', event => {
-                if (this.rb.getDataObject(this.selectedObjId) !== null) {
-                    let cmd = new SetValueCmd(this.selectedObjId,
-                        'rbro_text_element_cs_condition', 'cs_condition',
-                        elCondStyleCondition.val(), SetValueCmd.type.text, this.rb);
-                    this.rb.executeCommand(cmd);
-                }
-            });
-        autosize(elCondStyleCondition);
-        elFormField.append(elCondStyleCondition);
-        elParameterButton = $('<div class="rbroButton rbroRoundButton rbroIcon-select"></div>')
-            .click(event => {
-                let selectedObj = this.rb.getDataObject(this.selectedObjId);
-                if (selectedObj !== null) {
-                    this.rb.getPopupWindow().show(this.rb.getParameterItems(selectedObj), this.selectedObjId,
-                        'rbro_text_element_cs_condition', 'cs_condition', PopupWindow.type.parameterAppend);
-                }
-            });
-        elFormField.append(elParameterButton);
-        elFormField.append('<div id="rbro_text_element_cs_condition_error" class="rbroErrorMessage"></div>');
-        elDiv.append(elFormField);
-        elCondStyleSectionDiv.append(elDiv);
+        // let elCondStyleSectionDiv = $('<div id="rbro_text_element_cs_section" class="rbroHidden"></div>');
+        // elDiv = $('<div id="rbro_text_element_cs_condition_row" class="rbroFormRow"></div>');
+        // elDiv.append(`<label for="rbro_text_element_cs_condition">${this.rb.getLabel('docElementConditionalStyleCondition')}:</label>`);
+        // elFormField = $('<div class="rbroFormField rbroSplit rbroSelector"></div>');
+        // let elCondStyleCondition = $(`<textarea id="rbro_text_element_cs_condition" rows="1"></textarea>`)
+        //     .on('input', event => {
+        //         if (this.rb.getDataObject(this.selectedObjId) !== null) {
+        //             let cmd = new SetValueCmd(this.selectedObjId,
+        //                 'rbro_text_element_cs_condition', 'cs_condition',
+        //                 elCondStyleCondition.val(), SetValueCmd.type.text, this.rb);
+        //             this.rb.executeCommand(cmd);
+        //         }
+        //     });
+        // autosize(elCondStyleCondition);
+        // elFormField.append(elCondStyleCondition);
+        // elParameterButton = $('<div class="rbroButton rbroRoundButton rbroIcon-select"></div>')
+        //     .click(event => {
+        //         let selectedObj = this.rb.getDataObject(this.selectedObjId);
+        //         if (selectedObj !== null) {
+        //             this.rb.getPopupWindow().show(this.rb.getParameterItems(selectedObj), this.selectedObjId,
+        //                 'rbro_text_element_cs_condition', 'cs_condition', PopupWindow.type.parameterAppend);
+        //         }
+        //     });
+        // elFormField.append(elParameterButton);
+        // elFormField.append('<div id="rbro_text_element_cs_condition_error" class="rbroErrorMessage"></div>');
+        // elDiv.append(elFormField);
+        // elCondStyleSectionDiv.append(elDiv);
 
-        elDiv = $('<div class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_text_element_cs_style_id">${this.rb.getLabel('docElementStyle')}:</label>`);
-        elFormField = $('<div class="rbroFormField"></div>');
-        this.cs_elStyle = $('<select id="rbro_text_element_cs_style_id"></select>')
-            .change(event => {
-                if (this.rb.getDataObject(this.selectedObjId) !== null) {
-                    let cmd = new SetValueCmd(this.selectedObjId, `rbro_text_element_cs_style_id`, 'cs_styleId',
-                        this.cs_elStyle.val(), SetValueCmd.type.select, this.rb);
-                    this.rb.executeCommand(cmd);
-                }
-            });
-        elFormField.append(this.cs_elStyle);
-        elDiv.append(elFormField);
-        elCondStyleSectionDiv.append(elDiv);
+        // elDiv = $('<div class="rbroFormRow"></div>');
+        // elDiv.append(`<label for="rbro_text_element_cs_style_id">${this.rb.getLabel('docElementStyle')}:</label>`);
+        // elFormField = $('<div class="rbroFormField"></div>');
+        // this.cs_elStyle = $('<select id="rbro_text_element_cs_style_id"></select>')
+        //     .change(event => {
+        //         if (this.rb.getDataObject(this.selectedObjId) !== null) {
+        //             let cmd = new SetValueCmd(this.selectedObjId, `rbro_text_element_cs_style_id`, 'cs_styleId',
+        //                 this.cs_elStyle.val(), SetValueCmd.type.select, this.rb);
+        //             this.rb.executeCommand(cmd);
+        //         }
+        //     });
+        // elFormField.append(this.cs_elStyle);
+        // elDiv.append(elFormField);
+        // elCondStyleSectionDiv.append(elDiv);
 
-        let elCondStyleDiv = $('<div id="rbro_text_element_cs_style_settings"></div>');
-        StylePanel.renderStyle(elCondStyleDiv, 'text_element_cs_', 'cs_', DocElement.type.text, this, this.rb);
-        elCondStyleSectionDiv.append(elCondStyleDiv);
-        panel.append(elCondStyleSectionDiv);
+        // let elCondStyleDiv = $('<div id="rbro_text_element_cs_style_settings"></div>');
+        // StylePanel.renderStyle(elCondStyleDiv, 'text_element_cs_', 'cs_', DocElement.type.text, this, this.rb);
+        // elCondStyleSectionDiv.append(elCondStyleDiv);
+        // panel.append(elCondStyleSectionDiv);
 
-        if (this.rb.getProperty('enableSpreadsheet')) {
-            let elSpreadsheetHeader = $('<div class="rbroPanelSectionHeader"></div>');
-            let elSpreadsheetHeaderIcon = $('<span id="rbro_text_element_spreadsheet_header_icon" class="rbroIcon-plus"></span>');
-            elDiv = $('<div id="rbro_text_element_spreadsheet_header" class="rbroFormRow rbroPanelSection"></div>')
-                .click(event => {
-                    if (this.rb.getDataObject(this.selectedObjId) !== null) {
-                        $('#rbro_text_element_spreadsheet_header').toggleClass('rbroPanelSectionHeaderOpen');
-                        $('#rbro_text_element_spreadsheet_section').toggleClass('rbroHidden');
-                        elSpreadsheetHeaderIcon.toggleClass('rbroIcon-plus');
-                        elSpreadsheetHeaderIcon.toggleClass('rbroIcon-minus');
-                        if (elSpreadsheetHeaderIcon.hasClass('rbroIcon-minus')) {
-                            $('#rbro_detail_panel').scrollTop($('#rbro_detail_panel').scrollTop() + elSpreadsheetHeader.position().top);
-                        }
-                    }
-                });
-            elSpreadsheetHeader.append(elSpreadsheetHeaderIcon);
-            elSpreadsheetHeader.append(`<span>${this.rb.getLabel('docElementSpreadsheet')}</span>`);
-            elDiv.append(elSpreadsheetHeader);
-            panel.append(elDiv);
+        // if (this.rb.getProperty('enableSpreadsheet')) {
+        //     let elSpreadsheetHeader = $('<div class="rbroPanelSectionHeader"></div>');
+        //     let elSpreadsheetHeaderIcon = $('<span id="rbro_text_element_spreadsheet_header_icon" class="rbroIcon-plus"></span>');
+        //     elDiv = $('<div id="rbro_text_element_spreadsheet_header" class="rbroFormRow rbroPanelSection"></div>')
+        //         .click(event => {
+        //             if (this.rb.getDataObject(this.selectedObjId) !== null) {
+        //                 $('#rbro_text_element_spreadsheet_header').toggleClass('rbroPanelSectionHeaderOpen');
+        //                 $('#rbro_text_element_spreadsheet_section').toggleClass('rbroHidden');
+        //                 elSpreadsheetHeaderIcon.toggleClass('rbroIcon-plus');
+        //                 elSpreadsheetHeaderIcon.toggleClass('rbroIcon-minus');
+        //                 if (elSpreadsheetHeaderIcon.hasClass('rbroIcon-minus')) {
+        //                     $('#rbro_detail_panel').scrollTop($('#rbro_detail_panel').scrollTop() + elSpreadsheetHeader.position().top);
+        //                 }
+        //             }
+        //         });
+        //     elSpreadsheetHeader.append(elSpreadsheetHeaderIcon);
+        //     elSpreadsheetHeader.append(`<span>${this.rb.getLabel('docElementSpreadsheet')}</span>`);
+        //     elDiv.append(elSpreadsheetHeader);
+        //     panel.append(elDiv);
 
-            let elSpreadsheetSectionDiv = $('<div id="rbro_text_element_spreadsheet_section" class="rbroHidden"></div>');
-            elDiv = $('<div id="rbro_text_element_spreadsheet_hide_row" class="rbroFormRow"></div>');
-            elDiv.append(`<label for="rbro_text_element_spreadsheet_hide">${this.rb.getLabel('docElementSpreadsheetHide')}:</label>`);
-            elFormField = $('<div class="rbroFormField"></div>');
-            let elSpreadsheetHide = $(`<input id="rbro_text_element_spreadsheet_hide" type="checkbox">`)
-                .change(event => {
-                    if (this.rb.getDataObject(this.selectedObjId) !== null) {
-                        let cmd = new SetValueCmd(this.selectedObjId,
-                            'rbro_text_element_spreadsheet_hide', 'spreadsheet_hide',
-                            elSpreadsheetHide.is(":checked"), SetValueCmd.type.checkbox, this.rb);
-                        this.rb.executeCommand(cmd);
-                    }
-                });
-            elFormField.append(elSpreadsheetHide);
-            elDiv.append(elFormField);
-            elSpreadsheetSectionDiv.append(elDiv);
+        //     let elSpreadsheetSectionDiv = $('<div id="rbro_text_element_spreadsheet_section" class="rbroHidden"></div>');
+        //     elDiv = $('<div id="rbro_text_element_spreadsheet_hide_row" class="rbroFormRow"></div>');
+        //     elDiv.append(`<label for="rbro_text_element_spreadsheet_hide">${this.rb.getLabel('docElementSpreadsheetHide')}:</label>`);
+        //     elFormField = $('<div class="rbroFormField"></div>');
+        //     let elSpreadsheetHide = $(`<input id="rbro_text_element_spreadsheet_hide" type="checkbox">`)
+        //         .change(event => {
+        //             if (this.rb.getDataObject(this.selectedObjId) !== null) {
+        //                 let cmd = new SetValueCmd(this.selectedObjId,
+        //                     'rbro_text_element_spreadsheet_hide', 'spreadsheet_hide',
+        //                     elSpreadsheetHide.is(":checked"), SetValueCmd.type.checkbox, this.rb);
+        //                 this.rb.executeCommand(cmd);
+        //             }
+        //         });
+        //     elFormField.append(elSpreadsheetHide);
+        //     elDiv.append(elFormField);
+        //     elSpreadsheetSectionDiv.append(elDiv);
 
-            elDiv = $('<div id="rbro_text_element_spreadsheet_column_row" class="rbroFormRow"></div>');
-            elDiv.append(`<label for="rbro_text_element_spreadsheet_column">${this.rb.getLabel('docElementSpreadsheetColumn')}:</label>`);
-            elFormField = $('<div class="rbroFormField"></div>');
-            let elSpreadsheetColumn = $(`<input id="rbro_text_element_spreadsheet_column">`)
-                .on('input', event => {
-                    let obj = this.rb.getDataObject(this.selectedObjId);
-                    if (obj !== null && obj.getValue('spreadsheet_column') !== elSpreadsheetColumn.val()) {
-                        let cmd = new SetValueCmd(this.selectedObjId, 'rbro_text_element_spreadsheet_column', 'spreadsheet_column',
-                            elSpreadsheetColumn.val(), SetValueCmd.type.text, this.rb);
-                        this.rb.executeCommand(cmd);
-                    }
-                });
-            utils.setInputPositiveInteger(elSpreadsheetColumn);
-            elFormField.append(elSpreadsheetColumn);
-            elFormField.append('<div id="rbro_text_element_spreadsheet_column_error" class="rbroErrorMessage"></div>');
-            elDiv.append(elFormField);
-            elSpreadsheetSectionDiv.append(elDiv);
+        //     elDiv = $('<div id="rbro_text_element_spreadsheet_column_row" class="rbroFormRow"></div>');
+        //     elDiv.append(`<label for="rbro_text_element_spreadsheet_column">${this.rb.getLabel('docElementSpreadsheetColumn')}:</label>`);
+        //     elFormField = $('<div class="rbroFormField"></div>');
+        //     let elSpreadsheetColumn = $(`<input id="rbro_text_element_spreadsheet_column">`)
+        //         .on('input', event => {
+        //             let obj = this.rb.getDataObject(this.selectedObjId);
+        //             if (obj !== null && obj.getValue('spreadsheet_column') !== elSpreadsheetColumn.val()) {
+        //                 let cmd = new SetValueCmd(this.selectedObjId, 'rbro_text_element_spreadsheet_column', 'spreadsheet_column',
+        //                     elSpreadsheetColumn.val(), SetValueCmd.type.text, this.rb);
+        //                 this.rb.executeCommand(cmd);
+        //             }
+        //         });
+        //     utils.setInputPositiveInteger(elSpreadsheetColumn);
+        //     elFormField.append(elSpreadsheetColumn);
+        //     elFormField.append('<div id="rbro_text_element_spreadsheet_column_error" class="rbroErrorMessage"></div>');
+        //     elDiv.append(elFormField);
+        //     elSpreadsheetSectionDiv.append(elDiv);
 
-            elDiv = $('<div id="rbro_text_element_spreadsheet_colspan_row" class="rbroFormRow"></div>');
-            elDiv.append(`<label for="rbro_text_element_spreadsheet_colspan">${this.rb.getLabel('docElementSpreadsheetColspan')}:</label>`);
-            elFormField = $('<div class="rbroFormField"></div>');
-            let elSpreadsheetColspan = $(`<input id="rbro_text_element_spreadsheet_colspan">`)
-                .on('input', event => {
-                    let obj = this.rb.getDataObject(this.selectedObjId);
-                    if (obj !== null && obj.getValue('spreadsheet_colspan') !== elSpreadsheetColspan.val()) {
-                        let cmd = new SetValueCmd(this.selectedObjId, 'rbro_text_element_spreadsheet_colspan', 'spreadsheet_colspan',
-                            elSpreadsheetColspan.val(), SetValueCmd.type.text, this.rb);
-                        this.rb.executeCommand(cmd);
-                    }
-                });
-            utils.setInputPositiveInteger(elSpreadsheetColspan);
-            elFormField.append(elSpreadsheetColspan);
-            elFormField.append('<div id="rbro_text_element_spreadsheet_colspan_error" class="rbroErrorMessage"></div>');
-            elDiv.append(elFormField);
-            elSpreadsheetSectionDiv.append(elDiv);
+        //     elDiv = $('<div id="rbro_text_element_spreadsheet_colspan_row" class="rbroFormRow"></div>');
+        //     elDiv.append(`<label for="rbro_text_element_spreadsheet_colspan">${this.rb.getLabel('docElementSpreadsheetColspan')}:</label>`);
+        //     elFormField = $('<div class="rbroFormField"></div>');
+        //     let elSpreadsheetColspan = $(`<input id="rbro_text_element_spreadsheet_colspan">`)
+        //         .on('input', event => {
+        //             let obj = this.rb.getDataObject(this.selectedObjId);
+        //             if (obj !== null && obj.getValue('spreadsheet_colspan') !== elSpreadsheetColspan.val()) {
+        //                 let cmd = new SetValueCmd(this.selectedObjId, 'rbro_text_element_spreadsheet_colspan', 'spreadsheet_colspan',
+        //                     elSpreadsheetColspan.val(), SetValueCmd.type.text, this.rb);
+        //                 this.rb.executeCommand(cmd);
+        //             }
+        //         });
+        //     utils.setInputPositiveInteger(elSpreadsheetColspan);
+        //     elFormField.append(elSpreadsheetColspan);
+        //     elFormField.append('<div id="rbro_text_element_spreadsheet_colspan_error" class="rbroErrorMessage"></div>');
+        //     elDiv.append(elFormField);
+        //     elSpreadsheetSectionDiv.append(elDiv);
 
-            elDiv = $('<div id="rbro_text_element_spreadsheet_add_empty_row_row" class="rbroFormRow"></div>');
-            elDiv.append(`<label for="rbro_text_element_spreadsheet_add_empty_row">${this.rb.getLabel('docElementSpreadsheetAddEmptyRow')}:</label>`);
-            elFormField = $('<div class="rbroFormField"></div>');
-            let elSpreadsheetAddEmptyRow = $(`<input id="rbro_text_element_spreadsheet_add_empty_row" type="checkbox">`)
-                .change(event => {
-                    if (this.rb.getDataObject(this.selectedObjId) !== null) {
-                        let cmd = new SetValueCmd(this.selectedObjId,
-                            'rbro_text_element_spreadsheet_add_empty_row', 'spreadsheet_addEmptyRow',
-                            elSpreadsheetAddEmptyRow.is(":checked"), SetValueCmd.type.checkbox, this.rb);
-                        this.rb.executeCommand(cmd);
-                    }
-                });
-            elFormField.append(elSpreadsheetAddEmptyRow);
-            elDiv.append(elFormField);
-            elSpreadsheetSectionDiv.append(elDiv);
-            panel.append(elSpreadsheetSectionDiv);
-        }
+        //     elDiv = $('<div id="rbro_text_element_spreadsheet_add_empty_row_row" class="rbroFormRow"></div>');
+        //     elDiv.append(`<label for="rbro_text_element_spreadsheet_add_empty_row">${this.rb.getLabel('docElementSpreadsheetAddEmptyRow')}:</label>`);
+        //     elFormField = $('<div class="rbroFormField"></div>');
+        //     let elSpreadsheetAddEmptyRow = $(`<input id="rbro_text_element_spreadsheet_add_empty_row" type="checkbox">`)
+        //         .change(event => {
+        //             if (this.rb.getDataObject(this.selectedObjId) !== null) {
+        //                 let cmd = new SetValueCmd(this.selectedObjId,
+        //                     'rbro_text_element_spreadsheet_add_empty_row', 'spreadsheet_addEmptyRow',
+        //                     elSpreadsheetAddEmptyRow.is(":checked"), SetValueCmd.type.checkbox, this.rb);
+        //                 this.rb.executeCommand(cmd);
+        //             }
+        //         });
+        //     elFormField.append(elSpreadsheetAddEmptyRow);
+        //     elDiv.append(elFormField);
+        //     elSpreadsheetSectionDiv.append(elDiv);
+        //     panel.append(elSpreadsheetSectionDiv);
+        // }
 
         $('#rbro_detail_panel').append(panel);
         this.renderStyleSelect();
     }
 
     renderStyleSelect() {
-        this.elStyle.empty();
-        this.cs_elStyle.empty();
-        this.elStyle.append(`<option value="">${this.rb.getLabel('styleNone')}</option>`);
-        this.cs_elStyle.append(`<option value="">${this.rb.getLabel('styleNone')}</option>`);
-        let styles = this.rb.getStyles();
-        for (let style of styles) {
-            this.elStyle.append(`<option value="${style.getId()}">${style.getName()}</option>`);
-            this.cs_elStyle.append(`<option value="${style.getId()}">${style.getName()}</option>`);
-        }
+        // this.elStyle.empty();
+        // this.cs_elStyle.empty();
+        // this.elStyle.append(`<option value="">${this.rb.getLabel('styleNone')}</option>`);
+        // this.cs_elStyle.append(`<option value="">${this.rb.getLabel('styleNone')}</option>`);
+        // let styles = this.rb.getStyles();
+        // for (let style of styles) {
+        //     this.elStyle.append(`<option value="${style.getId()}">${style.getName()}</option>`);
+        //     this.cs_elStyle.append(`<option value="${style.getId()}">${style.getName()}</option>`);
+        // }
     }
 
     updateAutosizeInputs() {
@@ -545,6 +580,8 @@ export default class TextElementPanel {
             $('#rbro_text_element_spreadsheet_colspan').prop('disabled', false);
             $('#rbro_text_element_spreadsheet_add_empty_row').prop('disabled', false);
 
+            $('#rbro_text_element_source_type').val(data.getValue('sourceType'));
+            $('#rbro_text_element_format').val(data.getValue('format'));
             $('#rbro_text_element_content').val(data.getValue('content'));
             $('#rbro_text_element_eval').prop('checked', data.getValue('eval'));
             $('#rbro_text_element_width').val(data.getDisplayWidth());
@@ -666,30 +703,30 @@ export default class TextElementPanel {
      */
     notifyEvent(obj, operation) {
         if (obj instanceof Style) {
-            if (operation === Command.operation.add || operation === Command.operation.move) {
-                this.renderStyleSelect();
-                let selectedObj = this.rb.getDataObject(this.selectedObjId);
-                if (selectedObj !== null) {
-                    $('#rbro_text_element_style_id').val(selectedObj.getValue('styleId'));
-                    $('#rbro_text_element_cs_style_id').val(selectedObj.getValue('cs_styleId'));
-                }
-            } else if (operation === Command.operation.remove) {
-                this.elStyle.find(`option[value='${obj.getId()}']`).remove();
-                this.cs_elStyle.find(`option[value='${obj.getId()}']`).remove();
-            } else if (operation === Command.operation.rename) {
-                this.elStyle.find(`option[value='${obj.getId()}']`).text(obj.getName());
-                this.cs_elStyle.find(`option[value='${obj.getId()}']`).text(obj.getName());
-            }
-            if ($('#rbro_text_element_style_id').val() === '') {
-                $('#rbro_text_element_style_settings').show();
-            } else {
-                $('#rbro_text_element_style_settings').hide();
-            }
-            if ($('#rbro_text_element_cs_style_id').val() === '') {
-                $('#rbro_text_element_cs_style_settings').show();
-            } else {
-                $('#rbro_text_element_cs_style_settings').hide();
-            }
+            // if (operation === Command.operation.add || operation === Command.operation.move) {
+            //     this.renderStyleSelect();
+            //     let selectedObj = this.rb.getDataObject(this.selectedObjId);
+            //     if (selectedObj !== null) {
+            //         $('#rbro_text_element_style_id').val(selectedObj.getValue('styleId'));
+            //         $('#rbro_text_element_cs_style_id').val(selectedObj.getValue('cs_styleId'));
+            //     }
+            // } else if (operation === Command.operation.remove) {
+            //     this.elStyle.find(`option[value='${obj.getId()}']`).remove();
+            //     this.cs_elStyle.find(`option[value='${obj.getId()}']`).remove();
+            // } else if (operation === Command.operation.rename) {
+            //     this.elStyle.find(`option[value='${obj.getId()}']`).text(obj.getName());
+            //     this.cs_elStyle.find(`option[value='${obj.getId()}']`).text(obj.getName());
+            // }
+            // if ($('#rbro_text_element_style_id').val() === '') {
+            //     $('#rbro_text_element_style_settings').show();
+            // } else {
+            //     $('#rbro_text_element_style_settings').hide();
+            // }
+            // if ($('#rbro_text_element_cs_style_id').val() === '') {
+            //     $('#rbro_text_element_cs_style_settings').show();
+            // } else {
+            //     $('#rbro_text_element_cs_style_settings').hide();
+            // }
         }
     }
 

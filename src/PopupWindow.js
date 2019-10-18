@@ -71,7 +71,8 @@ export default class PopupWindow {
             $('body').append($('<div id="rbro_background_overlay" class="rbroBackgroundOverlay"></div>'));
             $('body').addClass('rbroFixedBackground'); // no scroll bars for background while popup is shown
         } else {
-            if (type === PopupWindow.type.parameterSet || type === PopupWindow.type.parameterAppend) {
+            if (type === PopupWindow.type.parameterSet || type === PopupWindow.type.parameterAppend ||
+                type === PopupWindow.type.vstore) {
                 elSearch = $(`<input class="rbroPopupSearch" placeholder="${this.rb.getLabel('parameterSearchPlaceholder')}">`)
                     .on('input', event => {
                         this.filterParameters(elSearch.val());
@@ -89,7 +90,8 @@ export default class PopupWindow {
                 let li = $('<li></li>');
                 if (item.separator) {
                     if ((type === PopupWindow.type.parameterSet ||
-                            type === PopupWindow.type.parameterAppend) && item.id) {
+                            type === PopupWindow.type.parameterAppend ||
+                            type === PopupWindow.type.vstore) && item.id) {
                         li.attr('id', 'parameter_group_' + item.id);
                     }
                     let separatorClass = 'rbroPopupItemSeparator';
@@ -99,7 +101,8 @@ export default class PopupWindow {
                     li.attr('class', separatorClass);
                 } else {
                     if ((type === PopupWindow.type.parameterSet ||
-                            type === PopupWindow.type.parameterAppend) && item.id) {
+                            type === PopupWindow.type.parameterAppend ||
+                            type === PopupWindow.type.vstore) && item.id) {
                         li.attr('id', 'parameter_' + item.id);
                     }
                     li.mousedown(event => {
@@ -118,6 +121,23 @@ export default class PopupWindow {
                             utils.insertAtCaret(this.input.get(0), paramText);
                             autosize.update(this.input);
                             this.input.trigger('input');
+                            this.hide();
+                        } else if (type === PopupWindow.type.vstore) {
+                            let paramText = '';
+                            if (item.name === item.name.toUpperCase()) {
+                                // 全大写
+                                paramText = '${' + item.name + '}';
+                            } else {
+                                paramText = '$[0].' + item.name;
+                            }
+                            var obj = this.rb.getDataObject(this.objId);
+                            if (obj != null && obj.getValue('sourceType') === 'QUERY') {
+                                utils.insertAtCaret(this.input.get(0), '(' + paramText + ')');
+                            } else {
+                                this.input.val(paramText);
+                            }
+                            this.input.trigger('input');
+                            autosize.update(this.input);
                             this.hide();
                         }
                         event.preventDefault();
@@ -358,5 +378,6 @@ PopupWindow.type = {
     parameterSet: 0,
     parameterAppend: 1,
     pattern: 2,
-    testData: 3
+    testData: 3,
+    vstore: 4
 };

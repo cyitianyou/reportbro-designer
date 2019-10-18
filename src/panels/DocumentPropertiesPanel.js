@@ -16,9 +16,62 @@ export default class DocumentPropertiesPanel {
 
     render(data) {
         let panel = $('<div id="rbro_document_properties_panel" class="rbroHidden"></div>');
-        let elDiv = $('<div id="rbro_document_properties_page_row" class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_document_properties_page_format">${this.rb.getLabel('pageFormat')}:</label>`);
+
+        let elDiv = $('<div class="rbroFormRow"></div>');
+        elDiv.append(`<label for="rbro_document_properties_name">${this.rb.getLabel('name')}:</label>`);
         let elFormField = $('<div class="rbroFormField"></div>');
+        let elName = $('<input id="rbro_document_properties_name">')
+            .change(event => {
+                let cmd = new SetValueCmd(this.documentProperties.getId(),
+                    'rbro_document_properties_name', 'name',
+                    elName.val(), SetValueCmd.type.text, this.rb);
+                this.rb.executeCommand(cmd);
+            });
+        elFormField.append(elName);
+        elDiv.append(elFormField);
+        panel.append(elDiv);
+
+        elDiv = $('<div id="rbro_document_properties_bocode_row" class="rbroFormRow"></div>');
+        elDiv.append(`<label for="rbro_document_properties_bocode">${this.rb.getLabel('boCode')}:</label>`);
+        if (this.rb.getProperty('chooseBOCodeEvent') instanceof Function) {
+            elFormField = $('<div class="rbroFormField rbroSplit rbroSelector"></div>');
+        } else {
+            elFormField = $('<div class="rbroFormField"></div>');
+        }
+        let elBOCode = $(`<textarea id="rbro_document_properties_bocode" rows="1"></textarea>`)
+            .on('input', event => {
+                let cmd = new SetValueCmd(this.documentProperties.getId(),
+                    'rbro_document_properties_bocode', 'boCode',
+                    elBOCode.val(), SetValueCmd.type.text, this.rb);
+                this.rb.executeCommand(cmd);
+
+            })
+            .blur(event => {
+                this.rb.getPopupWindow().hide();
+            });
+
+        autosize(elBOCode);
+        elFormField.append(elBOCode);
+        if (this.rb.getProperty('chooseBOCodeEvent') instanceof Function) {
+            let elParameterButton = $('<div class="rbroButton rbroRoundButton rbroIcon-select"></div>')
+                .click(event => {
+                    let that = this;
+                    this.rb.getProperty('chooseBOCodeEvent')(function(boCode) {
+                        let cmd = new SetValueCmd(that.documentProperties.getId(),
+                            'rbro_document_properties_bocode', 'boCode',
+                            boCode, SetValueCmd.type.text, that.rb);
+                        that.rb.executeCommand(cmd);
+                    });
+                });
+            elFormField.append(elParameterButton);
+        }
+        elFormField.append('<div id="rbro_document_properties_bocode_error" class="rbroErrorMessage"></div>');
+        elDiv.append(elFormField);
+        panel.append(elDiv);
+
+        elDiv = $('<div id="rbro_document_properties_page_row" class="rbroFormRow"></div>');
+        elDiv.append(`<label for="rbro_document_properties_page_format">${this.rb.getLabel('pageFormat')}:</label>`);
+        elFormField = $('<div class="rbroFormField"></div>');
         let elPageFormat = $(`<select id="rbro_document_properties_page_format">
                 <option value="A4">${this.rb.getLabel('pageFormatA4')}</option>
                 <option value="A5">${this.rb.getLabel('pageFormatA5')}</option>
@@ -50,6 +103,7 @@ export default class DocumentPropertiesPanel {
         utils.setInputPositiveInteger(elPageHeight);
         elPageSizeDiv.append(elPageHeight);
         let elUnit = $(`<select id="rbro_document_properties_unit">
+            <option value="px">px</option>
             <option value="mm">mm</option>
             <option value="inch">inch</option>
         </select>`)
@@ -67,72 +121,142 @@ export default class DocumentPropertiesPanel {
             elPageSizeDiv.hide();
         }
 
-        elDiv = $('<div class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_document_properties_orientation">${this.rb.getLabel('orientation')}:</label>`);
-        elFormField = $('<div class="rbroFormField"></div>');
-        let elOrientation = $(`<select id="rbro_document_properties_orientation">
-                <option value="portrait">${this.rb.getLabel('orientationPortrait')}</option>
-                <option value="landscape">${this.rb.getLabel('orientationLandscape')}</option>
-            </select>`)
-            .change(event => {
-                let cmd = new SetValueCmd(this.documentProperties.getId(), 'rbro_document_properties_orientation', 'orientation',
-                    elOrientation.val(), SetValueCmd.type.select, this.rb);
-                this.rb.executeCommand(cmd);
-            });
-        elFormField.append(elOrientation);
-        elDiv.append(elFormField);
-        panel.append(elDiv);
+        // elDiv = $('<div class="rbroFormRow"></div>');
+        // elDiv.append(`<label for="rbro_document_properties_orientation">${this.rb.getLabel('orientation')}:</label>`);
+        // elFormField = $('<div class="rbroFormField"></div>');
+        // let elOrientation = $(`<select id="rbro_document_properties_orientation">
+        //         <option value="portrait">${this.rb.getLabel('orientationPortrait')}</option>
+        //         <option value="landscape">${this.rb.getLabel('orientationLandscape')}</option>
+        //     </select>`)
+        //     .change(event => {
+        //         let cmd = new SetValueCmd(this.documentProperties.getId(), 'rbro_document_properties_orientation', 'orientation',
+        //             elOrientation.val(), SetValueCmd.type.select, this.rb);
+        //         this.rb.executeCommand(cmd);
+        //     });
+        // elFormField.append(elOrientation);
+        // elDiv.append(elFormField);
+        // panel.append(elDiv);
 
-        elDiv = $('<div class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_document_properties_content_height">${this.rb.getLabel('contentHeight')}:</label>`);
-        elFormField = $('<div class="rbroFormField"></div>');
-        let elContentHeight = $('<input id="rbro_document_properties_content_height">')
-            .change(event => {
-                let cmd = new SetValueCmd(this.documentProperties.getId(), 'rbro_document_properties_content_height', 'contentHeight',
-                    elContentHeight.val(), SetValueCmd.type.text, this.rb);
-                this.rb.executeCommand(cmd);
-            });
-        utils.setInputPositiveInteger(elContentHeight);
-        elFormField.append(elContentHeight);
-        elFormField.append(`<div class="rbroInfo">${this.rb.getLabel('contentHeightInfo')}</div>`);
-        elDiv.append(elFormField);
-        panel.append(elDiv);
+        // elDiv = $('<div class="rbroFormRow"></div>');
+        // elDiv.append(`<label for="rbro_document_properties_content_height">${this.rb.getLabel('contentHeight')}:</label>`);
+        // elFormField = $('<div class="rbroFormField"></div>');
+        // let elContentHeight = $('<input id="rbro_document_properties_content_height">')
+        //     .change(event => {
+        //         let cmd = new SetValueCmd(this.documentProperties.getId(), 'rbro_document_properties_content_height', 'contentHeight',
+        //             elContentHeight.val(), SetValueCmd.type.text, this.rb);
+        //         this.rb.executeCommand(cmd);
+        //     });
+        // utils.setInputPositiveInteger(elContentHeight);
+        // elFormField.append(elContentHeight);
+        // elFormField.append(`<div class="rbroInfo">${this.rb.getLabel('contentHeightInfo')}</div>`);
+        // elDiv.append(elFormField);
+        // panel.append(elDiv);
 
         this.renderMarginControls(panel);
-        this.renderHeaderFooter(panel);
+        // this.renderHeaderFooter(panel);
 
         elDiv = $('<div class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_document_properties_pattern_locale">${this.rb.getLabel('patternLocale')}:</label>`);
+        elDiv.append(`<label for="rbro_document_properties_page_header_size">${this.rb.getLabel('pageHeaderSize')}:</label>`);
         elFormField = $('<div class="rbroFormField"></div>');
-        let elPatternLocale = $(`<select id="rbro_document_properties_pattern_locale">
-                <option value="de">de</option>
-                <option value="en">en</option>
-                <option value="es">es</option>
-                <option value="fr">fr</option>
-                <option value="it">it</option>
-            </select>`)
+        let elPageHeaderSize = $('<input id="rbro_document_properties_page_header_size">')
             .change(event => {
-                let cmd = new SetValueCmd(this.documentProperties.getId(), 'rbro_document_properties_pattern_locale', 'patternLocale',
-                    elPatternLocale.val(), SetValueCmd.type.select, this.rb);
+                let cmd = new SetValueCmd(this.documentProperties.getId(),
+                    'rbro_document_properties_page_header_size', 'pageHeaderSize',
+                    elPageHeaderSize.val(), SetValueCmd.type.text, this.rb);
                 this.rb.executeCommand(cmd);
             });
-        elFormField.append(elPatternLocale);
+        elFormField.append(elPageHeaderSize);
         elDiv.append(elFormField);
         panel.append(elDiv);
 
         elDiv = $('<div class="rbroFormRow"></div>');
-        elDiv.append(`<label for="rbro_document_properties_pattern_currency_symbol">${this.rb.getLabel('patternCurrencySymbol')}:</label>`);
+        elDiv.append(`<label for="rbro_document_properties_start_section_size">${this.rb.getLabel('startSectionSize')}:</label>`);
         elFormField = $('<div class="rbroFormField"></div>');
-        let elPatternCurrencySymbol = $('<input id="rbro_document_properties_pattern_currency_symbol">')
+        let elStartSectionSize = $('<input id="rbro_document_properties_start_section_size">')
             .change(event => {
-                let cmd = new SetValueCmd(this.rb.getDetailData().getId(),
-                    'rbro_document_properties_pattern_currency_symbol', 'patternCurrencySymbol',
-                    elPatternCurrencySymbol.val(), SetValueCmd.type.text, this.rb);
+                let cmd = new SetValueCmd(this.documentProperties.getId(),
+                    'rbro_document_properties_start_section_size', 'startSectionSize',
+                    elStartSectionSize.val(), SetValueCmd.type.text, this.rb);
                 this.rb.executeCommand(cmd);
             });
-        elFormField.append(elPatternCurrencySymbol);
+        elFormField.append(elStartSectionSize);
         elDiv.append(elFormField);
         panel.append(elDiv);
+
+        elDiv = $('<div class="rbroFormRow"></div>');
+        elDiv.append(`<label class="rbroDisabled" for="rbro_document_properties_repetition_size">${this.rb.getLabel('repetitionSize')}:</label>`);
+        elFormField = $('<div class="rbroFormField"></div>');
+        let elRepetitionSize = $('<input id="rbro_document_properties_repetition_size">')
+            .change(event => {
+                let cmd = new SetValueCmd(this.documentProperties.getId(),
+                    'rbro_document_properties_repetition_size', 'repetitionSize',
+                    elRepetitionSize.val(), SetValueCmd.type.text, this.rb);
+                this.rb.executeCommand(cmd);
+            });
+        elFormField.append(elRepetitionSize);
+        elDiv.append(elFormField);
+        panel.append(elDiv);
+
+        elDiv = $('<div class="rbroFormRow"></div>');
+        elDiv.append(`<label for="rbro_document_properties_end_section_size">${this.rb.getLabel('endSectionSize')}:</label>`);
+        elFormField = $('<div class="rbroFormField"></div>');
+        let elEndSectionSize = $('<input id="rbro_document_properties_end_section_size">')
+            .change(event => {
+                let cmd = new SetValueCmd(this.documentProperties.getId(),
+                    'rbro_document_properties_end_section_size', 'endSectionSize',
+                    elEndSectionSize.val(), SetValueCmd.type.text, this.rb);
+                this.rb.executeCommand(cmd);
+            });
+        elFormField.append(elEndSectionSize);
+        elDiv.append(elFormField);
+        panel.append(elDiv);
+
+        elDiv = $('<div class="rbroFormRow"></div>');
+        elDiv.append(`<label for="rbro_document_properties_page_footer_size">${this.rb.getLabel('pageFooterSize')}:</label>`);
+        elFormField = $('<div class="rbroFormField"></div>');
+        let elPageFooterSize = $('<input id="rbro_document_properties_page_footer_size">')
+            .change(event => {
+                let cmd = new SetValueCmd(this.documentProperties.getId(),
+                    'rbro_document_properties_page_footer_size', 'pageFooterSize',
+                    elPageFooterSize.val(), SetValueCmd.type.text, this.rb);
+                this.rb.executeCommand(cmd);
+            });
+        elFormField.append(elPageFooterSize);
+        elDiv.append(elFormField);
+        panel.append(elDiv);
+
+        // elDiv = $('<div class="rbroFormRow"></div>');
+        // elDiv.append(`<label for="rbro_document_properties_pattern_locale">${this.rb.getLabel('patternLocale')}:</label>`);
+        // elFormField = $('<div class="rbroFormField"></div>');
+        // let elPatternLocale = $(`<select id="rbro_document_properties_pattern_locale">
+        //         <option value="de">de</option>
+        //         <option value="en">en</option>
+        //         <option value="es">es</option>
+        //         <option value="fr">fr</option>
+        //         <option value="it">it</option>
+        //     </select>`)
+        //     .change(event => {
+        //         let cmd = new SetValueCmd(this.documentProperties.getId(), 'rbro_document_properties_pattern_locale', 'patternLocale',
+        //             elPatternLocale.val(), SetValueCmd.type.select, this.rb);
+        //         this.rb.executeCommand(cmd);
+        //     });
+        // elFormField.append(elPatternLocale);
+        // elDiv.append(elFormField);
+        // panel.append(elDiv);
+
+        // elDiv = $('<div class="rbroFormRow"></div>');
+        // elDiv.append(`<label for="rbro_document_properties_pattern_currency_symbol">${this.rb.getLabel('patternCurrencySymbol')}:</label>`);
+        // elFormField = $('<div class="rbroFormField"></div>');
+        // let elPatternCurrencySymbol = $('<input id="rbro_document_properties_pattern_currency_symbol">')
+        //     .change(event => {
+        //         let cmd = new SetValueCmd(this.rb.getDetailData().getId(),
+        //             'rbro_document_properties_pattern_currency_symbol', 'patternCurrencySymbol',
+        //             elPatternCurrencySymbol.val(), SetValueCmd.type.text, this.rb);
+        //         this.rb.executeCommand(cmd);
+        //     });
+        // elFormField.append(elPatternCurrencySymbol);
+        // elDiv.append(elFormField);
+        // panel.append(elDiv);
 
         $('#rbro_detail_panel').append(panel);
 
@@ -330,6 +454,14 @@ export default class DocumentPropertiesPanel {
             $('#rbro_document_properties_footer_display').val(data.getValue('footerDisplay'));
             $('#rbro_document_properties_pattern_locale').val(data.getValue('patternLocale'));
             $('#rbro_document_properties_pattern_currency_symbol').val(data.getValue('patternCurrencySymbol'));
+            $('#rbro_document_properties_page_header_size').val(data.getValue('pageHeaderSize'));
+            $('#rbro_document_properties_start_section_size').val(data.getValue('startSectionSize'));
+            $('#rbro_document_properties_repetition_size').val(data.getValue('repetitionSize'));
+            $('#rbro_document_properties_repetition_size').prop('disabled', true);
+            $('#rbro_document_properties_end_section_size').val(data.getValue('endSectionSize'));
+            $('#rbro_document_properties_page_footer_size').val(data.getValue('pageFooterSize'));
+            $('#rbro_document_properties_name').val(data.getValue('name'));
+            $('#rbro_document_properties_bocode').val(data.getValue('boCode'));
             this.updateVisibility(data);
         }
         this.updateErrors();

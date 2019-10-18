@@ -10,6 +10,8 @@ export default class TextElement extends DocElement {
     constructor(id, initialData, rb) {
         super(rb.getLabel('docElementText'), id, 100, 20, rb);
         this.content = '';
+        this.sourceType = 'TEXT';
+        this.format = '';
         this.eval = false;
 
         this.styleId = '';
@@ -31,10 +33,10 @@ export default class TextElement extends DocElement {
         this.borderTop = false;
         this.borderRight = false;
         this.borderBottom = false;
-        this.paddingLeft = '2';
-        this.paddingTop = '2';
-        this.paddingRight = '2';
-        this.paddingBottom = '2';
+        this.paddingLeft = '';
+        this.paddingTop = '';
+        this.paddingRight = '';
+        this.paddingBottom = '';
 
         this.cs_condition = '';
         this.cs_styleId = '';
@@ -56,10 +58,10 @@ export default class TextElement extends DocElement {
         this.cs_borderTop = false;
         this.cs_borderRight = false;
         this.cs_borderBottom = false;
-        this.cs_paddingLeft = '2';
-        this.cs_paddingTop = '2';
-        this.cs_paddingRight = '2';
-        this.cs_paddingBottom = '2';
+        this.cs_paddingLeft = '';
+        this.cs_paddingTop = '';
+        this.cs_paddingRight = '';
+        this.cs_paddingBottom = '';
 
         this.alwaysPrintOnSamePage = true;
         this.pattern = '';
@@ -110,8 +112,8 @@ export default class TextElement extends DocElement {
 
         super.setValue(field, value, elSelector, isShown);
 
-        if (field === 'content') {
-            this.updateContent(value);
+        if (field === 'content' || field === 'format' || field === 'sourceType') {
+            this.updateContent(this['content']);
         } else if (field === 'width' || field === 'height') {
             this.updateDisplay();
         } else if (field === 'styleId') {
@@ -134,7 +136,7 @@ export default class TextElement extends DocElement {
      * @returns {String[]}
      */
     getFields() {
-        return ['id', 'containerId', 'x', 'y', 'width', 'height', 'content', 'eval',
+        return ['id', 'containerId', 'x', 'y', 'width', 'height', 'content', 'eval', 'sourceType', 'format',
             'styleId', 'bold', 'italic', 'underline', 'strikethrough',
             'horizontalAlignment', 'verticalAlignment', 'textColor', 'backgroundColor', 'font', 'fontSize',
             'lineSpacing', 'borderColor', 'borderWidth',

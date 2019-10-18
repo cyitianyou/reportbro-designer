@@ -50,7 +50,7 @@ export default class SetValueCmd {
             value = obj.getUpdateValue(this.field, value);
         }
 
-        if (this.field === 'name') {
+        if (this.field === 'name' && this.objId !== '0_document_properties') {
             $(`#rbro_menu_item_name${this.objId}`).text(value);
             $(`#rbro_menu_item_name${this.objId}`).attr('title', value);
             this.rb.notifyEvent(obj, Command.operation.rename);

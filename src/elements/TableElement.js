@@ -1,6 +1,7 @@
 import DocElement from './DocElement';
 import TableBandElement from './TableBandElement';
 import AddDeleteDocElementCmd from '../commands/AddDeleteDocElementCmd';
+import SetValueCmd from '../commands/SetValueCmd';
 import Parameter from '../data/Parameter';
 import MainPanelItem from '../menu/MainPanelItem';
 import * as utils from '../utils';
@@ -279,7 +280,17 @@ export default class TableElement extends DocElement {
     }
 
     remove() {
-        super.remove();
+        // super.remove();
+        if (this.el !== null) {
+            this.el.remove();
+            this.el = null;
+        }
+        if (this.panelItem !== null) {
+            if (this.panelItem.getParent() !== null) {
+                this.panelItem.getParent().removeChild(this.panelItem);
+                this.panelItem = null;
+            }
+        }
         this.rb.deleteDataObject(this.headerData);
         this.headerData.remove();
         this.headerData = null;
@@ -318,7 +329,7 @@ export default class TableElement extends DocElement {
             for (let i = 0; i < this.contentDataRows.length; i++) {
                 this.contentDataRows[i].updateColumnDisplay();
             }
-            this.footerData.updateColumnDisplay();
+            // this.footerData.updateColumnDisplay();
         }
     }
 
@@ -334,23 +345,39 @@ export default class TableElement extends DocElement {
         }
     }
 
+    addWidth(tmpWidth) {
+        let width = this.widthVal + tmpWidth;
+        this.width = '' + width;
+        this.widthVal = width;
+        $(`#rbro_el_table${this.id}`).css('width', (this.widthVal + 1) + 'px');
+    }
+
     /**
      * Update table height based on height of available bands.
      */
     updateHeight() {
         if (this.setupComplete) {
             let height = 0;
+            let repetitionHeight = 0;
             if (this.header) {
                 height += this.headerData.getHeight();
             }
+            repetitionHeight += this.headerData.getHeight();
             for (let i = 0; i < this.contentDataRows.length; i++) {
                 height += this.contentDataRows[i].getHeight();
+                repetitionHeight += this.contentDataRows[i].getHeight();
             }
             if (this.footer) {
                 height += this.footerData.getHeight();
             }
+            repetitionHeight += this.footerData.getHeight();
             this.height = '' + height;
             this.heightVal = height;
+            // 更新重复区高度
+            let cmd = new SetValueCmd(this.rb.getDocumentProperties().getId(),
+                'rbro_document_properties_repetition_size', 'repetitionSize',
+                '' + repetitionHeight, SetValueCmd.type.text, this.rb);
+            this.rb.executeCommand(cmd);
         }
     }
 
@@ -373,9 +400,9 @@ export default class TableElement extends DocElement {
                 this.contentDataRows[i].notifyColumnWidthResized(columnIndex, newColumnWidth);
             }
         }
-        if (tableBand !== this.footerData) {
-            this.footerData.notifyColumnWidthResized(columnIndex, newColumnWidth);
-        }
+        // if (tableBand !== this.footerData) {
+        //     this.footerData.notifyColumnWidthResized(columnIndex, newColumnWidth);
+        // }
         this.width = '' + newTableWidth;
         this.widthVal = newTableWidth;
         $(`#rbro_el_table${this.id}`).css('width', (newTableWidth + 1) + 'px');
@@ -484,7 +511,8 @@ export default class TableElement extends DocElement {
         let maxColumns = Math.floor(this.widthVal / TableElement.getColumnMinWidth());
         if (columns > existingColumns && columns > maxColumns) {
             // not enough space for all columns
-            return existingColumns;
+            this.addWidth((columns - existingColumns) * this.getMinWidth());
+            // return existingColumns;
         }
 
         // delete table with current settings and restore below with new columns, necessary for undo/redo

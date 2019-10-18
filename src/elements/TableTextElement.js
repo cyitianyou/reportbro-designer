@@ -269,6 +269,9 @@ export default class TableTextElement extends TextElement {
      * @returns {String[]}
      */
     getSizers() {
+        if (!!this.getParent() && this.getParent().bandType === "footer") {
+            return [];
+        }
         return ['E'];
     }
 

@@ -30,6 +30,7 @@ $(document).ready(function() {
         localStorageReportKey: 'reportBroDemoDefault',
         //remove reportServerUrl if you want to use the default report server for a quick start
         reportServerUrl: 'http://localhost:8000/reportbro/report/run',
+		chooseBOCodeEvent:function(callback){callback('AVA_SYS_USER');},
         additionalFonts: [ { name: 'Tangerine', value: 'tangerine'}, { name: 'Lobster', value: 'lobster'} ] });
     $('#reportbro').reportBro('loadLocalReport');
 });

@@ -45,7 +45,7 @@ export default class ReportBro {
     constructor(element, properties) {
         this.element = element;
         this.nextId = 1;
-        this.locale = locales[properties.localeKey || 'en_us'];
+        this.locale = locales[properties.localeKey || 'zh_cn'];
 
         this.properties = {
             additionalFonts: [],
@@ -61,6 +61,8 @@ export default class ReportBro {
             menuShowButtonLabels: false,
             menuSidebar: false,
             saveCallback: null,
+            /** 选择业务对象编码 */
+            chooseBOCodeEvent: null,
             showGrid: true,
             patternAdditionalDates: [],
             patternAdditionalNumbers: [],
@@ -105,15 +107,32 @@ export default class ReportBro {
         this.document = new Document(element, this.properties.showGrid, this);
         this.popupWindow = new PopupWindow(element, this);
         this.docElements = [];
+        /////////////////////////////
         this.headerBand = new Band(Band.bandType.header, false, '', '', this);
         this.contentBand = new Band(Band.bandType.content, false, '', '', this);
         this.footerBand = new Band(Band.bandType.footer, false, '', '', this);
+
+        this.pageHeaderBand = new Band(Band.bandType.page_header, false, '', '', this);
+        this.startSectionBand = new Band(Band.bandType.start_section, false, '', '', this);
+        this.repetitionBand = new Band(Band.bandType.repetition, false, '', '', this);
+        this.repetitionBand.select = function() {
+
+        }.bind(this.repetitionBand);
+        this.repetitionBand.deselect = function() {
+
+        }.bind(this.repetitionBand);
+        this.endSectionBand = new Band(Band.bandType.end_section, false, '', '', this);
+        this.pageFooterBand = new Band(Band.bandType.page_footer, false, '', '', this);
+        /////////////////////////
         this.parameterContainer = new Container('0_parameters', this.getLabel('parameters'), this);
         this.styleContainer = new Container('0_styles', this.getLabel('styles'), this);
         this.documentProperties = new DocumentProperties(this);
         this.clipboardElements = [];
 
+        // this.mainPanel = new MainPanel(element, this.headerBand, this.contentBand, this.footerBand,
+        //     this.parameterContainer, this.styleContainer, this);
         this.mainPanel = new MainPanel(element, this.headerBand, this.contentBand, this.footerBand,
+            this.pageHeaderBand, this.startSectionBand, this.repetitionBand, this.endSectionBand, this.pageFooterBand,
             this.parameterContainer, this.styleContainer, this);
         this.menuPanel = new MenuPanel(element, this);
         this.activeDetailPanel = 'none';
@@ -139,7 +158,10 @@ export default class ReportBro {
         this.modified = false;
         this.selectionSinceLastCommand = false;
         this.objectMap = {};
-        this.containers = [this.headerBand, this.contentBand, this.footerBand];
+        // this.containers = [this.headerBand, this.contentBand, this.footerBand];
+        this.containers = [this.pageHeaderBand, this.startSectionBand, this.repetitionBand,
+            this.endSectionBand, this.pageFooterBand
+        ];
         this.selections = [];
         this.reportKey = null; // key of last report preview to allow download of xlsx file for this report
 
@@ -380,16 +402,16 @@ export default class ReportBro {
      * Adds default parameters like page count/number.
      */
     addDefaultParameters() {
-        for (let parameterData of[{ name: 'page_count', type: Parameter.type.number, eval: false, editable: false, showOnlyNameType: true }, { name: 'page_number', type: Parameter.type.number, eval: false, editable: false, showOnlyNameType: true }]) {
-            let parameter = new Parameter(this.getUniqueId(), parameterData, this);
-            let parentPanel = this.mainPanel.getParametersItem();
-            let panelItem = new MainPanelItem(
-                'parameter', parentPanel, parameter, { hasChildren: false, showAdd: false, showDelete: false, draggable: false }, this);
-            parameter.setPanelItem(panelItem);
-            parentPanel.appendChild(panelItem);
-            parameter.setup();
-            this.addParameter(parameter);
-        }
+        // for (let parameterData of[{ name: 'page_count', type: Parameter.type.number, eval: false, editable: false, showOnlyNameType: true }, { name: 'page_number', type: Parameter.type.number, eval: false, editable: false, showOnlyNameType: true }]) {
+        //     let parameter = new Parameter(this.getUniqueId(), parameterData, this);
+        //     let parentPanel = this.mainPanel.getParametersItem();
+        //     let panelItem = new MainPanelItem(
+        //         'parameter', parentPanel, parameter, { hasChildren: false, showAdd: false, showDelete: false, draggable: false }, this);
+        //     parameter.setPanelItem(panelItem);
+        //     parentPanel.appendChild(panelItem);
+        //     parameter.setup();
+        //     this.addParameter(parameter);
+        // }
     }
 
     render() {
@@ -435,19 +457,24 @@ export default class ReportBro {
 
     setup() {
         this.addDefaultParameters();
-        this.headerBand.setup();
-        this.contentBand.setup();
-        this.footerBand.setup();
+        // this.headerBand.setup();
+        // this.contentBand.setup();
+        // this.footerBand.setup();
+        this.pageHeaderBand.setup();
+        this.startSectionBand.setup();
+        this.repetitionBand.setup();
+        this.endSectionBand.setup();
+        this.pageFooterBand.setup();
         this.documentProperties.setup();
     }
 
     initObjectMap() {
-        this.addDataObject(this.headerBand);
-        this.addDataObject(this.contentBand);
-        this.addDataObject(this.footerBand);
-        this.addDataObject(this.parameterContainer);
-        this.addDataObject(this.styleContainer);
         this.addDataObject(this.documentProperties);
+        this.addDataObject(this.pageHeaderBand);
+        this.addDataObject(this.startSectionBand);
+        this.addDataObject(this.repetitionBand);
+        this.addDataObject(this.endSectionBand);
+        this.addDataObject(this.pageFooterBand);
     }
 
     /**
@@ -580,7 +607,22 @@ export default class ReportBro {
      * @param {DocElement[]} docElements - list where document elements will be appended to.
      */
     appendContainerDocElements(container, asObjects, docElements) {
-        let children = container.getPanelItem().getChildren();
+        let children;
+        if (!!container.bandType) {
+            if (container.bandType === "repetition") {
+                let panelItem = container.getPanelItem();
+                if (!!panelItem.tableData) {
+                    children = [{
+                        getData() {
+                            return panelItem.tableData;
+                        }
+                    }]
+                }
+            }
+        }
+        if (!children) {
+            children = container.getPanelItem().getChildren();
+        }
         for (let child of children) {
             if (child.getData() instanceof DocElement) {
                 let docElement = child.getData();
@@ -619,9 +661,14 @@ export default class ReportBro {
      */
     getDocElements(asObjects) {
         let docElements = [];
-        this.appendContainerDocElements(this.headerBand, asObjects, docElements);
-        this.appendContainerDocElements(this.contentBand, asObjects, docElements);
-        this.appendContainerDocElements(this.footerBand, asObjects, docElements);
+        // this.appendContainerDocElements(this.headerBand, asObjects, docElements);
+        // this.appendContainerDocElements(this.contentBand, asObjects, docElements);
+        // this.appendContainerDocElements(this.footerBand, asObjects, docElements);
+        this.appendContainerDocElements(this.pageHeaderBand, asObjects, docElements);
+        this.appendContainerDocElements(this.startSectionBand, asObjects, docElements);
+        this.appendContainerDocElements(this.repetitionBand, asObjects, docElements);
+        this.appendContainerDocElements(this.endSectionBand, asObjects, docElements);
+        this.appendContainerDocElements(this.pageFooterBand, asObjects, docElements);
         return docElements;
     }
 
@@ -1349,8 +1396,24 @@ export default class ReportBro {
 
         this.commandStack = [];
         this.lastCommandIndex = -1;
-        this.modified = false;
+        this.modified = true;
         this.updateMenuButtons();
+        this.getMainPanel().getDocumentPropertiesItem().setActive();
+    }
+
+    reloadParameters(parameters) {
+        for (let parameter of this.getParameters()) {
+            this.deleteParameter(parameter);
+        }
+        this.mainPanel.getParametersItem().clear();
+        for (let id in this.objectMap) {
+            if (this.objectMap[id] instanceof Parameter) {
+                delete this.objectMap[id];
+            }
+        }
+        for (let parameterData of parameters) {
+            this.createParameter(parameterData);
+        }
     }
 
     /**

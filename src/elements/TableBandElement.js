@@ -13,7 +13,7 @@ import * as utils from '../utils';
  */
 export default class TableBandElement extends DocElement {
     constructor(id, initialData, bandType, rb) {
-        let name = (bandType === 'header') ? rb.getLabel('bandHeader') : ((bandType === 'footer') ? rb.getLabel('bandFooter') : rb.getLabel('bandContent'));
+        let name = (bandType === 'header') ? rb.getLabel('bandTableHeader') : ((bandType === 'footer') ? rb.getLabel('bandTableFooter') : rb.getLabel('bandTableContent'));
         super(name, id, 0, 20, rb);
         this.bandType = bandType;
         this.repeatHeader = false;
@@ -215,13 +215,18 @@ export default class TableBandElement extends DocElement {
             if (!dataId) {
                 dataId = this.rb.getUniqueId();
             }
-
+            if (this.bandType === 'footer') {
+                data.colspan = columns + "";
+            }
             let textElement = new TableTextElement(dataId, data, this.rb);
             newColumnData.push(textElement);
             this.rb.addDataObject(textElement);
             let panelItemText = new MainPanelItem(DocElement.type.text, this.panelItem, textElement, { showDelete: false }, this.rb);
             textElement.setPanelItem(panelItemText);
             this.panelItem.appendChild(panelItemText);
+            if (this.bandType === 'footer') {
+                break;
+            }
         }
         this.columnData = newColumnData;
         // call setup of table text elements after columnData of table band has been set
@@ -302,7 +307,7 @@ export default class TableBandElement extends DocElement {
             let nextCellIndex = column.getNextCellIndex();
             if (nextCellIndex > columnIndex) {
                 if (nextCellIndex > i + 1) {
-                    for (let j = i; j < nextCellIndex; j++) {
+                    for (let j = i; j < nextCellIndex && j < this.columnData.length; j++) {
                         if (j !== columnIndex) {
                             newColumnWidth += this.columnData[j].getValue('widthVal');
                         }

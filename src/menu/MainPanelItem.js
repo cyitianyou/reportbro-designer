@@ -329,6 +329,8 @@ export default class MainPanelItem {
     clear() {
         $(`#rbro_menu_item_children${this.id}`).empty();
         this.children = [];
+        // 仅针对重复区
+        this.tableData = undefined;
     }
 
     getDropObjectInfo() {
